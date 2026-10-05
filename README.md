@@ -1,12 +1,21 @@
 # Cambodia Tourism (Next.js + Tailwind + MySQL)
 
-1. `npm install`
-2. Copy the example env file: `cp .env.example .env.local`
-3. If you have MySQL running locally, import the database: `mysql -u root -p < db/schema.sql`
-4. Paste your CSS into `app/site.css`
-5. `npm run dev` then open http://localhost:3000
+## Getting started
 
-The app includes built-in fallback sample data so the homepage still loads even before a local MySQL database is configured. When you do connect MySQL, the app uses the live database automatically.
+1. Install dependencies with `npm install`.
+2. Copy `.env.example` to `.env.local` and set your MySQL connection values.
+3. Import `db/schema.sql` into your MySQL server.
+4. Start the app with `npm run dev` and open http://localhost:3000.
 
-Add photos to `public/images/` and set `places.image_url` (e.g. `/images/angkor-wat.jpg`).
-Sample prices, hours and coordinates are placeholders: verify before launch.
+The app uses MySQL when configured and falls back to sample data if the database cannot be reached. English and Khmer are supported.
+
+## Project structure
+
+- `app/` — Next.js routes, layouts, and styles
+- `components/` — shared UI components
+- `db/schema.sql` — MySQL schema and sample records
+- `lib/db/` — MySQL connection pool
+- `lib/repositories/` — database queries
+- `lib/types/` — shared data types
+
+Sample prices, hours, and coordinates are placeholders; verify them before launch.
