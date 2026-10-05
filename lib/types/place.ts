@@ -34,6 +34,7 @@ export type ProvinceGuide = Province & {
   stay_guide_en: string;
   food_guide_km: string;
   food_guide_en: string;
+  source_urls: string | null;
 };
 
 export type PlaceFilters = {

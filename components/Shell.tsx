@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Header from "./Header";
+import Footer from "./Footer";
 import { getPopular, getProvinces } from "@/lib/queries";
 import { T, pick, type Lang } from "@/lib/i18n";
 
@@ -37,7 +38,7 @@ export default async function Shell({
           </div>
         </aside>
       </div>
-      <footer><span>© Visit Cambodia</span></footer>
+      <Footer lang={lang} />
     </div>
   );
 }

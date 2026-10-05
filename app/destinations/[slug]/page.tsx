@@ -37,6 +37,11 @@ export default async function PlacePage({ params, searchParams }: {
   const typeLabel = t.placeTypes[p.listing_type];
   const name = pick(p, "name", lang);
   const summary = pick(p, "summary", lang);
+  const heroImage = p.image_url ?? ({
+    "angkor-wat": "/images/angkor-wat-header.jpg",
+    "angkor-thom": "/images/angkor-wat-header.jpg",
+    "kep-crab-market": "/images/food/kampot-pepper-crab.jpg",
+  }[p.slug] ?? null);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": p.listing_type === "restaurant" ? "Restaurant" : p.listing_type === "accommodation" ? "LodgingBusiness" : "TouristAttraction",
@@ -48,8 +53,14 @@ export default async function PlacePage({ params, searchParams }: {
   return (
     <Shell lang={lang} active={p.province_slug}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="section-head"><h1>{name}</h1></div>
-      {p.image_url && <div className="destination-hero"><img src={p.image_url} alt={name} fetchPriority="high" /></div>}
+      <header
+        className={`destination-hero destination-hero-${p.category}`}
+        aria-labelledby="destination-title"
+      >
+        {heroImage && <img src={heroImage} alt="" fetchPriority="high" />}
+        <div className="destination-hero-shade" aria-hidden="true" />
+        <h1 id="destination-title">{name}</h1>
+      </header>
       {summary && <p className="destination-summary">{summary}</p>}
       <table className="spec-table"><tbody>
         <tr><th>{t.province}</th><td>{pick({ n_km: p.province_km, n_en: p.province_en }, "n", lang)}</td></tr>

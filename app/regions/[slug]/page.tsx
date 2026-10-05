@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import PlaceCard from "@/components/PlaceCard";
+import ProvinceHero from "@/components/ProvinceHero";
 import Shell from "@/components/Shell";
 import { getLang, pick, T } from "@/lib/i18n";
 import { getPlaces, getProvinceGuide } from "@/lib/queries";
@@ -47,7 +48,7 @@ export default async function RegionPage({ params, searchParams }: {
   const name = pick(guide, "name", lang);
   return (
     <Shell lang={lang} active={slug}>
-      <div className="region-intro"><span className="region-eyebrow">{t.provinces}</span><h1>{name}</h1><p>{pick(guide, "overview", lang)}</p><p className="region-disclaimer">{t.guideDisclaimer}</p></div>
+      <ProvinceHero guide={guide} lang={lang} disclaimer={t.guideDisclaimer} />
       {sections.map((section) => (
         <section className="region-section" key={section.type}>
           <div className="section-head"><h2>{section.title}</h2><Link href={`/?lang=${lang}&province=${slug}&type=${section.type}`}>{t.all} ›</Link></div>
@@ -55,6 +56,18 @@ export default async function RegionPage({ params, searchParams }: {
           {section.places.length ? <div className="review-grid">{section.places.slice(0, 3).map((place) => <PlaceCard key={place.slug} place={place} lang={lang} categoryLabel={section.type === "attraction" ? t.cats[place.category as keyof typeof t.cats] ?? place.category : t.placeTypes[section.type]} />)}</div> : <p className="region-empty">{t.noListings}</p>}
         </section>
       ))}
+      {guide.source_urls && (
+        <section className="guide-sources" aria-label={t.sources}>
+          <h2>{t.sources}</h2>
+          <ul>
+            {guide.source_urls.split(/\r?\n/).filter((url) => url.startsWith("https://")).map((url) => (
+              <li key={url}>
+                <a href={url} target="_blank" rel="noreferrer">{new URL(url).hostname.replace(/^www\./, "")}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </Shell>
   );
 }

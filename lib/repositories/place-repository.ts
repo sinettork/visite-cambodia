@@ -47,7 +47,7 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
     const [rows] = await db.query<ProvinceGuide[]>(
       `SELECT p.slug, p.name_km, p.name_en, g.overview_km, g.overview_en,
         g.attractions_km, g.attractions_en, g.stay_guide_km, g.stay_guide_en,
-        g.food_guide_km, g.food_guide_en
+        g.food_guide_km, g.food_guide_en, g.source_urls
       FROM provinces p
       JOIN province_guides g ON g.province_id = p.id
       WHERE p.slug = ?`,
