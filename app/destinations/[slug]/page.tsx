@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Shell from "@/components/Shell";
-import { getPlace } from "@/lib/queries";
+import PlaceCard from "@/components/PlaceCard";
+import { getNearbyPlaces, getPlace } from "@/lib/queries";
 import { T, getLang, pick } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +14,8 @@ export default async function PlacePage({ params, searchParams }: {
   const t = T[lang];
   const p = await getPlace(slug);
   if (!p) notFound();
+  const nearby = await getNearbyPlaces(slug);
+  const typeLabel = t.placeTypes[p.listing_type];
 
   return (
     <Shell lang={lang} active={p.province_slug}>
@@ -22,9 +25,9 @@ export default async function PlacePage({ params, searchParams }: {
       <table className="spec-table">
         <tbody>
           <tr><th>{t.province}</th><td>{pick({ n_km: p.province_km, n_en: p.province_en }, "n", lang)}</td></tr>
-          <tr><th>{t.category}</th><td>{t.cats[p.category as keyof typeof t.cats]}</td></tr>
-          <tr><th>{t.ticket}</th><td>{p.ticket_usd ? `$${p.ticket_usd}` : t.free}</td></tr>
-          <tr><th>{t.hours}</th><td>{p.open_hours ?? "-"}</td></tr>
+          <tr><th>{t.category}</th><td>{p.listing_type === "attraction" ? t.cats[p.category as keyof typeof t.cats] : typeLabel}</td></tr>
+          {p.listing_type === "attraction" && <tr><th>{t.ticket}</th><td>{p.ticket_usd ? `$${p.ticket_usd}` : t.free}</td></tr>}
+          {p.open_hours && <tr><th>{t.hours}</th><td>{p.open_hours}</td></tr>}
         </tbody>
       </table>
       {p.lat && p.lng && (
@@ -34,6 +37,23 @@ export default async function PlacePage({ params, searchParams }: {
             {t.map} ›
           </a>
         </p>
+      )}
+      {nearby.length > 0 && (
+        <section className="region-section">
+          <div className="section-head"><h2>{t.nearby}</h2></div>
+          <div className="review-grid">
+            {nearby.map((place) => (
+              <PlaceCard
+                key={place.slug}
+                place={place}
+                lang={lang}
+                categoryLabel={place.listing_type === "attraction"
+                  ? t.cats[place.category as keyof typeof t.cats] ?? place.category
+                  : t.placeTypes[place.listing_type]}
+              />
+            ))}
+          </div>
+        </section>
       )}
     </Shell>
   );

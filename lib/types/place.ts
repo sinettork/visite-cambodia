@@ -9,6 +9,7 @@ export type Province = RowDataPacket & {
 export type Place = RowDataPacket & {
   slug: string;
   category: string;
+  listing_type: "attraction" | "accommodation" | "restaurant";
   image_url: string | null;
   name_km: string;
   name_en: string;
@@ -24,8 +25,20 @@ export type Place = RowDataPacket & {
   views: number;
 };
 
+export type ProvinceGuide = Province & {
+  overview_km: string;
+  overview_en: string;
+  attractions_km: string;
+  attractions_en: string;
+  stay_guide_km: string;
+  stay_guide_en: string;
+  food_guide_km: string;
+  food_guide_en: string;
+};
+
 export type PlaceFilters = {
   province?: string;
   category?: string;
+  type?: Place["listing_type"];
   q?: string;
 };

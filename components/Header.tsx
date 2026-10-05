@@ -3,7 +3,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { T, type Lang } from "@/lib/i18n";
 
-export default function Header({ lang, q = "" }: { lang: Lang; q?: string }) {
+export default function Header({
+  lang,
+  q = "",
+  type = "",
+}: {
+  lang: Lang;
+  q?: string;
+  type?: "" | "attraction" | "accommodation" | "restaurant";
+}) {
   const [open, setOpen] = useState(false);
   const t = T[lang];
   const other = lang === "km" ? "en" : "km";
@@ -17,6 +25,12 @@ export default function Header({ lang, q = "" }: { lang: Lang; q?: string }) {
           <form className="search" action="/">
             <input name="q" defaultValue={q} placeholder={t.search} />
             <input type="hidden" name="lang" value={lang} />
+            <select name="type" defaultValue={type} aria-label={t.browseByType}>
+              <option value="">{t.all}</option>
+              {Object.entries(t.placeTypes).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
+            </select>
             <button type="submit" aria-label="Search">⌕</button>
           </form>
         </div>

@@ -7,6 +7,7 @@ export type SampleProvince = {
 export type SamplePlace = {
   slug: string;
   category: string;
+  listing_type: "attraction" | "accommodation" | "restaurant";
   image_url: string | null;
   name_km: string;
   name_en: string;
@@ -35,6 +36,7 @@ export const samplePlaces: SamplePlace[] = [
   {
     slug: "angkor-wat",
     category: "history",
+    listing_type: "attraction",
     image_url: "/images/angkor-wat.svg",
     name_km: "ប្រាសាទអង្គរវត្ត",
     name_en: "Angkor Wat",
@@ -52,6 +54,7 @@ export const samplePlaces: SamplePlace[] = [
   {
     slug: "royal-palace",
     category: "culture",
+    listing_type: "attraction",
     image_url: "/images/royal-palace.svg",
     name_km: "រាជវាំង",
     name_en: "Royal Palace",
@@ -69,6 +72,7 @@ export const samplePlaces: SamplePlace[] = [
   {
     slug: "bokor-national-park",
     category: "nature",
+    listing_type: "attraction",
     image_url: "/images/bokor-national-park.svg",
     name_km: "ឧទ្យានជាតិបូកគោ",
     name_en: "Bokor National Park",
@@ -86,6 +90,7 @@ export const samplePlaces: SamplePlace[] = [
   {
     slug: "kep-crab-market",
     category: "food",
+    listing_type: "restaurant",
     image_url: "/images/kep-crab-market.svg",
     name_km: "ផ្សារក្តាមកែប",
     name_en: "Kep Crab Market",
@@ -103,6 +108,7 @@ export const samplePlaces: SamplePlace[] = [
   {
     slug: "koh-rong",
     category: "beach",
+    listing_type: "attraction",
     image_url: "/images/koh-rong.svg",
     name_km: "កោះរ៉ុង",
     name_en: "Koh Rong",
@@ -120,6 +126,7 @@ export const samplePlaces: SamplePlace[] = [
   {
     slug: "yeak-laom-lake",
     category: "nature",
+    listing_type: "attraction",
     image_url: "/images/yeak-laom-lake.svg",
     name_km: "បឹងយក្សឡោម",
     name_en: "Yeak Laom Lake",
