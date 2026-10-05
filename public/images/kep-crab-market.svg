@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <rect width="800" height="520" fill="#f5efe6"/>
+  <rect x="100" y="100" width="600" height="300" rx="16" fill="#e8b16a"/>
+  <path d="M150 290 C220 220, 250 200, 300 220 S390 300, 450 245 S560 210, 650 290" fill="none" stroke="#7f3e18" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="220" cy="230" r="46" fill="#d85f45"/>
+  <circle cx="390" cy="245" r="54" fill="#d85f45"/>
+  <circle cx="560" cy="228" r="48" fill="#d85f45"/>
+  <text x="400" y="448" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#3d2e22">Kep Crab Market</text>
+</svg>

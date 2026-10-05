@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1"><stop offset="0%" stop-color="#c78a2d"/><stop offset="100%" stop-color="#f0b359"/></linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="#1d2b3b"/>
+  <rect x="60" y="60" width="680" height="400" rx="20" fill="url(#g1)" opacity="0.9"/>
+  <path d="M150 350 L250 180 L350 350 Z" fill="#f8f2e8" opacity="0.9"/>
+  <path d="M290 350 L390 160 L510 350 Z" fill="#f6d9a7" opacity="0.9"/>
+  <path d="M470 350 L550 220 L625 350 Z" fill="#f8f2e8" opacity="0.9"/>
+  <text x="400" y="440" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" fill="#fff">Angkor Wat</text>
+</svg>
