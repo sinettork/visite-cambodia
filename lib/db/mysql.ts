@@ -16,6 +16,8 @@ export const db = hasRequiredDbConfig
         database: process.env.DB_NAME,
         charset: "utf8mb4",
         connectionLimit: 10,
+        connectTimeout: 3000,
+        enableKeepAlive: true,
         timezone: "+00:00",
       })))
   : null;

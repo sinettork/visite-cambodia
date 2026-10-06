@@ -18,6 +18,10 @@ function hydratePlace(row: Place): Place {
 
 type PlaceCoordinates = RowDataPacket & Pick<Place, "lat" | "lng">;
 
+const CACHE_TTL_MS = 60_000;
+let provincesCache: { value: Province[]; expiresAt: number } | null = null;
+const popularCache = new Map<number, { value: Place[]; expiresAt: number }>();
+
 function buildPlaceWhere(filters: PlaceFilters) {
   const where: string[] = [];
   const args: string[] = [];
@@ -52,7 +56,12 @@ function filterFallbackPlaces(filters: PlaceFilters = {}) {
 }
 
 export async function getProvinces(): Promise<Province[]> {
-  if (!db) return sampleProvinces as Province[];
+  if (provincesCache && provincesCache.expiresAt > Date.now()) return provincesCache.value;
+  if (!db) {
+    const value = sampleProvinces as Province[];
+    provincesCache = { value, expiresAt: Date.now() + CACHE_TTL_MS };
+    return value;
+  }
 
   try {
     const [rows] = await db.query<Province[]>("SELECT * FROM provinces ORDER BY name_en");
@@ -62,10 +71,14 @@ export async function getProvinces(): Promise<Province[]> {
       ...rowsBySlug.get(province.slug),
     })) as Province[];
     const additionalStoredProvinces = rows.filter((province) => !sampleProvinces.some((sample) => sample.slug === province.slug));
-    return [...canonicalAndStored, ...additionalStoredProvinces].sort((a, b) => a.name_en.localeCompare(b.name_en));
+    const value = [...canonicalAndStored, ...additionalStoredProvinces].sort((a, b) => a.name_en.localeCompare(b.name_en));
+    provincesCache = { value, expiresAt: Date.now() + CACHE_TTL_MS };
+    return value;
   } catch (error) {
     console.warn("MySQL is not available, using sample province data.", error);
-    return sampleProvinces as Province[];
+    const value = sampleProvinces as Province[];
+    provincesCache = { value, expiresAt: Date.now() + CACHE_TTL_MS };
+    return value;
   }
 }
 
@@ -207,14 +220,24 @@ export async function getNearbyPlaces(slug: string, limit = 6): Promise<Place[]>
 }
 
 export async function getPopular(limit = 5): Promise<Place[]> {
-  if (!db) return filterFallbackPlaces().slice(0, limit) as Place[];
+  const cached = popularCache.get(limit);
+  if (cached && cached.expiresAt > Date.now()) return cached.value;
+  if (!db) {
+    const value = filterFallbackPlaces().slice(0, limit) as Place[];
+    popularCache.set(limit, { value, expiresAt: Date.now() + CACHE_TTL_MS });
+    return value;
+  }
 
   try {
     const [rows] = await db.query<Place[]>(`${SELECT} ORDER BY p.views DESC LIMIT ?`, [limit]);
-    return rows.map(hydratePlace);
+    const value = rows.map(hydratePlace);
+    popularCache.set(limit, { value, expiresAt: Date.now() + CACHE_TTL_MS });
+    return value;
   } catch (error) {
     console.warn("MySQL is not available, using sample popular places.", error);
-    return filterFallbackPlaces().slice(0, limit) as Place[];
+    const value = filterFallbackPlaces().slice(0, limit) as Place[];
+    popularCache.set(limit, { value, expiresAt: Date.now() + CACHE_TTL_MS });
+    return value;
   }
 }
 
