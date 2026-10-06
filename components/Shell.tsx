@@ -5,16 +5,16 @@ import { getPopular, getProvinces } from "@/lib/queries";
 import { T, pick, type Lang } from "@/lib/i18n";
 
 export default async function Shell({
-  lang, q, active, type, children,
-}: { lang: Lang; q?: string; active?: string; type?: "" | "attraction" | "accommodation" | "restaurant"; children: React.ReactNode }) {
+  lang, q, active, type, variant = "results", children,
+}: { lang: Lang; q?: string; active?: string; type?: "" | "attraction" | "accommodation" | "restaurant"; variant?: "home" | "results" | "editorial" | "food" | "region" | "place"; children: React.ReactNode }) {
   const [provinces, popular] = await Promise.all([getProvinces(), getPopular()]);
   const t = T[lang];
   return (
-    <div className="site">
-      <Header lang={lang} q={q} type={type} />
+    <div className={`site site-${variant}`}>
+      <Header lang={lang} q={q} type={type} active={active} provinces={provinces} />
       <div className="columns">
         <aside className="left-side">
-          <h2>{t.provinces}</h2>
+          <h2 id="province-list">{t.provinces}</h2>
           <div className="brands">
             {provinces.map((p) => (
               <Link key={p.slug} href={`/regions/${p.slug}?lang=${lang}`}
@@ -23,7 +23,7 @@ export default async function Shell({
               </Link>
             ))}
           </div>
-          <Link className="all-brands" href={`/?lang=${lang}`}>{t.all} <b>›</b></Link>
+          <Link className="all-brands" href={`/explore?lang=${lang}`}>{t.destinations} <b>›</b></Link>
         </aside>
         <main>{children}</main>
         <aside className="right-side">

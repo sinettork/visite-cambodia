@@ -124,12 +124,21 @@ export default async function DiscoverPage({ searchParams }: {
   const t = T[lang];
   const content = guide[lang];
   return (
-    <Shell lang={lang}>
+    <Shell lang={lang} variant="editorial">
+      <nav className="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
+        <Link href={`/?lang=${lang}`}>{t.home}</Link><span aria-hidden="true">›</span>
+        <span aria-current="page">{t.discover}</span>
+      </nav>
       <header className="discover-page-heading">
-        <span className="region-eyebrow">{content.eyebrow}</span>
         <h1>{content.title}</h1>
         <p>{content.intro}</p>
       </header>
+
+      <nav className="discover-actions" aria-label={lang === "km" ? "ជំហានបន្ទាប់" : "Next steps"}>
+        <Link href={`/explore?lang=${lang}#province-list`}>{t.discoverActionRegions} <span aria-hidden="true">›</span></Link>
+        <Link href={`/food?lang=${lang}`}>{t.discoverActionFood} <span aria-hidden="true">›</span></Link>
+        <Link href={`/explore?type=attraction&lang=${lang}`}>{t.discoverActionPlaces} <span aria-hidden="true">›</span></Link>
+      </nav>
 
       <div className="discover-sections">
         {content.sections.map((section, index) => (
@@ -155,7 +164,7 @@ export default async function DiscoverPage({ searchParams }: {
             </Link>
           ))}
         </div>
-        <p className="discover-regions"><Link href={`/?lang=${lang}`}>{content.regionsLink} ›</Link></p>
+        <p className="discover-regions"><Link href={`/explore?lang=${lang}`}>{content.regionsLink} ›</Link></p>
       </section>
     </Shell>
   );

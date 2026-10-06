@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import PlaceCard from "@/components/PlaceCard";
 import Shell from "@/components/Shell";
-import { getLang } from "@/lib/i18n";
+import { getLang, T } from "@/lib/i18n";
 import { getPlaces } from "@/lib/queries";
 
 const foodGuide = {
@@ -116,9 +116,12 @@ export default async function FoodPage({ searchParams }: {
   const places = await getPlaces({ type: "restaurant" });
 
   return (
-    <Shell lang={lang}>
+    <Shell lang={lang} variant="food">
+      <nav className="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
+        <Link href={`/explore?lang=${lang}`}>{T[lang].destinations}</Link><span aria-hidden="true">›</span>
+        <span aria-current="page">{copy.title}</span>
+      </nav>
       <header className="discover-page-heading">
-        <span className="region-eyebrow">{copy.eyebrow}</span>
         <h1>{copy.title}</h1>
         <p>{copy.intro}</p>
       </header>
@@ -196,13 +199,13 @@ export default async function FoodPage({ searchParams }: {
       <section className="food-section" aria-labelledby="food-listings-title">
         <div className="section-head">
           <h2 id="food-listings-title">{copy.listingsTitle}</h2>
-          <Link href={`/?type=restaurant&lang=${lang}`}>{copy.browseAll} ›</Link>
+          <Link href={`/explore?type=restaurant&lang=${lang}`}>{copy.browseAll} ›</Link>
         </div>
         <p className="region-section-intro">{copy.listingsIntro}</p>
         {places.length ? (
           <div className="review-grid">
             {places.slice(0, 9).map((place) => (
-              <PlaceCard key={place.slug} place={place} lang={lang} categoryLabel={copy.listingsTitle} />
+              <PlaceCard key={place.slug} place={place} lang={lang} />
             ))}
           </div>
         ) : <p className="region-empty">{copy.empty}</p>}

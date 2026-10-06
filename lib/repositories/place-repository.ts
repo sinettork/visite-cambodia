@@ -1,12 +1,25 @@
 import type { RowDataPacket } from "mysql2";
 import { db } from "@/lib/db/mysql";
 import { samplePlaces, sampleProvinces } from "@/lib/data/sample-data";
-import type { Place, PlaceFilters, Province, ProvinceGuide } from "@/lib/types/place";
+import type { Place, PlaceFilters, PlacePage, Province, ProvinceGuide } from "@/lib/types/place";
 
 const SELECT = `SELECT p.*, pr.slug AS province_slug, pr.name_km AS province_km, pr.name_en AS province_en
   FROM places p JOIN provinces pr ON pr.id = p.province_id`;
 
 type PlaceCoordinates = RowDataPacket & Pick<Place, "lat" | "lng">;
+
+function buildPlaceWhere(filters: PlaceFilters) {
+  const where: string[] = [];
+  const args: string[] = [];
+  if (filters.province) { where.push("pr.slug = ?"); args.push(filters.province); }
+  if (filters.category) { where.push("p.category = ?"); args.push(filters.category); }
+  if (filters.type) { where.push("p.listing_type = ?"); args.push(filters.type); }
+  if (filters.q?.trim()) {
+    where.push("(p.name_en LIKE ? OR p.name_km LIKE ? OR pr.name_en LIKE ? OR pr.name_km LIKE ?)");
+    args.push(...Array(4).fill(`%${filters.q.trim()}%`));
+  }
+  return { clause: where.length ? `WHERE ${where.join(" AND ")}` : "", args };
+}
 
 function filterFallbackPlaces(filters: PlaceFilters = {}) {
   const term = filters.q?.trim().toLowerCase();
@@ -33,7 +46,13 @@ export async function getProvinces(): Promise<Province[]> {
 
   try {
     const [rows] = await db.query<Province[]>("SELECT * FROM provinces ORDER BY name_en");
-    return rows;
+    const rowsBySlug = new Map(rows.map((province) => [province.slug, province]));
+    const canonicalAndStored = sampleProvinces.map((province) => ({
+      ...province,
+      ...rowsBySlug.get(province.slug),
+    })) as Province[];
+    const additionalStoredProvinces = rows.filter((province) => !sampleProvinces.some((sample) => sample.slug === province.slug));
+    return [...canonicalAndStored, ...additionalStoredProvinces].sort((a, b) => a.name_en.localeCompare(b.name_en));
   } catch (error) {
     console.warn("MySQL is not available, using sample province data.", error);
     return sampleProvinces as Province[];
@@ -41,7 +60,25 @@ export async function getProvinces(): Promise<Province[]> {
 }
 
 export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | null> {
-  if (!db) return null;
+  const fallback = async () => {
+    const province = (await getProvinces()).find((item) => item.slug === slug);
+    if (!province) return null;
+    const nameKm = province.name_km;
+    const nameEn = province.name_en;
+    return {
+      ...province,
+      overview_km: `${nameKm} — ស្វែងរកកន្លែងកម្សាន្ត កន្លែងស្នាក់នៅ និងម្ហូបក្នុងតំបន់នេះ។ ព័ត៌មានខ្លះកំពុងរៀបចំបន្ថែម។`,
+      overview_en: `Explore attractions, places to stay and local food in ${nameEn}. Some local listings are still being added.`,
+      attractions_km: "មើលបញ្ជីកន្លែងកម្សាន្តដែលមានខាងក្រោម។ យើងនឹងបន្ថែមព័ត៌មាននៅពេលមានទិន្នន័យដែលអាចផ្ទៀងផ្ទាត់បាន។",
+      attractions_en: "Browse the attraction listings below. More details will be added as verified local information becomes available.",
+      stay_guide_km: "ព័ត៌មានកន្លែងស្នាក់នៅសម្រាប់ខេត្តនេះមិនទាន់មានពេញលេញទេ។ អ្នកអាចស្វែងរកបញ្ជីស្នាក់នៅទូទាំងប្រទេសបាន។",
+      stay_guide_en: "Stay listings for this province are not complete yet. You can browse stays listed across Cambodia.",
+      food_guide_km: "ព័ត៌មានភោជនីយដ្ឋាន និងហាងកាហ្វេក្នុងខេត្តនេះកំពុងត្រូវបានបន្ថែម។",
+      food_guide_en: "Restaurant and cafe information for this province is still being added.",
+      source_urls: null,
+    } as ProvinceGuide;
+  };
+  if (!db) return fallback();
 
   try {
     const [rows] = await db.query<ProvinceGuide[]>(
@@ -53,10 +90,10 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
       WHERE p.slug = ?`,
       [slug],
     );
-    return rows[0] ?? null;
+    return rows[0] ?? fallback();
   } catch (error) {
     console.warn("Unable to load the province guide from MySQL.", error);
-    return null;
+    return fallback();
   }
 }
 
@@ -64,35 +101,36 @@ export async function getPlaces(filters: PlaceFilters): Promise<Place[]> {
   if (!db) return filterFallbackPlaces(filters) as Place[];
 
   try {
-    const where: string[] = [];
-    const args: string[] = [];
-
-    if (filters.province) {
-      where.push("pr.slug = ?");
-      args.push(filters.province);
-    }
-
-    if (filters.category) {
-      where.push("p.category = ?");
-      args.push(filters.category);
-    }
-
-    if (filters.type) {
-      where.push("p.listing_type = ?");
-      args.push(filters.type);
-    }
-
-    if (filters.q) {
-      where.push("(p.name_en LIKE ? OR p.name_km LIKE ? OR pr.name_en LIKE ? OR pr.name_km LIKE ?)");
-      args.push(...Array(4).fill(`%${filters.q}%`));
-    }
-
-    const sql = `${SELECT} ${where.length ? "WHERE " + where.join(" AND ") : ""} ORDER BY p.views DESC`;
-    const [rows] = await db.query<Place[]>(sql, args);
+    const { clause, args } = buildPlaceWhere(filters);
+    const [rows] = await db.query<Place[]>(`${SELECT} ${clause} ORDER BY p.views DESC`, args);
     return rows;
   } catch (error) {
     console.warn("MySQL is not available, using sample place data.", error);
     return filterFallbackPlaces(filters) as Place[];
+  }
+}
+
+export async function getPlacePage(filters: PlaceFilters, page = 1, pageSize = 12): Promise<PlacePage> {
+  const requestedPage = Number.isFinite(page) ? Math.max(1, Math.floor(page) || 1) : 1;
+  const safePageSize = Math.min(48, Math.max(1, Math.floor(pageSize) || 12));
+  if (!db) {
+    const places = filterFallbackPlaces(filters) as Place[];
+    const safePage = Math.min(requestedPage, Math.max(1, Math.ceil(places.length / safePageSize)));
+    return { items: places.slice((safePage - 1) * safePageSize, safePage * safePageSize), total: places.length, page: safePage, pageSize: safePageSize };
+  }
+
+  try {
+    const { clause, args } = buildPlaceWhere(filters);
+    const [countRows] = await db.query<(RowDataPacket & { total: number })[]>(`SELECT COUNT(*) AS total FROM places p JOIN provinces pr ON pr.id = p.province_id ${clause}`, args);
+    const total = Number(countRows[0]?.total ?? 0);
+    const safePage = Math.min(requestedPage, Math.max(1, Math.ceil(total / safePageSize)));
+    const [items] = await db.query<Place[]>(`${SELECT} ${clause} ORDER BY p.views DESC LIMIT ? OFFSET ?`, [...args, safePageSize, (safePage - 1) * safePageSize]);
+    return { items, total, page: safePage, pageSize: safePageSize };
+  } catch (error) {
+    console.warn("MySQL is not available, using sample place data.", error);
+    const places = filterFallbackPlaces(filters) as Place[];
+    const safePage = Math.min(requestedPage, Math.max(1, Math.ceil(places.length / safePageSize)));
+    return { items: places.slice((safePage - 1) * safePageSize, safePage * safePageSize), total: places.length, page: safePage, pageSize: safePageSize };
   }
 }
 

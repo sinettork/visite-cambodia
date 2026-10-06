@@ -43,3 +43,10 @@ export type PlaceFilters = {
   type?: Place["listing_type"];
   q?: string;
 };
+
+export type PlacePage = {
+  items: Place[];
+  total: number;
+  page: number;
+  pageSize: number;
+};

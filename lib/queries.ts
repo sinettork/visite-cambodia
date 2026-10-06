@@ -1,6 +1,7 @@
-export type { Place, PlaceFilters, Province, ProvinceGuide } from "./types/place";
+export type { Place, PlaceFilters, PlacePage, Province, ProvinceGuide } from "./types/place";
 export {
   getPlace,
+  getPlacePage,
   getNearbyPlaces,
   getPlaces,
   getPopular,

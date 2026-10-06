@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Roboto+Condensed:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap");
-
 :root {
   --page-bg: #eaeaea;
   --surface: #fff;
@@ -8,7 +6,7 @@
   --text-secondary: #777;
   --border: #e6e6e6;
   --accent: #ee7b20;
-  font-family: Roboto, Arial, sans-serif;
+  font-family: var(--font-roboto), Arial, sans-serif;
   color: #444;
   background: var(--page-bg);
   font-synthesis: none;
@@ -157,7 +155,7 @@ textarea:focus-visible {
   padding: 5px 7px;
   border-radius: 2px;
   color: #eee;
-  font: 700 11px "Roboto Condensed", sans-serif;
+  font: 700 11px var(--font-roboto-condensed), sans-serif;
   text-align: center;
 }
 
@@ -191,7 +189,7 @@ textarea:focus-visible {
   padding: 0 8px;
   border-right: 1px solid #373737;
   color: #eee;
-  font: 700 12px "Roboto Condensed", sans-serif;
+  font: 700 12px var(--font-roboto-condensed), sans-serif;
   white-space: nowrap;
 }
 
@@ -230,7 +228,7 @@ textarea:focus-visible {
 .right-side h2 {
   margin: 0 0 11px;
   color: #777;
-  font: 700 13px "Roboto Condensed", sans-serif;
+  font: 700 13px var(--font-roboto-condensed), sans-serif;
 }
 
 main {
@@ -252,7 +250,7 @@ main {
 .section-head h2 {
   margin: 0;
   color: #444;
-  font: 700 clamp(19px, 2vw, 22px)/1.15 "Roboto Condensed", sans-serif;
+  font: 700 clamp(19px, 2vw, 22px)/1.15 var(--font-roboto-condensed), sans-serif;
 }
 
 .section-head a,
@@ -262,7 +260,7 @@ main {
   border: 0;
   color: #e37926;
   background: transparent;
-  font: 700 12px "Roboto Condensed", sans-serif;
+  font: 700 12px var(--font-roboto-condensed), sans-serif;
 }
 
 .place-type-filters {
@@ -355,7 +353,7 @@ main {
 .province-hero h1 {
   margin: 7px 0 9px;
   color: #fff;
-  font: 700 clamp(28px, 4vw, 42px)/1.16 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 clamp(28px, 4vw, 42px)/1.16 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
   text-wrap: balance;
 }
 
@@ -390,7 +388,7 @@ main {
 }
 
 .province-identity span {
-  font: 700 clamp(38px, 5vw, 60px)/1 "Battambang", sans-serif;
+  font: 700 clamp(38px, 5vw, 60px)/1 var(--font-battambang), sans-serif;
 }
 
 .province-identity.has-photo img {
@@ -442,7 +440,7 @@ main {
 .guide-sources h2 {
   margin: 0 0 8px;
   color: var(--text-secondary);
-  font: 700 13px "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 13px var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .guide-sources ul {
@@ -470,7 +468,7 @@ main {
 .discover-page-heading h1 {
   margin: 6px 0 10px;
   color: var(--text-primary);
-  font: 700 clamp(26px, 3vw, 36px)/1.2 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 clamp(26px, 3vw, 36px)/1.2 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .discover-page-heading p {
@@ -505,13 +503,13 @@ main {
 
 .discover-number {
   color: var(--accent);
-  font: 700 18px "Roboto Condensed", sans-serif;
+  font: 700 18px var(--font-roboto-condensed), sans-serif;
 }
 
 .discover-section h2 {
   margin: 0 0 10px;
   color: var(--text-primary);
-  font: 700 19px/1.3 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 19px/1.3 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .discover-section p + p {
@@ -540,7 +538,7 @@ main {
 
 .discover-place strong {
   color: var(--text-primary);
-  font: 700 16px/1.3 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 16px/1.3 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .discover-place span {
@@ -656,7 +654,7 @@ main {
 .food-dish h3 {
   margin: 0;
   color: var(--text-primary);
-  font: 700 17px/1.3 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 17px/1.3 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .food-dish-with-image .food-dish-heading,
@@ -716,7 +714,7 @@ main {
 .food-dietary-note h2 {
   margin: 0;
   color: var(--text-primary);
-  font: 700 17px/1.3 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 17px/1.3 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .food-tips-card ul {
@@ -762,7 +760,7 @@ main {
   padding: 10px;
   color: #fff !important;
   background: #eb7c25;
-  font: 700 13px "Roboto Condensed", sans-serif;
+  font: 700 13px var(--font-roboto-condensed), sans-serif;
 }
 
 .finder:hover,
@@ -792,7 +790,7 @@ main {
   color: #555;
   background: transparent;
   text-align: left;
-  font: 500 12px "Roboto Condensed", sans-serif;
+  font: 500 12px var(--font-roboto-condensed), sans-serif;
 }
 
 .brands a:hover,
@@ -854,7 +852,7 @@ main {
 .review h3 {
   margin: 10px 0 8px;
   color: var(--text-primary);
-  font: 700 16px/1.25 "Roboto Condensed", sans-serif;
+  font: 700 16px/1.25 var(--font-roboto-condensed), sans-serif;
 }
 
 .review:hover h3 {
@@ -913,7 +911,7 @@ main {
 
 .news-title {
   color: #343434;
-  font: 700 19px/1.22 "Roboto Condensed", sans-serif;
+  font: 700 19px/1.22 var(--font-roboto-condensed), sans-serif;
 }
 
 .news-item:hover .news-title {
@@ -923,7 +921,7 @@ main {
 .news-text p {
   margin: 8px 0 7px;
   color: #777;
-  font: 12px/1.45 Roboto, sans-serif;
+  font: 12px/1.45 var(--font-roboto), sans-serif;
 }
 
 .news-meta {
@@ -949,14 +947,14 @@ main {
 
 .guide span {
   z-index: 1;
-  font: 700 20px/1.02 "Roboto Condensed", sans-serif;
+  font: 700 20px/1.02 var(--font-roboto-condensed), sans-serif;
 }
 
 .guide strong {
   z-index: 1;
   max-width: 150px;
   margin-top: auto;
-  font: 500 12px/1.3 Roboto, sans-serif;
+  font: 500 12px/1.3 var(--font-roboto), sans-serif;
 }
 
 .phones a,
@@ -971,7 +969,7 @@ main {
   color: #555;
   background: transparent;
   text-align: left;
-  font: 700 12px/1.2 "Roboto Condensed", sans-serif;
+  font: 700 12px/1.2 var(--font-roboto-condensed), sans-serif;
 }
 
 .phones a:hover,
@@ -1031,7 +1029,7 @@ main {
   display: inline-flex;
   align-items: baseline;
   color: #fff;
-  font: 700 25px/1 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 25px/1 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
   letter-spacing: -.5px;
 }
 
@@ -1057,7 +1055,7 @@ main {
 .footer-group h2 {
   margin: 2px 0 5px;
   color: #fff;
-  font: 700 13px "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 13px var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 
 .footer-group a {
@@ -1219,7 +1217,7 @@ main {
     color: #fff;
     background: #222;
     text-align: left;
-    font: 700 13px "Roboto Condensed", sans-serif;
+    font: 700 13px var(--font-roboto-condensed), sans-serif;
   }
 
   .nav {
@@ -1320,9 +1318,9 @@ main {
 }
 
 /* Battambang supplies Khmer glyphs alongside the existing Latin fonts. */
-:root { font-family: Roboto, "Battambang", Arial, sans-serif; }
+:root { font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif; }
 .nav a, .brands a, .section-head h2, .review h3, .phones a {
-  font-family: "Roboto Condensed", "Battambang", sans-serif;
+  font-family: var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
 /* Popular list uses wide photos instead of tall phone images */
 .phones img { width: 64px; height: 48px; object-fit: cover; mix-blend-mode: normal; }
@@ -1370,7 +1368,7 @@ main {
   max-width: 900px;
   margin: 0;
   color: #fff;
-  font: 700 clamp(30px, 5vw, 54px)/1.12 "Roboto Condensed", "Battambang", sans-serif;
+  font: 700 clamp(30px, 5vw, 54px)/1.12 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
   text-wrap: balance;
   text-shadow: 0 2px 14px rgb(0 0 0 / 28%);
 }
@@ -1395,7 +1393,7 @@ main {
   justify-content: center;
   color: #aaa;
   background: #f2f2f2;
-  font: 700 11px "Roboto Condensed", sans-serif;
+  font: 700 11px var(--font-roboto-condensed), sans-serif;
 }
 .review:focus-visible {
   outline: 2px solid var(--accent);
