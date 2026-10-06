@@ -4258,3 +4258,11 @@ main {
     min-height: 28px;
   }
 }
+
+/* Province names stay on one line in the navigation menu. */
+.nav-dropdown-provinces-grid > a {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
