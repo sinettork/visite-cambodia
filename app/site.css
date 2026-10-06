@@ -4284,3 +4284,17 @@ main {
   min-width: 0;
   white-space: nowrap;
 }
+
+/* Province navigation names must remain fully visible on one line. */
+.nav-dropdown-provinces-grid > a {
+  min-width: 0;
+  white-space: nowrap !important;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
+.nav-dropdown-provinces-grid > a .province-nav-name {
+  display: inline-block;
+  white-space: nowrap !important;
+  overflow: visible;
+}
