@@ -59,21 +59,21 @@ export default async function Home({ searchParams }: {
             <span className="spotlight-icon"><i className="fa-solid fa-route" aria-hidden="true" /></span>
             <div>
               <h3>{t.itineraries}</h3>
-              <p>{lang === "km" ? "គំរូដំណើរកម្សាន្ត ៣-៤ ថ្ងៃ សម្រាប់សៀមរាប តំបន់ឆ្នេរ និងឦសាន" : "Curated 2-4 day itineraries for Angkor, Coast & Highland treks"}</p>
+              <p>{lang === "km" ? "ដំណើរកម្សាន្តតាមថ្ងៃ សម្រាប់គោលដៅសំខាន់ៗ។" : "Day-by-day plans for key destinations."}</p>
             </div>
           </Link>
           <Link href={`/events?lang=${lang}`} className="home-spotlight-card">
             <span className="spotlight-icon"><i className="fa-solid fa-calendar-days" aria-hidden="true" /></span>
             <div>
               <h3>{t.events}</h3>
-              <p>{lang === "km" ? "ប្រតិទិនពិធីបុណ្យជាតិ ចូលឆ្នាំខ្មែរ ភ្ជុំបិណ្ឌ និងបុណ្យអុំទូក" : "Festivals calendar: Khmer New Year, Pchum Ben & Water Festival"}</p>
+              <p>{lang === "km" ? "មើលព្រឹត្តិការណ៍ និងពិធីបុណ្យសំខាន់ៗ។" : "Key festivals and seasonal events."}</p>
             </div>
           </Link>
           <Link href={`/tools?lang=${lang}`} className="home-spotlight-card">
             <span className="spotlight-icon"><i className="fa-solid fa-toolbox" aria-hidden="true" /></span>
             <div>
               <h3>{t.tools}</h3>
-              <p>{lang === "km" ? "ឧបករណ៍ប្តូរប្រាក់ USD ↔ KHR ឃ្លាសន្ទនា និងលេខសង្គ្រោះបន្ទាន់" : "USD ↔ KHR converter, phrasebook & emergency directory"}</p>
+              <p>{lang === "km" ? "ប្តូរប្រាក់ ឃ្លាសន្ទនា និងលេខបន្ទាន់។" : "Currency, Khmer phrases and emergency contacts."}</p>
             </div>
           </Link>
         </div>
