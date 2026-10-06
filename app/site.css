@@ -4259,10 +4259,12 @@ main {
   }
 }
 
-/* Province names stay on one line in the navigation menu. */
+/* Province names stay fully visible on one line in the navigation menu. */
+.nav-dropdown-provinces-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .nav-dropdown-provinces-grid > a {
   min-width: 0;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
