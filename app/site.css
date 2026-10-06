@@ -1405,6 +1405,11 @@ main {
     padding: 22px;
     aspect-ratio: 4 / 3;
   }
+
+  .destination-hero-favorite {
+    top: 12px;
+    right: 12px;
+  }
 }
 
 
@@ -2345,11 +2350,14 @@ main {
   z-index: 1;
   width: 100%;
 }
-.destination-action-bar {
-  display: flex;
-  justify-content: flex-end;
-  margin: -4px 0 14px;
+
+.destination-hero-favorite {
+  position: absolute;
+  z-index: 3;
+  top: 16px;
+  right: 16px;
 }
+
 .destination-summary {
   max-width: 860px;
 }
