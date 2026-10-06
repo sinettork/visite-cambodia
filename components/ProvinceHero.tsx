@@ -10,13 +10,6 @@ const provinceBannerImages: Record<string, {
   source: string;
   license: string;
   licenseUrl: string;
-}> = const provinceBannerImages: Record<string, {
-  image: string;
-  alt: string;
-  credit: string;
-  source: string;
-  license: string;
-  licenseUrl: string;
 }> = {
   "banteay-meanchey": {
     image: "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/Banteay_Chhmar_Temple_Entrance.JPG/1280px-Banteay_Chhmar_Temple_Entrance.JPG",
@@ -218,7 +211,7 @@ const provinceBannerImages: Record<string, {
     license: "CC BY-SA 2.0",
     licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
   },
-};;
+};
 
 export function getProvinceBannerImage(slug: string): string | undefined {
   return provinceBannerImages[slug]?.image;
