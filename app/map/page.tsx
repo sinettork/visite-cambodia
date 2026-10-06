@@ -12,7 +12,7 @@ export default async function MapPage({ searchParams }: { searchParams: Promise<
   const lang = getLang((await searchParams).lang);
   const places = await getPlaces({});
   const located = places.filter((place) => place.lat && place.lng);
-  return <Shell lang={lang} variant="editorial">
+  return <Shell lang={lang} variant="map">
     <header className="browse-heading directory-heading">
       <h1>{lang === "km" ? "កន្លែងទេសចរណ៍លើផែនទី" : "Places on the map"}</h1>
     </header>
