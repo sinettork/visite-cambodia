@@ -3559,3 +3559,137 @@ main {
     padding: 8px 9px;
   }
 }
+
+
+/* Editorial content polish: keep Home visual, flatten secondary content blocks */
+.site-home .home-spotlight-section {
+  margin-bottom: 30px;
+}
+
+.site-home .home-spotlight-card {
+  min-height: 94px;
+  align-items: center;
+  box-shadow: none;
+  transform: none;
+}
+
+.site-home .home-spotlight-card:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.site-home .home-featured-section {
+  margin-bottom: 36px;
+}
+
+.site-home .home-regions-section {
+  margin-bottom: 36px;
+}
+
+.site-food .discover-page-heading {
+  margin-bottom: 20px;
+}
+
+.site-food .food-hero-photo {
+  margin-bottom: 25px;
+}
+
+.site-food .food-section {
+  margin-bottom: 34px;
+}
+
+.site-food .food-photo-grid,
+.site-food .food-text-grid {
+  gap: 10px;
+}
+
+.site-food .food-dish {
+  border-color: #ded9d4;
+}
+
+.site-food .food-dish-with-image {
+  box-shadow: none;
+}
+
+.site-food .food-tag {
+  border-top: 1px solid #eee5dc;
+  padding-top: 5px;
+  background: transparent;
+}
+
+.site-food .food-tips-grid {
+  gap: 10px;
+}
+
+.site-food .food-tips-card,
+.site-food .food-dietary-note {
+  background: #faf8f5;
+}
+
+.site-discover .discover-page-heading {
+  margin-bottom: 20px;
+}
+
+.site-discover .discover-actions {
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.site-discover .discover-actions a {
+  min-height: 32px;
+  padding: 5px 9px;
+}
+
+.site-discover .discover-sections {
+  gap: 0;
+  margin-bottom: 34px;
+}
+
+.site-discover .discover-section {
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 4px 18px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-discover .discover-section:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.site-discover .discover-number {
+  padding-top: 1px;
+  color: #b7744a;
+  font-size: 15px;
+}
+
+.site-discover .discover-section h2 {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.site-discover .discover-place {
+  padding: 13px 14px;
+}
+
+.site-discover .discover-place strong {
+  font-size: 15px;
+}
+
+@media (max-width: 760px) {
+  .site-food .food-dish {
+    min-height: 0;
+  }
+
+  .site-discover .discover-section {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 9px;
+    padding-block: 16px;
+  }
+
+  .site-discover .discover-section h2 {
+    font-size: 18px;
+  }
+}
