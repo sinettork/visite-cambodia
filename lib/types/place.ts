@@ -6,6 +6,20 @@ export type Province = RowDataPacket & {
   name_en: string;
 };
 
+export type PlaceGuide = {
+  about_km: string | null;
+  about_en: string | null;
+  history_km: string | null;
+  history_en: string | null;
+  highlights_km: string | null;
+  highlights_en: string | null;
+  visit_plan_km: string | null;
+  visit_plan_en: string | null;
+  tips_km: string | null;
+  tips_en: string | null;
+  source_urls: string | null;
+};
+
 export type Place = RowDataPacket & {
   slug: string;
   category: string;
@@ -23,6 +37,7 @@ export type Place = RowDataPacket & {
   province_km: string;
   province_en: string;
   views: number;
+  guide?: PlaceGuide | null;
 };
 
 export type ProvinceGuide = Province & {
