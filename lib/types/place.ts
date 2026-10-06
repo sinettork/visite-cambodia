@@ -34,6 +34,8 @@ export type ProvinceGuide = Province & {
   history_en: string | null;
   culture_km: string | null;
   culture_en: string | null;
+  travel_km: string | null;
+  travel_en: string | null;
   attractions_km: string;
   attractions_en: string;
   stay_guide_km: string;
