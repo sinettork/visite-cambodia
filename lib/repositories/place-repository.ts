@@ -75,6 +75,12 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
       stay_guide_en: "Stay listings for this province are not complete yet. You can browse stays listed across Cambodia.",
       food_guide_km: "ព័ត៌មានភោជនីយដ្ឋាន និងហាងកាហ្វេក្នុងខេត្តនេះកំពុងត្រូវបានបន្ថែម។",
       food_guide_en: "Restaurant and cafe information for this province is still being added.",
+      story_km: `${nameKm} — ស្វែងយល់ពីប្រវត្តិសាស្ត្រ វប្បធម៌ និងជីវិតមូលដ្ឋានរបស់តំបន់។`,
+      story_en: `Learn about ${nameEn} through its history, culture and local life.`,
+      history_km: `ព័ត៌មានប្រវត្តិសាស្ត្រលម្អិតរបស់ ${nameKm} នឹងត្រូវបន្ថែមនៅពេលមានប្រភពដែលអាចផ្ទៀងផ្ទាត់បាន។`,
+      history_en: `More verified historical detail for ${nameEn} will be added as source material is reviewed.`,
+      culture_km: `ស្គាល់ម្ហូប ជីវភាព និងទំនៀមទម្លាប់មូលដ្ឋានរបស់ ${nameKm} តាមកន្លែង និងសហគមន៍ដែលបានចុះបញ្ជី។`,
+      culture_en: `Discover local food, daily life and traditions through the places and communities listed for ${nameEn}.`,
       source_urls: null,
     } as ProvinceGuide;
   };
@@ -83,6 +89,7 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
   try {
     const [rows] = await db.query<ProvinceGuide[]>(
       `SELECT p.slug, p.name_km, p.name_en, g.overview_km, g.overview_en,
+        g.story_km, g.story_en, g.history_km, g.history_en, g.culture_km, g.culture_en,
         g.attractions_km, g.attractions_en, g.stay_guide_km, g.stay_guide_en,
         g.food_guide_km, g.food_guide_en, g.source_urls
       FROM provinces p
