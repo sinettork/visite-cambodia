@@ -3693,3 +3693,155 @@ main {
     font-size: 18px;
   }
 }
+
+
+/* Structured content polish: itineraries, events and tools */
+.site-itineraries .itinerary-card {
+  border-color: #ddd7d2;
+}
+
+.site-itineraries .itinerary-hero-badge {
+  box-shadow: none;
+}
+
+.site-itineraries .itinerary-card-body {
+  padding: clamp(18px, 2.6vw, 26px);
+}
+
+.site-itineraries .itinerary-transport-box {
+  background: #faf8f5;
+}
+
+.site-itineraries .itinerary-day-item {
+  padding: 12px 0;
+  border: 0;
+  border-top: 1px solid #e9e5e1;
+  background: transparent;
+}
+
+.site-itineraries .itinerary-day-item:first-child {
+  border-top: 0;
+}
+
+.site-itineraries .itinerary-day-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #315548;
+}
+
+.site-itineraries .itinerary-highlights ul {
+  gap: 4px 18px;
+}
+
+.site-itineraries .itinerary-card-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+}
+
+.site-events .events-list {
+  gap: 0;
+}
+
+.site-events .event-card {
+  padding: 18px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+.site-events .event-card:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-events .event-date-badge {
+  align-self: start;
+  min-height: 80px;
+}
+
+.site-events .event-meta-line {
+  margin-bottom: 8px;
+}
+
+.site-events .event-type-badge {
+  border: 1px solid #eadfd7;
+  background: #fffaf6;
+}
+
+.site-events .event-highlights-box {
+  padding: 10px 0 10px 13px;
+  border: 0;
+  border-left: 2px solid #ded7d0;
+  background: transparent;
+}
+
+.site-events .event-tips-box {
+  background: transparent;
+}
+
+.site-tools .tools-section {
+  margin-bottom: 32px;
+}
+
+.site-tools .currency-converter-card,
+.site-tools .phrasebook-card {
+  border-color: #ded9d4;
+  box-shadow: none;
+}
+
+.site-tools .emergency-contacts-section {
+  padding-top: 4px;
+}
+
+.site-tools .emergency-intro-text {
+  max-width: 760px;
+  margin: -2px 0 14px;
+}
+
+.site-tools .emergency-cards-grid {
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+
+.site-tools .emergency-card {
+  min-height: 82px;
+  align-items: center;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-tools .emergency-icon-badge {
+  width: 34px;
+  height: 34px;
+  flex-basis: 34px;
+}
+
+.site-tools .emergency-call-btn {
+  background: #fffaf6;
+}
+
+@media (max-width: 760px) {
+  .site-events .event-card {
+    gap: 12px;
+    padding-block: 15px;
+  }
+
+  .site-tools .emergency-card {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-itineraries .itinerary-card-body {
+    padding: 16px;
+  }
+
+  .site-events .event-date-badge {
+    min-width: 90px;
+  }
+
+  .site-tools .emergency-card {
+    gap: 9px;
+  }
+}
