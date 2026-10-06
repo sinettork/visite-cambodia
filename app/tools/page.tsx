@@ -28,7 +28,7 @@ export default async function ToolsPage({
   const t = T[lang];
 
   return (
-    <Shell lang={lang} variant="editorial">
+    <Shell lang={lang} variant="tools">
       <div className="tools-page-container">
         <header className="page-header-block">
           <h1>{t.toolsTitle}</h1>
