@@ -2258,36 +2258,36 @@ main {
 
 .favorite-btn {
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   place-items: center;
   padding: 0;
   border: 0;
   border-radius: 0;
   color: #fff;
-  background: rgb(20 20 20 / 22%);
+  background: transparent;
   box-shadow: none;
   font-size: 16px;
   line-height: 1;
-  text-shadow: 0 1px 5px rgb(0 0 0 / 65%);
-  transition: color .15s ease, background .15s ease, transform .15s ease;
+  text-shadow: none;
+  transition: color .15s ease, transform .15s ease;
 }
 
 .favorite-btn:hover {
   color: #ffd2ae;
-  background: rgb(20 20 20 / 38%);
+  background: transparent;
   transform: translateY(-1px);
 }
 
 .favorite-btn.large {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   font-size: 18px;
 }
 
 .favorite-btn.active {
   color: var(--accent);
-  background: rgb(20 20 20 / 30%);
+  background: transparent;
 }
 
 .card-favorite-btn {
