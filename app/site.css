@@ -3487,6 +3487,72 @@ main {
   margin-bottom: 15px;
 }
 
+.province-editorial {
+  margin: 0 0 34px;
+}
+
+.province-editorial .section-head {
+  margin-bottom: 18px;
+}
+
+.province-editorial-story {
+  max-width: 860px;
+  margin-bottom: 20px;
+}
+
+.province-editorial-story p {
+  margin: 0;
+  color: #4f4944;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.province-editorial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.province-editorial-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 0 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.province-editorial-index {
+  padding-top: 2px;
+  color: #b7744a;
+  font: 700 12px var(--font-roboto-condensed), sans-serif;
+}
+
+.province-editorial-item h3 {
+  margin: 0 0 7px;
+  color: var(--text-primary);
+  font: 700 18px/1.3 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+}
+
+.province-editorial-item p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 760px) {
+  .province-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .province-editorial-item {
+    padding-block: 16px;
+  }
+}
+
+
 .site-region .section-head {
   margin-bottom: 11px;
 }
