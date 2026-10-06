@@ -1,7 +1,16 @@
 import type { ProvinceGuide } from "@/lib/types/place";
 import { pick, type Lang } from "@/lib/i18n";
+import { getProvinceGallery } from "@/lib/province-gallery";
+import ProvinceGallery from "./ProvinceGallery";
 
 const provinceBannerImages: Record<string, {
+  image: string;
+  alt: string;
+  credit: string;
+  source: string;
+  license: string;
+  licenseUrl: string;
+}> = const provinceBannerImages: Record<string, {
   image: string;
   alt: string;
   credit: string;
@@ -209,36 +218,29 @@ const provinceBannerImages: Record<string, {
     license: "CC BY-SA 2.0",
     licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
   },
-};
+};;
 
 export function getProvinceBannerImage(slug: string): string | undefined {
   return provinceBannerImages[slug]?.image;
 }
 
-export default function ProvinceHero({ guide, lang, disclaimer }: {
+export default async function ProvinceHero({ guide, lang, disclaimer }: {
   guide: ProvinceGuide;
   lang: Lang;
   disclaimer: string;
 }) {
   const image = provinceBannerImages[guide.slug];
   const name = pick(guide, "name", lang);
+  const slides = await getProvinceGallery(guide.slug, image ?? null);
 
   return (
-    <header className={`province-hero${image ? " has-photo" : ""}`} aria-labelledby="province-title">
-      {image && <img className="province-hero-image" src={image.image} alt={image.alt} fetchPriority="high" />}
-      <div className="province-hero-shade" aria-hidden="true" />
-      <div className="province-hero-copy">
-        <h1 id="province-title">{name}</h1>
-        <p>{pick(guide, "overview", lang)}</p>
-        <p className="province-hero-disclaimer">{disclaimer}</p>
-      </div>
-      {image && (
-        <div className="province-photo-credit">
-          <a href={image.source} target="_blank" rel="noreferrer">Photo: {image.credit}</a>
-          <span aria-hidden="true"> · </span>
-          <a href={image.licenseUrl} target="_blank" rel="noreferrer">{image.license}</a>
-        </div>
-      )}
+    <header className={"province-hero" + (slides.length ? " has-photo" : "")} aria-labelledby="province-title">
+      <ProvinceGallery
+        slides={slides}
+        title={name}
+        overview={pick(guide, "overview", lang)}
+        disclaimer={disclaimer}
+      />
     </header>
   );
 }
