@@ -390,37 +390,35 @@ main {
   font-size: 10px;
 }
 
-.province-gallery-controls {
+.province-gallery-dots {
   position: absolute;
   z-index: 3;
-  right: 16px;
+  right: 18px;
   bottom: 14px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 7px;
-  color: rgb(255 255 255 / 84%);
-  font: 700 10px var(--font-roboto-condensed), sans-serif;
+  gap: 6px;
 }
 
-.province-gallery-controls button {
-  display: inline-flex;
-  width: 24px;
-  height: 24px;
-  align-items: center;
-  justify-content: center;
+.province-gallery-dots button {
+  width: 7px;
+  height: 7px;
   padding: 0;
   border: 0;
-  color: inherit;
-  background: transparent;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 52%);
+  box-shadow: none;
 }
 
-.province-gallery-controls button:hover {
-  color: var(--accent);
+.province-gallery-dots button:hover,
+.province-gallery-dots button:focus-visible {
+  background: rgb(255 255 255 / 92%);
 }
 
-.province-gallery-controls span {
-  min-width: 42px;
-  text-align: center;
+.province-gallery-dots button.is-active {
+  width: 20px;
+  border-radius: 7px;
+  background: #fff;
 }
 
 .province-photo-credit {
