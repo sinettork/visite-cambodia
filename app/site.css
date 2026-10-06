@@ -3716,6 +3716,37 @@ main {
   box-shadow: none;
 }
 
+.site-food .review {
+  border-color: #dfc7b2;
+  background: #fffaf4;
+  box-shadow: 0 3px 12px rgb(92 54 29 / 8%);
+}
+
+.site-food .review:hover {
+  border-color: #d98b50;
+  box-shadow: 0 5px 16px rgb(92 54 29 / 14%);
+}
+
+.site-food .review-thumb-wrapper {
+  background: #e7c7a8;
+}
+
+.site-food .review-thumb-empty {
+  color: #fffaf4;
+  background: #a85f35;
+  font-size: 13px;
+  letter-spacing: .2px;
+  text-shadow: 0 1px 2px rgb(55 28 15 / 35%);
+}
+
+.site-food .review h3 {
+  color: #4d3023;
+}
+
+.site-food .review-meta {
+  color: #80624d;
+}
+
 .site-food .food-tag {
   border-top: 1px solid #eee5dc;
   padding-top: 5px;
