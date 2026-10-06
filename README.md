@@ -5,7 +5,7 @@
 1. Install dependencies with `npm install`.
 2. Copy `.env.example` to `.env.local` and set your MySQL connection values.
 3. Import `db/schema.sql` into your MySQL server.
-4. Apply each SQL migration in `db/migrations/` in filename order.
+4. Apply each SQL migration in `db/migrations/` in filename order. Migration `004_province_story_content.sql` adds the province storytelling fields used by the region pages.
 5. Start the app with `npm run dev` and open http://localhost:3000.
 
 The app uses MySQL when configured and falls back to sample data if the database cannot be reached. English and Khmer are supported. Province guides cover all 25 Cambodian provinces and municipality. Place listings can be classified as attractions, accommodations, or restaurants; only add named businesses after verifying their details.
