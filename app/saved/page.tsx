@@ -27,7 +27,7 @@ export default async function SavedPage({
   const allPlaces = await getPlaces({});
 
   return (
-    <Shell lang={lang} variant="editorial">
+    <Shell lang={lang} variant="saved">
       <SavedPlacesList allPlaces={allPlaces} lang={lang} />
     </Shell>
   );
