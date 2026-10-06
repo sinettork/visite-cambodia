@@ -3961,3 +3961,104 @@ main {
     align-items: flex-start;
   }
 }
+
+
+/* Site-wide flat editorial treatment */
+.section-head {
+  border-bottom: 1px solid var(--border);
+}
+
+.page-header-block,
+.discover-page-heading,
+.saved-header-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.discover-actions a,
+.clear-filters,
+.btn-explore-places,
+.saved-clear-btn,
+.saved-explore-link,
+.btn-reset-map-filters,
+.emergency-call-btn,
+.popup-detail-btn,
+.law-source-card a,
+.pagination a,
+.pagination span {
+  min-height: 28px;
+  padding: 3px 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--accent);
+  background: transparent;
+  box-shadow: none;
+  font-weight: 700;
+}
+
+.discover-actions a:hover,
+.clear-filters:hover,
+.btn-explore-places:hover,
+.saved-clear-btn:hover,
+.saved-explore-link:hover,
+.btn-reset-map-filters:hover,
+.emergency-call-btn:hover,
+.popup-detail-btn:hover,
+.law-source-card a:hover,
+.pagination a:hover {
+  color: #c85f18;
+  border: 0;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.saved-count-badge {
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+}
+
+.saved-clear-btn {
+  align-self: flex-start;
+}
+
+.saved-explore-link {
+  margin-top: 15px;
+  background: transparent;
+}
+
+.popup-detail-btn {
+  display: inline-flex;
+}
+
+.pagination {
+  gap: 16px;
+}
+
+.pagination span[aria-current="page"] {
+  color: #777;
+  background: transparent;
+}
+
+.site-events .event-type-badge {
+  padding: 0;
+  border: 0;
+  color: var(--accent);
+  background: transparent;
+}
+
+.site-laws .law-disclaimer {
+  padding: 10px 0;
+  border-left: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+@media (max-width: 620px) {
+  .discover-actions {
+    gap: 12px 16px;
+  }
+
+  .pagination {
+    gap: 12px;
+  }
+}
