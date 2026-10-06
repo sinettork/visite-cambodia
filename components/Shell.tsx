@@ -25,7 +25,7 @@ export default async function Shell({
           </div>
           <Link className="all-brands" href={`/explore?lang=${lang}`}>{t.destinations} <b>›</b></Link>
         </aside>
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <aside className="right-side">
           <h2>{t.popular}</h2>
           <div className="phones">
