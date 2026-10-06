@@ -58,6 +58,7 @@ export default async function RegionPage({ params, searchParams }: {
         <a href="#province-about"><i className="fa-solid fa-book-open" aria-hidden="true" /><span>{t.aboutProvince}</span></a>
         <a href="#province-history"><i className="fa-solid fa-landmark" aria-hidden="true" /><span>{t.historyAndHeritage}</span></a>
         <a href="#province-culture"><i className="fa-solid fa-people-group" aria-hidden="true" /><span>{t.cultureLocalLife}</span></a>
+        <a href="#province-plan"><i className="fa-solid fa-route" aria-hidden="true" /><span>{t.planYourVisit}</span></a>
         {sections.map((section) => {
           const icon = section.type === "attraction" ? "fa-compass" : section.type === "accommodation" ? "fa-bed" : "fa-utensils";
           return (
@@ -75,6 +76,7 @@ export default async function RegionPage({ params, searchParams }: {
           about: t.aboutProvince,
           history: t.historyAndHeritage,
           culture: t.cultureLocalLife,
+          travel: t.planYourVisit,
         }}
       />
       {sections.map((section) => (
