@@ -63,7 +63,7 @@ SET
     WHEN 'tboung-khmum' THEN 'Tboung Khmum suits travelers interested in agriculture, rubber landscapes and communities along the Mekong. It can be linked with Kampong Cham and Kratie on an eastern route. Rural sites are easier with your own transport or local guidance.'
     ELSE 'Confirm road conditions, weather, opening hours and local services with current sources before departure.'
   END,
-  g.source_urls = CASE p.slug
+  g.source_urls = CONCAT('https://tourism.gov.kh/', CHAR(10), CASE p.slug
     WHEN 'banteay-meanchey' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/banteay-meanchey.htm', CHAR(10), 'https://en.wikipedia.org/wiki/Banteay_Meanchey_province')
     WHEN 'battambang' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/battambang.htm', CHAR(10), 'https://en.wikipedia.org/wiki/Battambang_province')
     WHEN 'kampong-cham' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/kampong-cham.htm', CHAR(10), 'https://en.wikipedia.org/wiki/Kampong_Cham_province')
@@ -90,4 +90,4 @@ SET
     WHEN 'pailin' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/pailin.htm', CHAR(10), 'https://en.wikipedia.org/wiki/Pailin_province')
     WHEN 'tboung-khmum' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/tbong-khmum.htm', CHAR(10), 'https://en.wikipedia.org/wiki/Tboung_Khmum_province')
     ELSE g.source_urls
-  END;
+  END);
