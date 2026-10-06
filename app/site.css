@@ -776,8 +776,8 @@ main {
 
 .brands {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 7px;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .brands a,
@@ -1246,7 +1246,7 @@ main {
   }
 
   .left-side .brands {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
   }
 
   main {
