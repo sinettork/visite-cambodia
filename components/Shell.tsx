@@ -7,7 +7,7 @@ import BackToTop from "./BackToTop";
 
 export default async function Shell({
   lang, q, active, type, variant = "results", children,
-}: { lang: Lang; q?: string; active?: string; type?: "" | "attraction" | "accommodation" | "restaurant"; variant?: "home" | "results" | "editorial" | "food" | "discover" | "itineraries" | "events" | "tools" | "region" | "place"; children: React.ReactNode }) {
+}: { lang: Lang; q?: string; active?: string; type?: "" | "attraction" | "accommodation" | "restaurant"; variant?: "home" | "results" | "editorial" | "food" | "discover" | "itineraries" | "events" | "tools" | "map" | "saved" | "laws" | "region" | "place"; children: React.ReactNode }) {
   const [provinces, popular] = await Promise.all([getProvinces(), getPopular()]);
   const t = T[lang];
   return (
