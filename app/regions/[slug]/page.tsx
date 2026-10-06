@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import PlaceCard from "@/components/PlaceCard";
 import ProvinceHero from "@/components/ProvinceHero";
+import ProvinceStory from "@/components/ProvinceStory";
 import Shell from "@/components/Shell";
 import { getLang, pick, T } from "@/lib/i18n";
 import { getPlaces, getProvinceGuide } from "@/lib/queries";
@@ -53,7 +54,10 @@ export default async function RegionPage({ params, searchParams }: {
         <span aria-current="page">{name}</span>
       </nav>
       <ProvinceHero guide={guide} lang={lang} disclaimer={t.guideDisclaimer} />
-      <nav className="region-jump-nav" aria-label={lang === "km" ? "មើលតាមប្រភេទ" : "Jump to section"}>
+      <nav className="region-jump-nav" aria-label={lang === "km" ? "មើលផ្នែក" : "Jump to section"}>
+        <a href="#province-about"><i className="fa-solid fa-book-open" aria-hidden="true" /><span>{t.aboutProvince}</span></a>
+        <a href="#province-history"><i className="fa-solid fa-landmark" aria-hidden="true" /><span>{t.historyAndHeritage}</span></a>
+        <a href="#province-culture"><i className="fa-solid fa-people-group" aria-hidden="true" /><span>{t.cultureLocalLife}</span></a>
         {sections.map((section) => {
           const icon = section.type === "attraction" ? "fa-compass" : section.type === "accommodation" ? "fa-bed" : "fa-utensils";
           return (
@@ -64,6 +68,15 @@ export default async function RegionPage({ params, searchParams }: {
           );
         })}
       </nav>
+      <ProvinceStory
+        guide={guide}
+        lang={lang}
+        labels={{
+          about: t.aboutProvince,
+          history: t.historyAndHeritage,
+          culture: t.cultureLocalLife,
+        }}
+      />
       {sections.map((section) => (
         <section className="region-section" id={`region-${section.type}`} key={section.type}>
           <div className="section-head"><h2>{section.title}</h2><Link href={`/explore?lang=${lang}&province=${slug}&type=${section.type}`}>{t.all} ›</Link></div>
