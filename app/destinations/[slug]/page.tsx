@@ -78,6 +78,32 @@ export default async function PlacePage({ params, searchParams }: {
         {p.listing_type === "attraction" && <tr><th>{t.ticket}</th><td>{p.ticket_usd ? `$${p.ticket_usd}` : t.free}</td></tr>}
         {p.open_hours && <tr><th>{t.hours}</th><td>{p.open_hours}</td></tr>}
       </tbody></table>
+      {p.guide && (
+        <nav className="place-jump-nav" aria-label={lang === "km" ? "មាតិកាទីតាំង" : "Place sections"}>
+          <a href="#place-guide-title">{t.aboutPlace}</a>
+          {p.guide.history_km || p.guide.history_en ? <a href="#place-history">{t.destinationHistory}</a> : null}
+          {p.guide.highlights_km || p.guide.highlights_en ? <a href="#place-highlights">{t.destinationHighlights}</a> : null}
+          {p.guide.visit_plan_km || p.guide.visit_plan_en ? <a href="#place-plan">{t.planYourVisit}</a> : null}
+          {p.guide.tips_km || p.guide.tips_en ? <a href="#place-tips">{t.travelerTips}</a> : null}
+          {p.guide.source_urls ? <a href="#place-sources">{t.sources}</a> : null}
+        </nav>
+      )}
+
+      {p.guide && (
+        <PlaceGuide
+          place={p}
+          lang={lang}
+          labels={{
+            about: t.aboutPlace,
+            history: t.destinationHistory,
+            highlights: t.destinationHighlights,
+            plan: t.planYourVisit,
+            tips: t.travelerTips,
+            sources: t.sources,
+          }}
+        />
+      )}
+
       <div className="destination-actions">
         {p.lat && p.lng && (
           <a
