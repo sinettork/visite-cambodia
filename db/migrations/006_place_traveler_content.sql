@@ -85,14 +85,14 @@ SELECT
   END,
 
   CASE p.slug
-    WHEN 'angkor-wat' THEN 'https://apsaraauthority.gov.kh/temples-new/' || CHAR(10) || 'https://whc.unesco.org/en/list/668/'
-    WHEN 'angkor-thom' THEN 'https://apsaraauthority.gov.kh/temples-new/' || CHAR(10) || 'https://apsaraauthority.gov.kh/our-work/tourism-info/' || CHAR(10) || 'https://whc.unesco.org/en/list/668/'
+    WHEN 'angkor-wat' THEN CONCAT('https://apsaraauthority.gov.kh/temples-new/', CHAR(10), 'https://whc.unesco.org/en/list/668/')
+    WHEN 'angkor-thom' THEN CONCAT('https://apsaraauthority.gov.kh/temples-new/', CHAR(10), 'https://apsaraauthority.gov.kh/our-work/tourism-info/', CHAR(10), 'https://whc.unesco.org/en/list/668/')
     WHEN 'royal-palace' THEN 'https://www.tourismcambodia.com/travelguides/provinces/phnom-penh/what-to-see/18_royal-palace.htm'
     WHEN 'wat-phnom' THEN 'https://www.tourismcambodia.com/travelguides/provinces/phnom-penh/what-to-see/22_wat-phnom-hill.htm'
-    WHEN 'bokor-national-park' THEN 'https://www.tourismcambodia.com/travelguides/provinces/kampot/what-to-see/37_bokor-hill-station.htm' || CHAR(10) || 'https://www.tourismcambodia.com/news/localnews/23943/preserving-history-on-bokor-hill-station.htm'
-    WHEN 'kep-crab-market' THEN 'https://www.tourismcambodia.com/travelguides/provinces/kep/where-to-eat.htm' || CHAR(10) || 'https://www.tourismcambodia.com/travelguides/provinces/kep.htm'
+    WHEN 'bokor-national-park' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/kampot/what-to-see/37_bokor-hill-station.htm', CHAR(10), 'https://www.tourismcambodia.com/news/localnews/23943/preserving-history-on-bokor-hill-station.htm')
+    WHEN 'kep-crab-market' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/kep/where-to-eat.htm', CHAR(10), 'https://www.tourismcambodia.com/travelguides/provinces/kep.htm')
     WHEN 'koh-rong' THEN 'https://www.tourismcambodia.com/travelguides/provinces/sihanouk-ville/what-to-see/427_koh-rong-island.htm'
-    WHEN 'yeak-laom-lake' THEN 'https://www.tourismcambodia.com/travelguides/provinces/rattanakiri/what-tosee/216_beung-yeak-loam.htm' || CHAR(10) || 'https://www.tourismcambodia.com/visit-cambodia/attractions/rattanakiri.htm'
+    WHEN 'yeak-laom-lake' THEN CONCAT('https://www.tourismcambodia.com/travelguides/provinces/rattanakiri/what-tosee/216_beung-yeak-loam.htm', CHAR(10), 'https://www.tourismcambodia.com/visit-cambodia/attractions/rattanakiri.htm')
   END
 FROM places p
 WHERE p.slug IN (
