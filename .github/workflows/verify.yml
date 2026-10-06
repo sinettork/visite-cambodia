@@ -30,3 +30,17 @@ jobs:
 
       - name: Production build
         run: npm run build
+
+      - name: Start production server
+        run: |
+          npm run start > /tmp/visit-cambodia-next.log 2>&1 &
+          echo $! > /tmp/visit-cambodia-next.pid
+
+      - name: Route smoke test
+        env:
+          BASE_URL: http://127.0.0.1:3000
+        run: node scripts/verify-routes.mjs
+
+      - name: Server log on failure
+        if: failure()
+        run: cat /tmp/visit-cambodia-next.log || true
