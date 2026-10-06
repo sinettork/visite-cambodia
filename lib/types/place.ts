@@ -24,6 +24,7 @@ export type Place = RowDataPacket & {
   slug: string;
   category: string;
   listing_type: "attraction" | "accommodation" | "restaurant";
+  ticket_status?: "free" | "unknown" | "check" | null;
   image_url: string | null;
   name_km: string;
   name_en: string;

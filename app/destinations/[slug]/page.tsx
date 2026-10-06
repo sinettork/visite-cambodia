@@ -40,6 +40,12 @@ export default async function PlacePage({ params, searchParams }: {
   const name = pick(p, "name", lang);
   const summary = pick(p, "summary", lang);
   const detailedDescription = pick(p.guide ?? {}, "about", lang) || summary;
+  const ticketStatus = p.ticket_status ?? (p.ticket_usd ? "check" : "unknown");
+  const ticketLabel = ticketStatus === "free"
+    ? t.ticketFree
+    : ticketStatus === "check"
+      ? `${p.ticket_usd ? `$${p.ticket_usd} — ` : ""}${t.ticketCheck}`
+      : t.ticketUnknown;
   const heroImage = p.image_url ?? ({
     "angkor-wat": "/images/angkor-wat-header.jpg",
     "angkor-thom": "/images/angkor-wat-header.jpg",
@@ -75,7 +81,7 @@ export default async function PlacePage({ params, searchParams }: {
       {summary && <p className="destination-summary">{summary}</p>}
       <table className="spec-table"><tbody>
         <tr><th>{t.province}</th><td>{pick({ n_km: p.province_km, n_en: p.province_en }, "n", lang)}</td></tr>
-        {p.listing_type === "attraction" && <tr><th>{t.ticket}</th><td>{p.ticket_usd ? `$${p.ticket_usd}` : t.free}</td></tr>}
+        {p.listing_type === "attraction" && <tr><th>{t.ticket}</th><td>{ticketLabel}</td></tr>}
         {p.open_hours && <tr><th>{t.hours}</th><td>{p.open_hours}</td></tr>}
       </tbody></table>
       {p.guide && (

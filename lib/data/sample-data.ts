@@ -14,6 +14,7 @@ export type SamplePlace = {
   summary_km: string | null;
   summary_en: string | null;
   ticket_usd: string | null;
+  ticket_status?: "free" | "unknown" | "check";
   open_hours: string | null;
   lat: string | null;
   lng: string | null;
@@ -247,6 +248,7 @@ export const samplePlaces: SamplePlace[] = [
     summary_km: "ចម្ការម្រេចកំពតសរីរាង្គលំដាប់ពិភពលោក ផ្តល់ការទស្សនាដោយឥតគិតថ្លៃ និងភ្លក់រសជាតិម្រេចគ្រប់ប្រភេទ។",
     summary_en: "Award-winning organic Kampot pepper plantation offering guided agricultural tours and tastings.",
     ticket_usd: null,
+    ticket_status: "free",
     open_hours: "09:00-18:00",
     lat: "10.6558",
     lng: "104.3721",
