@@ -52,6 +52,28 @@ SELECT
   END,
 
   CASE p.slug
+    WHEN 'angkor-wat' THEN 'អង្គរវត្តត្រូវបានសាងសង់នៅសតវត្សរ៍ទី១២ ក្នុងរជ្ជកាលព្រះបាទសូរ្យវរ្ម័នទី២ ហើយដើមឡើយឧទ្ទិសដល់ព្រះវិស្ណុ។ ប្រាសាទបានបន្តជាទីសក្ការៈ និងជាផ្នែកសំខាន់នៃប្រវត្តិសាស្ត្រអង្គរ។'
+    WHEN 'angkor-thom' THEN 'អង្គរធំត្រូវបានពង្រីក និងរៀបចំជាមជ្ឈមណ្ឌលរាជធានីសំខាន់ក្នុងរជ្ជកាលព្រះបាទជ័យវរ្ម័នទី៧ នៅចុងសតវត្សរ៍ទី១២។ បាយ័ន និងសំណង់សាធារណៈនៅក្នុងក្រុងបង្ហាញពីការរៀបចំទីក្រុង និងជំនឿសាសនានៃសម័យនោះ។'
+    WHEN 'royal-palace' THEN 'រាជវាំងភ្នំពេញមានប្រវត្តិសាស្ត្រភ្ជាប់នឹងការរៀបចំរាជធានីភ្នំពេញជាមជ្ឈមណ្ឌលរដ្ឋបាល និងរាជវាំងនៅសតវត្សរ៍ទី១៩។ បរិវេណបច្ចុប្បន្នបានក្លាយជាសំណុំស្ថាបត្យកម្មរាជវាំងដ៏សំខាន់របស់កម្ពុជា។'
+    WHEN 'wat-phnom' THEN 'ប្រវត្តិនៃវត្តភ្នំត្រូវបានភ្ជាប់ជាមួយរឿងព្រេងលោកយាយពេញ និងការបង្កើតឈ្មោះភ្នំពេញ។ ភ្នំនិងវត្តត្រូវបានអភិវឌ្ឍឡើងជាបន្តបន្ទាប់ក្នុងរយៈពេលជាច្រើនសតវត្សរ៍។'
+    WHEN 'bokor-national-park' THEN 'Bokor Hill Station ត្រូវបានអភិវឌ្ឍក្នុងសម័យអាណានិគមបារាំងនៅដើមសតវត្សរ៍ទី២០ ជាតំបន់ភ្នំសម្រាប់សម្រាកពីអាកាសធាតុក្តៅ។ សំណង់នៅសល់បានក្លាយជាផ្នែកសំខាន់នៃទេសចរណ៍បេតិកភណ្ឌរបស់ភ្នំបូកគោ។'
+    WHEN 'kep-crab-market' THEN 'កែបត្រូវបានអភិវឌ្ឍជាទីក្រុងមាត់សមុទ្រនិងតំបន់សម្រាកលំហែកាយ ហើយការនេសាទបានក្លាយជាផ្នែកសំខាន់នៃជីវភាពមូលដ្ឋាន។ ផ្សារក្តាមសព្វថ្ងៃបន្តបង្ហាញទំនាក់ទំនងរវាងសហគមន៍នេសាទ និងម្ហូបសមុទ្រ។'
+    WHEN 'koh-rong' THEN 'កោះរ៉ុងមានសហគមន៍រស់នៅ និងការប្រើប្រាស់ធនធានសមុទ្រមុនពេលទេសចរណ៍សម័យទំនើបរីកចម្រើន។ ក្នុងប៉ុន្មានទសវត្សរ៍ចុងក្រោយ កោះបានអភិវឌ្ឍជាទិសដៅទេសចរណ៍ដែលមានសេវាស្នាក់នៅ និងសកម្មភាពសមុទ្រច្រើនឡើង។'
+    WHEN 'yeak-laom-lake' THEN 'បឹងយក្សឡោមជាបឹងភ្នំភ្លើងធម្មជាតិដែលមានទំនាក់ទំនងវប្បធម៌ជាមួយសហគមន៍ជនជាតិដើមនៅរតនគិរី។ តំបន់នេះត្រូវបានគ្រប់គ្រងដោយការរួមបញ្ចូលការអភិរក្សធម្មជាតិ និងការគោរពតម្លៃសហគមន៍។'
+  END,
+
+  CASE p.slug
+    WHEN 'angkor-wat' THEN 'Angkor Wat was built in the 12th century during the reign of King Suryavarman II and was originally dedicated to Vishnu. It later remained an important sacred and cultural monument within the Angkor landscape.'
+    WHEN 'angkor-thom' THEN 'Angkor Thom was expanded and organised as a major royal capital under King Jayavarman VII in the late 12th century. Bayon and the civic structures inside the city reflect the urban planning and religious world of the period.'
+    WHEN 'royal-palace' THEN 'Phnom Penh’s Royal Palace is tied to the development of the capital as Cambodia’s political and royal centre in the 19th century. The present grounds form one of the country’s most important ensembles of royal architecture.'
+    WHEN 'wat-phnom' THEN 'Wat Phnom is closely linked to the legend of Lady Penh and the origin story of Phnom Penh. The hill and pagoda have been developed and restored over several centuries.'
+    WHEN 'bokor-national-park' THEN 'Bokor Hill Station was developed during the French colonial period in the early 20th century as a hill retreat from the lowland heat. The surviving structures are now part of the heritage landscape of Bokor.'
+    WHEN 'kep-crab-market' THEN 'Kep developed as a coastal town and leisure destination, while fishing remained an important part of local life. The crab market continues that connection between fishing communities and seafood culture.'
+    WHEN 'koh-rong' THEN 'Koh Rong has long had local communities and traditional uses of marine resources. In recent decades the island has developed into a tourism destination with a growing range of accommodation and marine activities.'
+    WHEN 'yeak-laom-lake' THEN 'Yeak Laom is a natural volcanic lake with longstanding cultural significance for Indigenous communities in Ratanakiri. The area combines nature conservation with respect for local community values.'
+  END,
+
+  CASE p.slug
     WHEN 'angkor-wat' THEN 'ផ្នែកដែលគួរយកចិត្តទុកដាក់រួមមានបណ្ណសិលាចារឹក និងចម្លាក់តាមជញ្ជាំងរានហាល កំពូលប្រាង្គកណ្ដាល និងទស្សនីយភាពជុំវិញគូទឹក។ គួរទុកពេលសម្រាប់ដើររកព័ត៌មានអំពីស្ថាបត្យកម្ម មិនមែនត្រឹមតែថតរូបទេ។'
     WHEN 'angkor-thom' THEN 'គួរមើលទ្វារទីក្រុងទាំងផ្លូវចូល បាយ័ន និងកំពែងជុំវិញ។ បាពួន ស្រះស្រង់ និងតំបន់រាជវាំងបុរាណអាចបញ្ចូលក្នុងផ្លូវទស្សនាដូចគ្នា។ ចម្លាក់មុខ និងរូបភាពតាមរានហាលជួយឱ្យយល់ពីអត្តសញ្ញាណរបស់ទីក្រុង។'
     WHEN 'royal-palace' THEN 'ផ្តោតលើព្រះទីនាំងចន្ទឆាយ ព្រះទីនាំងសំខាន់ៗ បរិវេណវត្តប្រាក់ និងស្នាដៃសិល្បៈខ្មែរនៅក្នុងបរិវេណ។ ទីតាំងមានន័យជាផ្នែកមួយនៃជីវិតរាជវាំងបច្ចុប្បន្ន មិនមែនជាប្រាសាទបុរាណប៉ុណ្ណោះទេ។'
