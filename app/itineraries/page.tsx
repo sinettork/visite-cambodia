@@ -54,10 +54,23 @@ export default async function ItinerariesPage({
                 </div>
 
                 <div className="itinerary-card-body">
-                  <div className="itinerary-meta-tags">
-                    <span className="tag-region"><i className="fa-solid fa-location-dot" aria-hidden="true" /> {region}</span>
-                    <span className="tag-season"><i className="fa-regular fa-sun" aria-hidden="true" /> {bestTime}</span>
-                    <span className="tag-budget"><i className="fa-solid fa-tag" aria-hidden="true" /> {itinerary.estimated_cost_usd}</span>
+                  <div className="itinerary-summary-table-wrap">
+                    <table className="itinerary-summary-table">
+                      <thead>
+                        <tr>
+                          <th>{lang === "km" ? "តំបន់" : "Destination"}</th>
+                          <th>{lang === "km" ? "រដូវសមស្រប" : "Best time"}</th>
+                          <th>{lang === "km" ? "ចំណាយប្រហែល" : "Estimated cost"}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{region}</td>
+                          <td>{bestTime}</td>
+                          <td>{itinerary.estimated_cost_usd}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
 
                   <h2>{title}</h2>
