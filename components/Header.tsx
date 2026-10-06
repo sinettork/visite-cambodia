@@ -136,7 +136,7 @@ export default function Header({
                   className={active === province.slug ? "active-prov-link" : ""}
                   aria-current={active === province.slug ? "page" : undefined}
                 >
-                  {lang === "km" ? province.name_km : province.name_en}
+                  <span className="province-nav-name">{lang === "km" ? province.name_km : province.name_en}</span>
                 </Link>
               ))}
             </div>
