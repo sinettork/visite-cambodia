@@ -46,12 +46,14 @@ export default async function ItinerariesPage({
 
             return (
               <article key={itinerary.id} className="itinerary-card" id={itinerary.slug}>
-                <div className="itinerary-card-hero">
-                  <img src={itinerary.image_url} alt={title} loading="lazy" />
-                  <div className="itinerary-hero-badge">
-                    <span>{duration}</span>
+                {itinerary.image_url && (
+                  <div className="itinerary-card-hero">
+                    <img src={itinerary.image_url} alt={title} loading="lazy" />
+                    <div className="itinerary-hero-badge">
+                      <span>{duration}</span>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="itinerary-card-body">
                   <div className="itinerary-summary-table-wrap">
