@@ -68,10 +68,8 @@ export default async function PlacePage({ params, searchParams }: {
         <div className="destination-hero-content">
           <h1 id="destination-title">{name}</h1>
         </div>
+        <FavoriteButton slug={p.slug} lang={lang} size="large" className="destination-hero-favorite" />
       </header>
-      <div className="destination-action-bar">
-        <FavoriteButton slug={p.slug} lang={lang} size="large" />
-      </div>
       {summary && <p className="destination-summary">{summary}</p>}
       <table className="spec-table"><tbody>
         <tr><th>{t.province}</th><td>{pick({ n_km: p.province_km, n_en: p.province_en }, "n", lang)}</td></tr>
