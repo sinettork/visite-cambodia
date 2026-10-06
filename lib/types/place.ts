@@ -28,6 +28,12 @@ export type Place = RowDataPacket & {
 export type ProvinceGuide = Province & {
   overview_km: string;
   overview_en: string;
+  story_km: string | null;
+  story_en: string | null;
+  history_km: string | null;
+  history_en: string | null;
+  culture_km: string | null;
+  culture_en: string | null;
   attractions_km: string;
   attractions_en: string;
   stay_guide_km: string;
