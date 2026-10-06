@@ -23,7 +23,7 @@ export type Itinerary = {
   best_time_en: string;
   budget_level: "$" | "$$" | "$$$";
   estimated_cost_usd: string;
-  image_url: string;
+  image_url: string | null;
   overview_km: string;
   overview_en: string;
   days: ItineraryDay[];
@@ -97,7 +97,7 @@ export const sampleItineraries: Itinerary[] = [
     best_time_en: "November to May (Calm seas and sunny beach days)",
     budget_level: "$$",
     estimated_cost_usd: "$150 - $280 / ម្នាក់",
-    image_url: "/images/bokor-national-park.svg",
+    image_url: null,
     overview_km: "ដំណើរកម្សាន្តតាមបណ្តោយឆ្នេរសមុទ្រភាគខាងត្បូងកម្ពុជា រួមបញ្ចូលទាំងការស្រូបយកខ្យល់អាកាសបរិសុទ្ធ ភ្នំបូកគោ ចម្ការម្រេច អាហារសមុទ្រស្រស់ៗ និងកោះធម្មជាតិដ៏ស្រស់ត្រកាល។",
     overview_en: "Discover the relaxed charms of Cambodia's southern coast: historic riverside Kampot, seafood capital Kep, and the tranquil white beaches of Koh Rong.",
     transport_km: "រថយន្តឈ្នួល/តាក់ស៊ី, ម៉ូតូជួល, និងកប៉ាល់ល្បឿនលឿនទៅកោះ (Speed Ferry)",
@@ -156,7 +156,7 @@ export const sampleItineraries: Itinerary[] = [
     best_time_en: "All year round",
     budget_level: "$",
     estimated_cost_usd: "$60 - $140 / ម្នាក់",
-    image_url: "/images/royal-palace.svg",
+    image_url: null,
     overview_km: "ស្វែងយល់ពីរាជធានីភ្នំពេញ «គុជនៃអាស៊ី» តាមរយៈសំណង់ស្ថាបត្យកម្មព្រះបរមរាជវាំង សារមន្ទីរប្រវត្តិសាស្ត្រ និងជីវិតរស់រវើកតាមបណ្តោយមាត់ទន្លេចតុមុខ។",
     overview_en: "A rich cultural city break showcasing Cambodia's vibrant capital, from royal architectural masterpieces to evocative historical landmarks and lively riverside promenades.",
     transport_km: "PassApp / Grab, រ៉ឺម៉កកង់បី ឬដើរថ្មើរជើងតាមមាត់ទន្លេ",
@@ -197,7 +197,7 @@ export const sampleItineraries: Itinerary[] = [
     best_time_en: "October to February (Lush green landscapes and full waterfalls)",
     budget_level: "$$$",
     estimated_cost_usd: "$180 - $320 / ម្នាក់",
-    image_url: "/images/yeak-laom-lake.svg",
+    image_url: null,
     overview_km: "ដំណើរកម្សាន្តបែបផ្សងព្រេង និងអេកូទេសចរណ៍នៅតំបន់ខ្ពង់រាបភាគឦសាន ជួបជាមួយជនជាតិដើមភាគតិច ដើរមើលដំរីក្នុងជម្រកធម្មជាតិ និងហែលទឹកក្នុងបឹងភ្នំភ្លើងបុរាណ។",
     overview_en: "Immerse yourself in Cambodia's highlands: roll through pine-clad hills, support ethical elephant conservation in Mondulkiri, and swim in the emerald waters of Yeak Laom.",
     transport_km: "រថយន្ត 4WD ឬ Minivan ទេសចរណ៍ និងជួលម៉ូតូសម្រាប់ផ្លូវជនបទ",
