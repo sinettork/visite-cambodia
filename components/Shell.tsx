@@ -3,6 +3,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { getPopular, getProvinces } from "@/lib/queries";
 import { T, pick, type Lang } from "@/lib/i18n";
+import BackToTop from "./BackToTop";
 
 export default async function Shell({
   lang, q, active, type, variant = "results", children,
@@ -39,6 +40,7 @@ export default async function Shell({
         </aside>
       </div>
       <Footer lang={lang} />
+      <BackToTop />
     </div>
   );
 }
