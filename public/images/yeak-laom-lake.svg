@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
-  <rect width="800" height="520" fill="#1e3d33"/>
-  <circle cx="400" cy="220" r="136" fill="#56b3c4"/>
-  <circle cx="400" cy="220" r="96" fill="#7ad7db" opacity="0.7"/>
-  <path d="M120 360 C250 300, 330 310, 400 350 S550 420, 680 360 L680 520 L120 520 Z" fill="#5b8e5d"/>
-  <text x="400" y="450" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" fill="#fff">Yeak Laom Lake</text>
-</svg>
