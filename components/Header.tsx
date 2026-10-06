@@ -67,7 +67,7 @@ export default function Header({
             Visit Cambodia
           </Link>
           <form className="search" action="/explore">
-            <input name="q" defaultValue={q} placeholder={t.search} />
+            <input name="q" defaultValue={q} placeholder={t.search} aria-label={t.search} />
             <input type="hidden" name="lang" value={lang} />
             <select name="type" defaultValue={type} aria-label={t.browseByType}>
               <option value="">{t.all}</option>
@@ -87,6 +87,7 @@ export default function Header({
       </header>
 
       <button
+        type="button"
         className="mobile-menu"
         aria-expanded={open}
         aria-controls="site-navigation"
