@@ -791,6 +791,7 @@ main {
   background: transparent;
   text-align: left;
   font: 500 12px var(--font-roboto-condensed), sans-serif;
+  white-space: nowrap;
 }
 
 .brands a:hover,
