@@ -12,7 +12,7 @@ export default async function Shell({
   const t = T[lang];
   return (
     <div className={`site site-${variant}`}>
-      <Header lang={lang} q={q} type={type} active={active} provinces={provinces} />
+      <Header lang={lang} q={q} type={type} active={active} />
       <div className="columns">
         <aside className="left-side">
           <h2 id="province-list">{t.provinces}</h2>
