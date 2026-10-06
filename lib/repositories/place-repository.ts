@@ -208,16 +208,95 @@ export async function getPopular(limit = 5): Promise<Place[]> {
   }
 }
 
+type PlaceWithGuideRow = Place & {
+  guide_about_km: string | null;
+  guide_about_en: string | null;
+  guide_history_km: string | null;
+  guide_history_en: string | null;
+  guide_highlights_km: string | null;
+  guide_highlights_en: string | null;
+  guide_visit_plan_km: string | null;
+  guide_visit_plan_en: string | null;
+  guide_tips_km: string | null;
+  guide_tips_en: string | null;
+  guide_source_urls: string | null;
+};
+
+function hydratePlaceGuide(row: PlaceWithGuideRow): Place {
+  const {
+    guide_about_km,
+    guide_about_en,
+    guide_history_km,
+    guide_history_en,
+    guide_highlights_km,
+    guide_highlights_en,
+    guide_visit_plan_km,
+    guide_visit_plan_en,
+    guide_tips_km,
+    guide_tips_en,
+    guide_source_urls,
+  } = row;
+
+  return {
+    ...row,
+    guide: (
+      guide_about_km
+      || guide_about_en
+      || guide_history_km
+      || guide_history_en
+      || guide_highlights_km
+      || guide_highlights_en
+      || guide_visit_plan_km
+      || guide_visit_plan_en
+      || guide_tips_km
+      || guide_tips_en
+      || guide_source_urls
+    )
+      ? {
+          about_km: guide_about_km,
+          about_en: guide_about_en,
+          history_km: guide_history_km,
+          history_en: guide_history_en,
+          highlights_km: guide_highlights_km,
+          highlights_en: guide_highlights_en,
+          visit_plan_km: guide_visit_plan_km,
+          visit_plan_en: guide_visit_plan_en,
+          tips_km: guide_tips_km,
+          tips_en: guide_tips_en,
+          source_urls: guide_source_urls,
+        }
+      : null,
+  };
+}
+
 export async function getPlace(slug: string): Promise<Place | null> {
   if (!db) {
     return filterFallbackPlaces().find((place) => place.slug === slug) as Place | null;
   }
 
   try {
-    const [rows] = await db.query<Place[]>(`${SELECT} WHERE p.slug = ?`, [slug]);
-    return rows[0] ?? null;
+    const [rows] = await db.query<PlaceWithGuideRow[]>(
+      `SELECT p.*, pr.slug AS province_slug, pr.name_km AS province_km, pr.name_en AS province_en,
+        g.about_km AS guide_about_km, g.about_en AS guide_about_en,
+        g.history_km AS guide_history_km, g.history_en AS guide_history_en,
+        g.highlights_km AS guide_highlights_km, g.highlights_en AS guide_highlights_en,
+        g.visit_plan_km AS guide_visit_plan_km, g.visit_plan_en AS guide_visit_plan_en,
+        g.tips_km AS guide_tips_km, g.tips_en AS guide_tips_en,
+        g.source_urls AS guide_source_urls
+      FROM places p
+      JOIN provinces pr ON pr.id = p.province_id
+      LEFT JOIN place_guides g ON g.place_id = p.id
+      WHERE p.slug = ?`,
+      [slug],
+    );
+    return rows[0] ? hydratePlaceGuide(rows[0]) : null;
   } catch (error) {
-    console.warn("MySQL is not available, using sample place lookup.", error);
-    return filterFallbackPlaces().find((place) => place.slug === slug) as Place | null;
+    console.warn("Unable to load the destination guide from MySQL.", error);
+    try {
+      const [rows] = await db.query<Place[]>(`${SELECT} WHERE p.slug = ?`, [slug]);
+      return rows[0] ?? (filterFallbackPlaces().find((place) => place.slug === slug) as Place | null);
+    } catch {
+      return filterFallbackPlaces().find((place) => place.slug === slug) as Place | null;
+    }
   }
 }
