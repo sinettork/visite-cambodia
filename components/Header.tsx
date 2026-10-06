@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { T, type Lang } from "@/lib/i18n";
-import type { Province } from "@/lib/types/place";
 import { getStoredFavorites } from "./FavoriteButton";
 
 export default function Header({
@@ -12,17 +11,14 @@ export default function Header({
   q = "",
   type = "",
   active,
-  provinces,
 }: {
   lang: Lang;
   q?: string;
   type?: "" | "attraction" | "accommodation" | "restaurant";
   active?: string;
-  provinces: Province[];
 }) {
   const [open, setOpen] = useState(false);
   const [savedCount, setSavedCount] = useState<number>(0);
-  const provincesMenu = useRef<HTMLDetailsElement>(null);
   const guidesMenu = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -46,7 +42,6 @@ export default function Header({
 
   const closeAllMenus = () => {
     setOpen(false);
-    if (provincesMenu.current) provincesMenu.current.open = false;
     if (guidesMenu.current) guidesMenu.current.open = false;
   };
 
@@ -121,27 +116,15 @@ export default function Header({
           {t.destinations}
         </Link>
 
-        {/* 3. Provinces Dropdown */}
-        <details ref={provincesMenu} className={`nav-dropdown${isProvincesRoute ? " current" : ""}`}>
-          <summary aria-label={t.provinces} aria-current={isProvincesRoute ? "page" : undefined}>
-            {t.provinces} <i className="fa-solid fa-chevron-down" aria-hidden="true" style={{ fontSize: "0.75em", marginLeft: 4 }} />
-          </summary>
-          <div className="nav-dropdown-menu nav-dropdown-provinces-menu">
-            <div className="nav-dropdown-provinces-grid">
-              {provinces.map((province) => (
-                <Link
-                  key={province.slug}
-                  href={`/regions/${province.slug}?lang=${lang}`}
-                  onClick={closeAllMenus}
-                  className={active === province.slug ? "active-prov-link" : ""}
-                  aria-current={active === province.slug ? "page" : undefined}
-                >
-                  <span className="province-nav-name">{lang === "km" ? province.name_km : province.name_en}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </details>
+        {/* 3. Provinces */}
+        <Link
+          href={`/?lang=${lang}#province-list`}
+          onClick={closeAllMenus}
+          className={isProvincesRoute ? "current" : ""}
+          aria-current={isProvincesRoute ? "page" : undefined}
+        >
+          {t.provinces}
+        </Link>
 
         {/* 4. Map */}
         <Link
