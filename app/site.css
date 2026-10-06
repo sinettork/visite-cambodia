@@ -1356,8 +1356,14 @@ main {
   }
 }
 
-/* Battambang supplies Khmer glyphs alongside the existing Latin fonts. */
-:root { font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif; }
+/* Offline-safe system stacks avoid blocking builds on external font downloads. */
+:root {
+  --font-roboto: Arial, "Noto Sans", sans-serif;
+  --font-roboto-condensed: "Arial Narrow", Arial, sans-serif;
+  --font-battambang: "Noto Sans Khmer", "Khmer OS", sans-serif;
+  --font-noto-sans-khmer: "Noto Sans Khmer", "Khmer OS", sans-serif;
+  font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif;
+}
 .nav a, .brands a, .section-head h2, .review h3, .phones a {
   font-family: var(--font-roboto-condensed), var(--font-battambang), sans-serif;
 }
