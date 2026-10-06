@@ -3222,3 +3222,14 @@ main {
   transform: translateY(0);
   color: #fff;
 }
+
+
+/* Explicit semantic aliases used by content components */
+.home-food-link {
+  min-height: 100%;
+}
+.tag-region,
+.tag-season,
+.tag-budget {
+  color: #6b625c;
+}
