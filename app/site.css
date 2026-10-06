@@ -4062,3 +4062,199 @@ main {
     gap: 12px;
   }
 }
+
+/* Final flat editorial pass — navigation and reading surfaces */
+.region-jump-nav {
+  display: flex;
+  gap: 20px;
+  margin: -2px 0 30px;
+  padding: 0 0 9px;
+  overflow-x: auto;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  scrollbar-width: thin;
+}
+
+.region-jump-nav a {
+  display: inline-flex;
+  min-height: 30px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  color: var(--accent);
+  background: transparent;
+  font: 700 12px var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+  text-decoration: none;
+}
+
+.region-jump-nav a i {
+  font-size: 10px;
+}
+
+.region-jump-nav a:hover,
+.region-jump-nav a:focus-visible {
+  color: #c85f18;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Reading-first page surfaces: keep structure, remove decorative card chrome. */
+.site-results .browse-toolbar {
+  padding: 0 0 12px;
+  border: 0;
+  background: transparent;
+}
+
+.site-results .place-type-filters a {
+  min-height: 28px;
+  padding: 3px 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: #6a625d;
+  background: transparent;
+}
+
+.site-results .place-type-filters a:hover,
+.site-results .place-type-filters a.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+
+.site-results .browse-query {
+  padding: 0 0 0 9px;
+  border-left: 2px solid var(--accent);
+  background: transparent;
+}
+
+.site-discover .discover-place {
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-discover .discover-place:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-food .food-dish {
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-food .food-dish-with-image {
+  border-top: 0;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.site-food .food-tips-card,
+.site-food .food-dietary-note {
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-food .food-dietary-note {
+  border-left: 0;
+  border-top: 2px solid var(--accent);
+}
+
+.site-itineraries .itinerary-card {
+  border: 0;
+  background: transparent;
+}
+
+.site-itineraries .itinerary-card-body {
+  padding-inline: 0;
+  padding-bottom: 0;
+}
+
+.site-itineraries .itinerary-card-footer {
+  padding-bottom: 2px;
+}
+
+.site-laws .law-source-list {
+  gap: 0;
+}
+
+.site-laws .law-source-card {
+  padding: 16px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-laws .law-source-card:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-saved .saved-empty-card {
+  max-width: none;
+  margin-top: 20px;
+  padding: 34px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-saved .saved-empty-icon {
+  border: 0;
+  background: transparent;
+}
+
+.site-home .home-spotlight-grid {
+  gap: 0;
+}
+
+.site-home .home-spotlight-card {
+  padding: 14px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: transparent;
+}
+
+.site-home .home-spotlight-card:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.site-home .home-editorial-link {
+  border: 0;
+  background: transparent;
+}
+
+.site-home .home-official-note {
+  padding: 20px 0;
+  border: 0;
+  border-top: 2px solid var(--accent);
+  background: transparent;
+}
+
+.site-home .home-official-note a {
+  margin-top: 12px;
+}
+
+@media (max-width: 620px) {
+  .region-jump-nav {
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    margin-inline: -1px;
+    margin-bottom: 24px;
+    padding: 7px 0 8px;
+    border-bottom: 1px solid var(--border);
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .region-jump-nav a {
+    min-height: 28px;
+  }
+}
