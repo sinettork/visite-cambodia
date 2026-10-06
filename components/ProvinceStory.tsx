@@ -12,14 +12,16 @@ export default function ProvinceStory({
     about: string;
     history: string;
     culture: string;
+    travel: string;
   };
 }) {
   const name = pick(guide, "name", lang);
   const story = pick(guide, "story", lang);
   const history = pick(guide, "history", lang);
   const culture = pick(guide, "culture", lang);
+  const travel = pick(guide, "travel", lang);
 
-  if (!story && !history && !culture) return null;
+  if (!story && !history && !culture && !travel) return null;
 
   return (
     <section className="province-editorial" aria-labelledby="province-about-title">
@@ -48,6 +50,16 @@ export default function ProvinceStory({
             <div>
               <h3>{labels.culture}</h3>
               <p>{culture}</p>
+            </div>
+          </article>
+        )}
+
+        {travel && (
+          <article id="province-plan" className="province-editorial-item">
+            <span className="province-editorial-index">03</span>
+            <div>
+              <h3>{labels.travel}</h3>
+              <p>{travel}</p>
             </div>
           </article>
         )}
