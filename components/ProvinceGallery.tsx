@@ -36,7 +36,6 @@ export default function ProvinceGallery({
   }
 
   const active = slides[index];
-  const goTo = (nextIndex: number) => setIndex((nextIndex + count) % count);
 
   return (
     <>
@@ -51,24 +50,31 @@ export default function ProvinceGallery({
           />
         ))}
       </div>
+
       <div className="province-hero-shade" aria-hidden="true" />
+
       <div className="province-hero-copy">
         <span className="province-gallery-label">{active.label}</span>
         <h1 id="province-title">{title}</h1>
         <p>{overview}</p>
         <p className="province-hero-disclaimer">{disclaimer}</p>
       </div>
+
       {count > 1 && (
-        <div className="province-gallery-controls" aria-label="Gallery controls">
-          <button type="button" onClick={() => goTo(index - 1)} aria-label="Previous photo">
-            <i className="fa-solid fa-chevron-left" aria-hidden="true" />
-          </button>
-          <span>{String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}</span>
-          <button type="button" onClick={() => goTo(index + 1)} aria-label="Next photo">
-            <i className="fa-solid fa-chevron-right" aria-hidden="true" />
-          </button>
+        <div className="province-gallery-dots" aria-label="Choose photo">
+          {slides.map((slide, slideIndex) => (
+            <button
+              key={slide.image + "-dot"}
+              type="button"
+              className={slideIndex === index ? "is-active" : ""}
+              onClick={() => setIndex(slideIndex)}
+              aria-label={"Show photo " + (slideIndex + 1)}
+              aria-current={slideIndex === index ? "true" : undefined}
+            />
+          ))}
         </div>
       )}
+
       <div className="province-photo-credit">
         <a href={active.source} target="_blank" rel="noreferrer">Photo: {active.credit}</a>
         <span aria-hidden="true"> · </span>
