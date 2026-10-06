@@ -63,6 +63,17 @@ SELECT
   END,
 
   CASE p.slug
+    WHEN 'angkor-wat' THEN 'Focus on the carved galleries, the central towers and the surrounding moat landscape. Allow time to understand the architecture and reliefs rather than treating the visit as only a photo stop.'
+    WHEN 'angkor-thom' THEN 'See the city gates, Bayon and the defensive walls and moat. Baphuon, Srah Srang and the former royal area can be combined into the same circuit. The carved faces and galleries help explain the identity of the city.'
+    WHEN 'royal-palace' THEN 'Focus on the Throne Hall, the principal ceremonial buildings, the Silver Pagoda compound and Khmer art within the grounds. This is living royal heritage, not only an archaeological monument.'
+    WHEN 'wat-phnom' THEN 'Use the eastern stairway to reach the shrine and stupa, and notice the lion and naga figures at the entrance. The visit can be combined with nearby Wat Ounalom and the riverside.'
+    WHEN 'bokor-national-park' THEN 'Bokor Hill Station has historic structures that make the landscape different from a typical nature park. Popokvil Waterfall and the mountain viewpoints can be included in the same outing.'
+    WHEN 'kep-crab-market' THEN 'For a fuller experience, walk along the waterfront and fishing area before choosing where to eat. Kep crab with Kampot pepper is a popular choice, but other seafood depends on the day’s supply.'
+    WHEN 'koh-rong' THEN 'The main draw is the beaches, marine activities, forest paths and sunset views. The experience differs greatly between busier tourism areas and quieter beaches.'
+    WHEN 'yeak-laom-lake' THEN 'Walk around the lake, explore the forest and use the visitor information facilities. If swimming is permitted, follow the site rules and current guidance from local managers.'
+  END,
+
+  CASE p.slug
     WHEN 'angkor-wat' THEN 'សម្រាប់អ្នកទស្សនាដំបូង គួររៀបចំជាមួយអង្គរធំ និងប្រាសាទសំខាន់ផ្សេងទៀតជាថ្ងៃមួយ ឬបែងចែកច្រើនថ្ងៃបើចង់ទស្សនាដោយមិនប្រញាប់។ ម៉ោង និងសំបុត្រតំបន់អង្គរគួរបញ្ជាក់ពីប្រភពផ្លូវការមុនទៅ។'
     WHEN 'angkor-thom' THEN 'ទុកពេលយ៉ាងហោចណាស់ ១–២ម៉ោងសម្រាប់អង្គរធំ ប្រសិនបើចង់ឈប់មើលបាយ័ន និងកំពែងដោយមិនប្រញាប់។ គួររៀបចំជាមួយអង្គរវត្ត និងតាព្រហ្មក្នុងថ្ងៃតែមួយតាមផ្លូវទេសចរណ៍ដែលសមរម្យ។ ព័ត៌មានសំបុត្រ និងច្រកចូលគួរបញ្ជាក់ពី Angkor Enterprise/APSARA មុនចេញដំណើរ។'
     WHEN 'royal-palace' THEN 'គួររៀបចំជាមួយសារមន្ទីរជាតិ និងមាត់ទន្លេក្នុងពាក់កណ្តាលថ្ងៃដូចគ្នា។ ពិនិត្យម៉ោងបើក និងតំបន់ដែលអនុញ្ញាតឱ្យចូលមុនទៅ ព្រោះរាជវាំងជាតំបន់រស់នៅ និងពិធីការរបស់ព្រះមហាក្សត្រ។'
@@ -74,6 +85,17 @@ SELECT
   END,
 
   CASE p.slug
+    WHEN 'angkor-wat' THEN 'First-time visitors can combine Angkor Wat with Angkor Thom and other major temples in one day, or spread the visit across several days for a slower pace. Confirm current Angkor ticket and access information with official sources before travelling.'
+    WHEN 'angkor-thom' THEN 'Allow around 1–2 hours for Angkor Thom if you want time for Bayon and the city walls without rushing. It can be paired with Angkor Wat and Ta Prohm in the same day. Confirm ticket and entrance details with Angkor Enterprise or APSARA before departure.'
+    WHEN 'royal-palace' THEN 'Combine the palace with the National Museum and Riverside in the same half-day. Check opening hours and public-access areas before visiting because the Royal Palace remains a functioning royal complex.'
+    WHEN 'wat-phnom' THEN 'Wat Phnom works well as a 30–60 minute stop in a city itinerary. The climb is short, but allow time for prayer and a shaded rest.'
+    WHEN 'bokor-national-park' THEN 'Leave Kampot in the morning to allow time for the mountain road, heritage sites and waterfall. Conditions on the mountain can be cooler and wetter than in Kampot town, so check the weather and bring a light layer.'
+    WHEN 'kep-crab-market' THEN 'Combine the market with Kep Beach and Kep National Park. Before ordering, ask clearly about seafood pricing by size, weight or dish so there are no surprises.'
+    WHEN 'koh-rong' THEN 'Build in a buffer for boat travel and weather when planning an island trip. Choose accommodation according to the beach atmosphere you want, and confirm the departure pier and return boat times in advance.'
+    WHEN 'yeak-laom-lake' THEN 'The lake is about 5 km from Banlung, making it suitable for a half-day trip. Bring drinking water and sun protection, and respect community rules and designated areas.'
+  END,
+
+  CASE p.slug
     WHEN 'angkor-wat' THEN 'អង្គរជាទីកន្លែងសក្ការៈ។ ស្លៀកពាក់សមរម្យ មិនឡើង ឬប៉ះប្រាសាទ និងគោរពអ្នកអធិស្ឋាន និងព្រះសង្ឃ។ អនុវត្តតាម Visitor Code of Conduct របស់ APSARA។'
     WHEN 'angkor-thom' THEN 'គោរពប្រាសាទជាទីសក្ការៈ មិនឡើងលើសំណង់ដែលហាមឃាត់ និងកុំប៉ះចម្លាក់។ ប្រើផ្លូវដែលបានកំណត់ ដើម្បីកាត់បន្ថយផលប៉ះពាល់ដល់បេតិកភណ្ឌ។'
     WHEN 'royal-palace' THEN 'ស្លៀកពាក់សមរម្យ និងគោរពតំបន់ព្រះរាជវាំង។ កុំសន្មត់ថាតំបន់ទាំងអស់បើកសម្រាប់សាធារណៈ ហើយគោរពការណែនាំរបស់បុគ្គលិកនៅទីតាំង។'
@@ -82,6 +104,17 @@ SELECT
     WHEN 'kep-crab-market' THEN 'តម្លៃអាហារសមុទ្រអាចប្រែប្រួលតាមទំហំ និងការផ្គត់ផ្គង់។ សួរតម្លៃមុនចម្អិន ហើយជៀសវាងកាកសំណល់ប្លាស្ទិកនៅមាត់សមុទ្រ។'
     WHEN 'koh-rong' THEN 'គោរពបរិស្ថានសមុទ្រ មិនចោលសំរាម និងកុំយកផ្កាថ្ម ឬសត្វសមុទ្រចេញពីធម្មជាតិ។ សកម្មភាពតាមសមុទ្រគួរត្រូវធ្វើតាមការណែនាំសុវត្ថិភាព និងអាកាសធាតុ។'
     WHEN 'yeak-laom-lake' THEN 'បឹងមានសារៈសំខាន់ខាងវប្បធម៌សម្រាប់សហគមន៍ជនជាតិដើម។ គោរពតំបន់សក្ការៈ សួរអនុញ្ញាតមុនថតរូបមនុស្ស និងកុំចោលសំរាមក្នុងព្រៃ ឬបឹង។'
+  END,
+
+  CASE p.slug
+    WHEN 'angkor-wat' THEN 'Angkor is a sacred heritage site. Dress respectfully, do not climb or touch protected structures, and be considerate of worshippers and monks. Follow APSARA visitor guidance.'
+    WHEN 'angkor-thom' THEN 'Treat the monuments as sacred heritage, avoid climbing restricted structures and do not touch carvings. Stay on designated paths to help protect the site.'
+    WHEN 'royal-palace' THEN 'Dress appropriately and respect the palace grounds. Do not assume every area is open to the public, and follow staff instructions on site.'
+    WHEN 'wat-phnom' THEN 'This is a place of worship. Keep your voice respectful, dress appropriately, and avoid disturbing sacred objects or people who are praying.'
+    WHEN 'bokor-national-park' THEN 'Stay on safe routes in the mountain environment and do not remove plants or natural objects from the protected area. View old structures only from permitted areas.'
+    WHEN 'kep-crab-market' THEN 'Seafood prices can change with size and supply. Ask for the price before cooking, and help keep the waterfront free of plastic waste.'
+    WHEN 'koh-rong' THEN 'Respect the marine environment, do not litter, and do not remove coral or marine life. Follow safety advice and weather conditions for water activities.'
+    WHEN 'yeak-laom-lake' THEN 'The lake has cultural importance for nearby Indigenous communities. Respect sacred areas, ask before photographing people, and keep waste out of the forest and water.'
   END,
 
   CASE p.slug
