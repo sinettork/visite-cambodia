@@ -47,6 +47,15 @@ export default async function RegionPage({ params, searchParams }: {
     { type: "restaurant", title: t.whereToEat, intro: pick(guide, "food_guide", lang), places: restaurants },
   ];
   const name = pick(guide, "name", lang);
+  const sourceLabel = (url: string) => {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    if (host === "tourism.gov.kh") return lang === "km" ? "ក្រសួងទេសចរណ៍" : "Ministry of Tourism";
+    if (host === "tourismcambodia.com") return "Tourism Cambodia";
+    if (host === "whc.unesco.org") return "UNESCO World Heritage Centre";
+    if (host === "wwf.org.kh") return "WWF Cambodia";
+    if (host === "en.wikipedia.org") return "Wikipedia";
+    return host;
+  };
   return (
     <Shell lang={lang} active={slug} variant="region">
       <nav className="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
@@ -97,7 +106,7 @@ export default async function RegionPage({ params, searchParams }: {
           <ul>
             {guide.source_urls.split(/\r?\n/).filter((url) => url.startsWith("https://")).map((url) => (
               <li key={url}>
-                <a href={url} target="_blank" rel="noreferrer">{new URL(url).hostname.replace(/^www\./, "")}</a>
+                <a href={url} target="_blank" rel="noreferrer">{sourceLabel(url)}</a>
               </li>
             ))}
           </ul>
