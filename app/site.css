@@ -1411,7 +1411,7 @@ main {
 /* Home page — preserve the site's editorial DNA while giving the landing hero a real visual hierarchy. */
 .home-hero {
   position: relative;
-  min-height: clamp(390px, 48vw, 560px);
+  min-height: clamp(340px, 34vw, 440px);
   overflow: hidden;
   isolation: isolate;
   display: flex;
@@ -1988,7 +1988,7 @@ main {
   .phrases-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
-  .home-hero { margin: -20px -16px 22px; min-height: 390px; }
+  .home-hero { margin: -20px -16px 22px; min-height: 340px; }
   .home-hero > img { object-position: 58% center; }
   .home-hero-shade {
     background:
