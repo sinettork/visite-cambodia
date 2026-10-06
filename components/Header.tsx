@@ -61,12 +61,13 @@ export default function Header({
 
   return (
     <>
+      <a className="skip-link" href="#main-content">{lang === "km" ? "រំលងទៅមាតិកា" : "Skip to content"}</a>
       <header className="header">
         <div className="header-inner">
           <Link href={`/?lang=${lang}`} className="logo" style={{ fontWeight: 700, fontSize: 22, color: "#fff" }}>
             Visit Cambodia
           </Link>
-          <form className="search" action="/explore">
+          <form className="search" action="/explore" role="search">
             <input name="q" defaultValue={q} placeholder={t.search} aria-label={t.search} />
             <input type="hidden" name="lang" value={lang} />
             <select name="type" defaultValue={type} aria-label={t.browseByType}>
