@@ -27,7 +27,7 @@ export default async function ItinerariesPage({
   const t = T[lang];
 
   return (
-    <Shell lang={lang} variant="editorial">
+    <Shell lang={lang} variant="itineraries">
       <div className="itineraries-container">
         <header className="page-header-block">
           <h1>{t.itinerariesTitle}</h1>
