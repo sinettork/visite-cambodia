@@ -26,7 +26,7 @@ export default async function EventsPage({
   const t = T[lang];
 
   return (
-    <Shell lang={lang} variant="editorial">
+    <Shell lang={lang} variant="events">
       <div className="events-container">
         <header className="page-header-block">
           <h1>{t.eventsTitle}</h1>
