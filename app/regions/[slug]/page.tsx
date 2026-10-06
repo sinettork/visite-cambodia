@@ -54,7 +54,15 @@ export default async function RegionPage({ params, searchParams }: {
       </nav>
       <ProvinceHero guide={guide} lang={lang} disclaimer={t.guideDisclaimer} />
       <nav className="region-jump-nav" aria-label={lang === "km" ? "មើលតាមប្រភេទ" : "Jump to section"}>
-        {sections.map((section) => <a key={section.type} href={`#region-${section.type}`}>{section.title}</a>)}
+        {sections.map((section) => {
+          const icon = section.type === "attraction" ? "fa-compass" : section.type === "accommodation" ? "fa-bed" : "fa-utensils";
+          return (
+            <a key={section.type} href={`#region-${section.type}`}>
+              <i className={`fa-solid ${icon}`} aria-hidden="true" />
+              <span>{section.title}</span>
+            </a>
+          );
+        })}
       </nav>
       {sections.map((section) => (
         <section className="region-section" id={`region-${section.type}`} key={section.type}>
