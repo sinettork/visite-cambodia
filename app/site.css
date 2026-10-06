@@ -4381,3 +4381,16 @@ main {
   white-space: nowrap !important;
   overflow: visible;
 }
+
+
+/* Province guide: keep the researched editorial sections readable on wide screens. */
+.province-editorial-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 980px) {
+  .province-editorial-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
