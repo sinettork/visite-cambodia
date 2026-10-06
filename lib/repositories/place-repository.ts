@@ -6,6 +6,16 @@ import type { Place, PlaceFilters, PlacePage, Province, ProvinceGuide } from "@/
 const SELECT = `SELECT p.*, pr.slug AS province_slug, pr.name_km AS province_km, pr.name_en AS province_en
   FROM places p JOIN provinces pr ON pr.id = p.province_id`;
 
+function hydratePlace(row: Place): Place {
+  if (typeof row.source_urls !== "string") return row;
+
+  try {
+    return { ...row, source_urls: JSON.parse(row.source_urls) as string[] };
+  } catch {
+    return { ...row, source_urls: null };
+  }
+}
+
 type PlaceCoordinates = RowDataPacket & Pick<Place, "lat" | "lng">;
 
 function buildPlaceWhere(filters: PlaceFilters) {
@@ -113,7 +123,7 @@ export async function getPlaces(filters: PlaceFilters): Promise<Place[]> {
   try {
     const { clause, args } = buildPlaceWhere(filters);
     const [rows] = await db.query<Place[]>(`${SELECT} ${clause} ORDER BY p.views DESC`, args);
-    return rows;
+    return rows.map(hydratePlace);
   } catch (error) {
     console.warn("MySQL is not available, using sample place data.", error);
     return filterFallbackPlaces(filters) as Place[];
@@ -135,7 +145,7 @@ export async function getPlacePage(filters: PlaceFilters, page = 1, pageSize = 1
     const total = Number(countRows[0]?.total ?? 0);
     const safePage = Math.min(requestedPage, Math.max(1, Math.ceil(total / safePageSize)));
     const [items] = await db.query<Place[]>(`${SELECT} ${clause} ORDER BY p.views DESC LIMIT ? OFFSET ?`, [...args, safePageSize, (safePage - 1) * safePageSize]);
-    return { items, total, page: safePage, pageSize: safePageSize };
+    return { items: items.map(hydratePlace), total, page: safePage, pageSize: safePageSize };
   } catch (error) {
     console.warn("MySQL is not available, using sample place data.", error);
     const places = filterFallbackPlaces(filters) as Place[];
@@ -189,7 +199,7 @@ export async function getNearbyPlaces(slug: string, limit = 6): Promise<Place[]>
       LIMIT ?`,
       [Number(current.lat), Number(current.lng), Number(current.lat), slug, limit],
     );
-    return rows;
+    return rows.map(hydratePlace);
   } catch (error) {
     console.warn("Unable to find nearby places in MySQL.", error);
     return [];
@@ -201,7 +211,7 @@ export async function getPopular(limit = 5): Promise<Place[]> {
 
   try {
     const [rows] = await db.query<Place[]>(`${SELECT} ORDER BY p.views DESC LIMIT ?`, [limit]);
-    return rows;
+    return rows.map(hydratePlace);
   } catch (error) {
     console.warn("MySQL is not available, using sample popular places.", error);
     return filterFallbackPlaces().slice(0, limit) as Place[];
@@ -237,7 +247,7 @@ function hydratePlaceGuide(row: PlaceWithGuideRow): Place {
     guide_source_urls,
   } = row;
 
-  return {
+  return hydratePlace({
     ...row,
     guide: (
       guide_about_km
@@ -266,7 +276,7 @@ function hydratePlaceGuide(row: PlaceWithGuideRow): Place {
           source_urls: guide_source_urls,
         }
       : null,
-  };
+  });
 }
 
 export async function getPlace(slug: string): Promise<Place | null> {

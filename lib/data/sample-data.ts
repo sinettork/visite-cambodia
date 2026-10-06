@@ -775,7 +775,7 @@ export const samplePlaces: SamplePlace[] = [
     ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "11.84012", lng: "105.477764",
     access_km: "ពីកំពង់ចាមតាមផ្លូវជាតិលេខ ៧ បន្តតាមផ្លូវជាតិលេខ ១១ ហើយតាមផ្លូវដីប្រហែល ៨ គីឡូម៉ែត្រ។ គួរប្រើម៉ូតូ ឬយានយន្តខ្ពស់ក្រោយភ្លៀង។",
     access_en: "From Kampong Cham, take National Road 7 then National Road 11, followed by about 8 km on a dirt track; a motorbike or high-clearance vehicle is prudent after rain.",
-    source_urls: ["https://www.tourismcambodia.com/travelguides/provinces/tbong-khmum/what-to-see/130_wat-preah-theat-thmor-da-temple.htm", "https://elevationmap.net/preah-theat-thma-da-preah-theat-ou-reang-ov-kh-1003256169", "https://km.wikipedia.org/wiki/%E1%9E%94%E1%9F%92%E1%9E%9A%E1%9E%B6%E1%9E%9F%E1%9E%B6%E1%9E%91%E1%9E%9C%E1%9E%8F%E1%9F%92%E1%9E%8F%E1%9E%96%E1%9F%92%E1%9E%9A%E1%9F%87%E1%9E%92%E1%9E%B6%E1%    0.00"],
+    source_urls: ["https://www.tourismcambodia.com/travelguides/provinces/tbong-khmum/what-to-see/130_wat-preah-theat-thmor-da-temple.htm", "https://elevationmap.net/preah-theat-thma-da-preah-theat-ou-reang-kh-1003256169"],
     province_slug: "tboung-khmum", province_km: "ត្បូងឃ្មុំ", province_en: "Tboung Khmum", views: 240,
   },
 ];
