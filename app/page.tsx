@@ -103,7 +103,9 @@ export default async function Home({ searchParams }: {
           <div className="home-region-links">
             {provinces.map((province) => (
               <Link key={province.slug} href={`/regions/${province.slug}?lang=${lang}`}>
-                <img src={getProvinceBannerImage(province.slug) ?? "/images/angkor-wat.svg"} alt="" loading="lazy" />
+                {getProvinceBannerImage(province.slug) && (
+                  <img src={getProvinceBannerImage(province.slug)!} alt="" loading="lazy" />
+                )}
                 <span className="home-region-name">{lang === "km" ? province.name_km : province.name_en}</span><span aria-hidden="true">›</span>
               </Link>
             ))}
