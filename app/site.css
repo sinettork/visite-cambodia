@@ -2110,11 +2110,14 @@ main {
   background: #3b3b3b;
 }
 .nav-dropdown-provinces-menu {
-  min-width: 560px;
+  width: 760px;
+  max-width: calc(100vw - 32px);
+  min-width: 760px;
 }
+
 .nav-dropdown-provinces-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
   gap: 2px;
 }
 .nav-dropdown-guides-menu {
@@ -3017,10 +3020,12 @@ main {
     grid-template-columns: 165px minmax(0, 1fr) 200px;
   }
   .nav-dropdown-provinces-menu {
-    min-width: 500px;
+    width: min(680px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    min-width: 0;
   }
   .nav-dropdown-provinces-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
   }
 }
 
@@ -3069,6 +3074,8 @@ main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .nav-dropdown-provinces-menu {
+    width: min(680px, calc(100vw - 20px));
+    max-width: calc(100vw - 20px);
     min-width: 0;
   }
   .nav-dropdown-guides-menu {
@@ -3111,7 +3118,7 @@ main {
     min-height: 40px;
   }
   .nav-dropdown-provinces-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
   }
   .browse-toolbar {
     gap: 10px;
