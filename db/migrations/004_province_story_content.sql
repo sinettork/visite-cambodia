@@ -8,6 +8,29 @@ ALTER TABLE province_guides
   ADD COLUMN culture_km TEXT NULL AFTER history_en,
   ADD COLUMN culture_en TEXT NULL AFTER culture_km;
 
+INSERT INTO province_guides (
+  province_id,
+  overview_km, overview_en,
+  attractions_km, attractions_en,
+  stay_guide_km, stay_guide_en,
+  food_guide_km, food_guide_en
+)
+SELECT
+  p.id,
+  CONCAT(p.name_km, ' — ស្វែងយល់ពីប្រវត្តិសាស្ត្រ វប្បធម៌ និងកន្លែងគួរទៅលេងក្នុងខេត្តនេះ។'),
+  CONCAT('Explore the history, culture and places to visit in ', p.name_en, '.'),
+  'ស្វែងរកកន្លែងកម្សាន្ត និងតំបន់គួរទស្សនាដែលមានបញ្ជីខាងក្រោម។',
+  'Browse the attractions and places listed below.',
+  'ជ្រើសរើសកន្លែងស្នាក់នៅតាមផែនការធ្វើដំណើរ និងបញ្ជាក់ព័ត៌មានមុនកក់។',
+  'Choose accommodation around your route and confirm current details before booking.',
+  'សាកម្ហូបក្នុងតំបន់ និងបញ្ជាក់តម្លៃមុនកុម្ម៉ង់។',
+  'Try local food and confirm prices before ordering.'
+FROM provinces p
+WHERE p.slug IN ('siem-reap','phnom-penh','kampot','kep','preah-sihanouk','ratanakiri')
+  AND NOT EXISTS (
+    SELECT 1 FROM province_guides g WHERE g.province_id = p.id
+  );
+
 UPDATE province_guides g
 JOIN provinces p ON p.id = g.province_id
 SET
