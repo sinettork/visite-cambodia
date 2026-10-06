@@ -83,6 +83,7 @@ export default async function PlacePage({ params, searchParams }: {
         <tr><th>{t.province}</th><td>{pick({ n_km: p.province_km, n_en: p.province_en }, "n", lang)}</td></tr>
         {p.listing_type === "attraction" && <tr><th>{t.ticket}</th><td>{ticketLabel}</td></tr>}
         {p.open_hours && <tr><th>{t.hours}</th><td>{p.open_hours}</td></tr>}
+        {pick(p, "access", lang) && <tr><th>{t.access}</th><td>{pick(p, "access", lang)}</td></tr>}
       </tbody></table>
       {p.guide && (
         <nav className="place-jump-nav" aria-label={lang === "km" ? "មាតិកាទីតាំង" : "Place sections"}>
@@ -126,6 +127,12 @@ export default async function PlacePage({ params, searchParams }: {
         </Link>
       </div>
       <p className="destination-disclaimer"><i className="fa-solid fa-circle-info" aria-hidden="true" /> <span>{t.guideDisclaimer}</span></p>
+      {p.source_urls && p.source_urls.length > 0 && (
+        <section className="place-sources" id="place-sources">
+          <h2>{t.sources}</h2>
+          <ul>{p.source_urls.map((url) => <li key={url}><a href={url} target="_blank" rel="noreferrer">{url}</a></li>)}</ul>
+        </section>
+      )}
       {nearby.length > 0 && <section className="region-section"><div className="section-head"><h2>{t.nearby}</h2></div><div className="review-grid">
         {nearby.map((place) => <PlaceCard key={place.slug} place={place} lang={lang} />)}
       </div></section>}

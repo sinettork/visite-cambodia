@@ -18,6 +18,9 @@ export type SamplePlace = {
   open_hours: string | null;
   lat: string | null;
   lng: string | null;
+  access_km?: string | null;
+  access_en?: string | null;
+  source_urls?: string[];
   province_slug: string;
   province_km: string;
   province_en: string;
@@ -618,5 +621,161 @@ export const samplePlaces: SamplePlace[] = [
     province_km: "ក្រចេះ",
     province_en: "Kratie",
     views: 490,
+  },
+
+  // Banteay Meanchey
+  {
+    slug: "banteay-chhmar", category: "history", listing_type: "attraction", image_url: null,
+    name_km: "ប្រាសាទបន្ទាយឆ្មារ", name_en: "Banteay Chhmar Temple",
+    summary_km: "ប្រាសាទអង្គរដ៏ធំនៅចុងសតវត្សទី១២ ដល់ដើមសតវត្សទី១៣ ដែលមានថែវ ប៉មមុខ ចម្លាក់លៀនទាប កសិណ និងប្រាសាទរណបជាច្រើន។",
+    summary_en: "A major late-12th- to early-13th-century Angkorian temple complex with galleries, face towers, bas-reliefs, moats and satellite temples.",
+    ticket_usd: "5.00", ticket_status: "check", open_hours: null, lat: "14.0711", lng: "103.0997",
+    access_km: "តាមផ្លូវជាតិលេខ ៥៦/៥៦A ពីសិរីសោភ័ណប្រហែល ៥៩–៦៥ គីឡូម៉ែត្រ។ គួររៀបចំយានជំនិះជាមុន និងអាចទាក់ទងសហគមន៍ទេសចរណ៍សម្រាប់មគ្គុទ្ទេសក៍។",
+    access_en: "Reach Banteay Chhmar via National Road 56/56A, about 59–65 km north of Sisophon. Arrange transport ahead and consider the local community tourism service for guides.",
+    source_urls: ["https://whc.unesco.org/en/tentativelists/6456/", "https://www.tourismcambodia.com/activities/community-based-tourism-cbt/banteay-chhmar-community-based-tourism-site.htm", "https://www.visitbanteaychhmar.org/the-temples/"],
+    province_slug: "banteay-meanchey", province_km: "បន្ទាយមានជ័យ", province_en: "Banteay Meanchey", views: 320,
+  },
+
+  // Kampong Chhnang
+  {
+    slug: "kampong-chhnang-floating-villages", category: "culture", listing_type: "attraction", image_url: null,
+    name_km: "ភូមិបណ្ដែតទឹកកំពង់ឆ្នាំង", name_en: "Kampong Chhnang Floating Villages",
+    summary_km: "បទពិសោធន៍តាមទន្លេសាប ជាមួយផ្ទះបណ្ដែតទឹក កន្លែងនេសាទ និងសហគមន៍រស់នៅតាមទឹកនៅមុខក្រុងកំពង់ឆ្នាំង។",
+    summary_en: "A Tonlé Sap river experience among floating houses, fishing lots and waterside communities near Kampong Chhnang town.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "12.2961", lng: "104.6695",
+    access_km: "ទៅកំពង់ផែក្រុងកំពង់ឆ្នាំង ហើយជួលទូកមូលដ្ឋានប្រហែល ១–២ ម៉ោង។ ចម្ងាយ និងផ្លូវទឹកប្រែប្រួលតាមរដូវ។",
+    access_en: "Go to the Kampong Chhnang town port and hire a local boat for roughly 1–2 hours. The route and distance vary with the season and village location.",
+    source_urls: ["https://tourismcambodia.org/provinces/60/kampong-chhnang", "https://www.tourismcambodia.com/travelguides/provinces/kampong-chhnang/what-to-see/374_tonle-sap-view.htm", "https://mapcarta.com/W664110520"],
+    province_slug: "kampong-chhnang", province_km: "កំពង់ឆ្នាំង", province_en: "Kampong Chhnang", views: 310,
+  },
+
+  // Kampong Speu
+  {
+    slug: "kirirom-national-park", category: "nature", listing_type: "attraction", image_url: null,
+    name_km: "ឧទ្យានជាតិព្រះសុរាម្រិត-កុសមៈ គិរីរម្យ", name_en: "Kirirom National Park",
+    summary_km: "ឧទ្យានភ្នំដែលមានព្រៃស្រល់ ទឹកជ្រោះ ផ្កាអ័រគីដេ និងសក្តានុពលមើលសត្វស្លាប នៅស្រុកភ្នំស្រួច។",
+    summary_en: "A conserved mountain park known for pine forests, waterfalls, orchids and birdwatching in Phnom Sruoch district.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "11.3068542", lng: "104.0527431",
+    access_km: "ពីភ្នំពេញតាមផ្លូវជាតិលេខ ៤ ប្រហែល ១១៧ គីឡូម៉ែត្រ ហើយត្រូវរៀបចំយានជំនិះសម្រាប់ផ្លូវឡើងភ្នំចុងក្រោយ។",
+    access_en: "From Phnom Penh, follow National Road 4 for about 117 km, then arrange local transport for the final mountain approach.",
+    source_urls: ["https://www.tourismcambodia.com/travelguides/provinces/kampong-speu/what-to-see/320_kirirom-national-park.htm", "https://www.tourismcambodia.com/travelguides/provinces/kampong-speu/how-to-get-there.htm", "https://nominatim.openstreetmap.org/search?q=Kirirom+National+Park%2C+Cambodia&format=jsonv2&limit=5"],
+    province_slug: "kampong-speu", province_km: "កំពង់ស្ពឺ", province_en: "Kampong Speu", views: 300,
+  },
+
+  // Kampong Thom
+  {
+    slug: "sambor-prei-kuk", category: "history", listing_type: "attraction", image_url: null,
+    name_km: "ប្រាសាទសំបូរព្រៃគុក", name_en: "Sambor Prei Kuk Temple Zone",
+    summary_km: "តំបន់ប្រាសាទបុរាណនៃរាជធានីឦសានបុរៈរបស់ចេនឡា ដែលមានប្រាសាទជាង ១០០ និងស្ថាបត្យកម្មមុនអង្គរ។",
+    summary_en: "The archaeological zone of ancient Ishanapura, with more than 100 pre-Angkorian temples and distinctive octagonal sanctuaries.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "12.8725", lng: "105.0431",
+    access_km: "ពីក្រុងកំពង់ធំប្រហែល ៣០–៣៥ គីឡូម៉ែត្រតាមផ្លូវជាតិលេខ ៦៤។ អាចប្រើតុកតុក ឬម៉ូតូ ហើយត្រូវដើររវាងក្រុមប្រាសាទ។",
+    access_en: "About 30–35 km north of Kampong Thom town via National Road 64; a tuk-tuk or motorbike is practical, with walking between temple groups.",
+    source_urls: ["https://whc.unesco.org/en/list/1532/", "https://whc.unesco.org/en/list/1532/maps/", "https://ctb.gov.kh/travel-tips/21"],
+    province_slug: "kampong-thom", province_km: "កំពង់ធំ", province_en: "Kampong Thom", views: 390,
+  },
+
+  // Prey Veng
+  {
+    slug: "ba-phnom-resort", category: "culture", listing_type: "attraction", image_url: null,
+    name_km: "រមណីយដ្ឋានបាភ្នំ", name_en: "Ba Phnom Resort",
+    summary_km: "តំបន់ធម្មជាតិ និងវប្បធម៌ដែលមានភ្នំជាប់គ្នា វត្តបាភ្នំ ទេសភាពលើកំពូល និងសំណល់បុរាណនៅស្រុកបាភ្នំ។",
+    summary_en: "A cultural and natural landscape with connected hills, Wat Ba Phnom, summit views and archaeological remains in Ba Phnom district.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "11.2561243", lng: "105.3890437",
+    access_km: "ពីភ្នំពេញតាមផ្លូវជាតិលេខ ១ បត់នៅផ្សារកំពង់ស្នឹង ហើយបន្តប្រហែល ៧ គីឡូម៉ែត្រ។",
+    access_en: "From Phnom Penh, follow National Road 1, turn at Kampong Sneung market and continue about 7 km; ask locally for the final rural turn.",
+    source_urls: ["https://www.tourismcambodia.com/travelguides/provinces/prey-veng/what-to-see/93_ba-phnom-resort.htm", "https://www.khmertimeskh.com/501337622/government-establishes-chheu-kach-ba-phnom-mountain-cultural-heritage-site/", "https://www.openstreetmap.org/node/860954295"],
+    province_slug: "prey-veng", province_km: "ព្រៃវែង", province_en: "Prey Veng", views: 280,
+  },
+
+  // Pursat
+  {
+    slug: "kampong-luang-floating-village", category: "culture", listing_type: "attraction", image_url: null,
+    name_km: "សហគមន៍ភូមិបណ្ដែតទឹកកំពង់ហ្លួង", name_en: "Kampong Luang Floating Village",
+    summary_km: "សហគមន៍ភូមិបណ្ដែតទឹកលើបឹងទន្លេសាប ដែលអាចជិះទូកទស្សនាជីវភាពអ្នកនេសាទ ព្រៃលិចទឹក និងថ្ងៃលិច។",
+    summary_en: "A Tonle Sap floating-village community where boat trips reveal fishing life, flooded forest and sunset views.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "12.57321", lng: "104.20827",
+    access_km: "ពីទីប្រជុំជនស្រុកក្រគរ តាមផ្លូវជាតិលេខ ៥៤ ប្រហែល ៧ គីឡូម៉ែត្រទៅមាត់ទឹក ហើយរៀបចំទូកមូលដ្ឋាន។",
+    access_en: "From Krakor district town, take National Road 54 for about 7 km to the waterfront and arrange a local boat; water levels affect access.",
+    source_urls: ["https://cata.org.kh/en/tourism-maps/114-pursat-province", "https://www.cata.org.kh/km/tourism-maps/114-pursat-province", "https://www.geonames.org/1828265"],
+    province_slug: "pursat", province_km: "ពោធិ៍សាត់", province_en: "Pursat", views: 290,
+  },
+
+  // Stung Treng
+  {
+    slug: "stung-treng-ramsar-site", category: "nature", listing_type: "attraction", image_url: null,
+    name_km: "តំបន់រ៉ាមសារស្ទឹងត្រែង", name_en: "Stung Treng Ramsar Site",
+    summary_km: "តំបន់ដីសើមរ៉ាមសារតាមទន្លេមេគង្គ មានទឹកជួរ អន្លង់ កោះ និងព្រៃលិចទឹក ជាជម្រកសត្វស្លាប និងផ្សោតទន្លេ។",
+    summary_en: "An internationally important Mekong wetland with rapids, deep pools, islands and flooded forest supporting birds and Irrawaddy dolphins.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "13.734167", lng: "106.000000",
+    access_km: "ប្រហែល ៥ គីឡូម៉ែត្រពីក្រុងស្ទឹងត្រែង។ គួររៀបចំទូកមូលដ្ឋាន ដើម្បីទស្សនាព្រៃលិចទឹក និងទឹកជួរ ហើយបញ្ជាក់ស្ថានភាពទឹកជាមុន។",
+    access_en: "About 5 km from Stung Treng town. Arrange a local boat to view flooded forest and rapids, and confirm water and landing conditions before departure.",
+    source_urls: ["https://rsis.ramsar.org/sites/default/files/rsiswp_search/exports/Ramsar-Sites-annotated-summary-Cambodia.pdf", "https://www.mekongfishnetwork.org/everyone-invited-visit-stung-treng-ramsar-site/", "https://iucn.org/resources/grey-literature/climate-change-vulnerability-assessment-stung-treng-ramsar-site-cambodia"],
+    province_slug: "stung-treng", province_km: "ស្ទឹងត្រែង", province_en: "Stung Treng", views: 270,
+  },
+
+  // Svay Rieng
+  {
+    slug: "prey-ba-sak", category: "history", listing_type: "attraction", image_url: null,
+    name_km: "ប្រាសាទព្រៃបាសាក់", name_en: "Prey Ba Sak Temple",
+    summary_km: "ទីតាំងបុរាណវិទ្យា និងកន្លែងសក្ការៈជនបទក្បែរទន្លេវ៉ៃគូ ដែលមានសំណល់ប្រាសាទ និងបរិយាកាសព្រៃឈើ។",
+    summary_en: "A rural archaeological and spiritual site near the Vaiko River, with temple remains and a wooded setting.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "11.052997", lng: "105.839663",
+    access_km: "ប្រហែល ៨.៥ គីឡូម៉ែត្រភាគអាគ្នេយ៍ពីក្រុងស្វាយរៀង តាមផ្លូវជនបទ។ គួរប្រើកូអរដោនេ និងសួរអ្នកស្រុកសម្រាប់ផ្លូវចុងក្រោយ។",
+    access_en: "About 8.5 km southeast of Svay Rieng town on rural roads; use the coordinates and ask locally for the final approach.",
+    source_urls: ["https://www.tourismcambodia.com/travelguides/provinces/svay-rieng/what-to-see/65_prey-ba-sak.htm", "https://www.yosothor.org/publications/khmer-renaissance/chapter-four/prasat-brosak.html", "https://www.guidetrip.info/place/basac-temple-tourism-site"],
+    province_slug: "svay-rieng", province_km: "ស្វាយរៀង", province_en: "Svay Rieng", views: 250,
+  },
+
+  // Takeo
+  {
+    slug: "phnom-da", category: "history", listing_type: "attraction", image_url: null,
+    name_km: "ប្រាសាទភ្នំដា", name_en: "Phnom Da Temple",
+    summary_km: "ប្រាសាទបុរាណលើភ្នំខាងត្បូងអង្គរបូរី ដែលស្ថិតក្នុងតំបន់បេតិកភណ្ឌអង្គរបូរី–ភ្នំដា និងមានសំណង់ជាប់ពាក់ព័ន្ធជាច្រើន។",
+    summary_en: "A hilltop temple south of Angkor Borei, part of the proposed Angkor Borei–Phnom Da heritage area with nearby related monuments.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "10.964489", lng: "104.988715",
+    access_km: "ពីក្រុងតាកែវប្រហែល ២៤ គីឡូម៉ែត្រតាមទឹក ឬទៅអង្គរបូរីប្រហែល ៣ គីឡូម៉ែត្រទៀត។ ផ្លូវទឹកអាចងាយស្រួលជាងនៅពេលផ្លូវគោកជន់លិច។",
+    access_en: "About 24 km east of Takeo town by canal, or about 3 km from Angkor Borei town; the canal can be easier when roads flood.",
+    source_urls: ["https://whc.unesco.org/en/tentativelists/6455/", "https://www.tourismcambodia.com/travelguides/provinces/takeo/what-to-see/62_phnom-da.htm", "https://cambodianess.com/article/visiting-the-angkor-borei-museum-and-phnom-da-temple-site"],
+    province_slug: "takeo", province_km: "តាកែវ", province_en: "Takeo", views: 340,
+  },
+
+  // Oddar Meanchey
+  {
+    slug: "ta-moan-thom", category: "history", listing_type: "attraction", image_url: null,
+    name_km: "ប្រាសាទតាមាន់ធំ", name_en: "Prasat Ta Moan Thom",
+    summary_km: "ប្រាសាទខ្មែរបែបហិណ្ឌូនៅលើជួរភ្នំដងរែកជាប់ព្រំដែន ដែលមានប្រាង្គកណ្ដាល សំណង់ថ្មបាយក្រៀម និងលិង្គធម្មជាតិ។",
+    summary_en: "A late-11th-century Khmer-Hindu temple on the Dangrek Mountains, with a central sanctuary, laterite structures and a natural rock linga.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: "09:00–15:00 (reported 2025; verify before travel)", lat: "14.3493", lng: "103.2666",
+    access_km: "តំបន់ព្រំដែនដែលស្ថានភាពសន្តិសុខអាចផ្លាស់ប្តូរ។ ផ្លូវចុងក្រោយជាផ្លូវភ្នំ ហើយអាចត្រូវការការអនុញ្ញាត ឬការណែនាំពីមូលដ្ឋាន។ កុំឆ្លងរបាំង ឬព្រំដែនអន្តរជាតិ។",
+    access_en: "This is a security-sensitive border area. The final approach is mountainous and may require local permission or escort; do not cross barriers or the international border.",
+    source_urls: ["https://cambodianess.com/article/growing-number-of-cambodian-thais-visitors-at-ta-moan-thom-temple", "https://cambodianess.com/article/a-wish-to-visit-sacred-ta-moan-thom-photo-story", "https://www.cambotours.com/prasat-ta-muen-thom.html"],
+    province_slug: "oddar-meanchey", province_km: "ឧត្តរមានជ័យ", province_en: "Oddar Meanchey", views: 220,
+  },
+
+  // Pailin
+  {
+    slug: "wat-phnom-yat", category: "culture", listing_type: "attraction", image_url: null,
+    name_km: "វត្តភ្នំយ៉ាត", name_en: "Wat Phnom Yat",
+    summary_km: "រមណីយដ្ឋានវប្បធម៌លើភ្នំក្នុងក្រុងប៉ៃលិន ដែលមានវត្ត ចេតិយ អាស្រម និងទេសភាពក្រុងពីលើកំពូល។",
+    summary_en: "A hilltop cultural site in Pailin City with a pagoda, stupas, shrines and views over the city and surrounding plains.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "12.846013", lng: "102.610204",
+    access_km: "ស្ថិតតាមផ្លូវជាតិលេខ ៥៧ ជិតវត្តរតនសោភ័ណ។ អាចឡើងតាមជណ្តើរ ២៤២ កាំ ឬជិះយានយន្តទៅកំពូល។",
+    access_en: "Along National Road 57 near Wat Ratan Sophon; reach the summit by the 242-step stairway or by moto/car.",
+    source_urls: ["https://cata.org.kh/en/tourism-maps/88-pailin-province", "https://www.tourismcambodia.com/travelguides/provinces/pailin/what-to-see/280_phnom-yat.htm", "https://www.travelfish.org/sight_profile/cambodia/western_cambodia/pailin/pailin/1078"],
+    province_slug: "pailin", province_km: "ប៉ៃលិន", province_en: "Pailin", views: 260,
+  },
+
+  // Tboung Khmum
+  {
+    slug: "wat-preah-theat-thmor-da", category: "history", listing_type: "attraction", image_url: null,
+    name_km: "ប្រាសាទវត្តព្រះធាតុថ្មដា", name_en: "Wat Preah Theat Thmor Da Temple",
+    summary_km: "តំបន់ប្រាសាទបុរាណនៅស្រុកអូររាំងឪ ដែលមានប្រាសាទព្រះធាតុ បឹង ទីសក្ការៈ និងសាលាមេរុមេនាសម័យអាណានិគម។",
+    summary_en: "An ancient temple area in Ou Reang Ov district with Preah Theat temple, a pond, worship statues and a colonial-era hall.",
+    ticket_usd: null, ticket_status: "unknown", open_hours: null, lat: "11.84012", lng: "105.477764",
+    access_km: "ពីកំពង់ចាមតាមផ្លូវជាតិលេខ ៧ បន្តតាមផ្លូវជាតិលេខ ១១ ហើយតាមផ្លូវដីប្រហែល ៨ គីឡូម៉ែត្រ។ គួរប្រើម៉ូតូ ឬយានយន្តខ្ពស់ក្រោយភ្លៀង។",
+    access_en: "From Kampong Cham, take National Road 7 then National Road 11, followed by about 8 km on a dirt track; a motorbike or high-clearance vehicle is prudent after rain.",
+    source_urls: ["https://www.tourismcambodia.com/travelguides/provinces/tbong-khmum/what-to-see/130_wat-preah-theat-thmor-da-temple.htm", "https://elevationmap.net/preah-theat-thma-da-preah-theat-ou-reang-ov-kh-1003256169", "https://km.wikipedia.org/wiki/%E1%9E%94%E1%9F%92%E1%9E%9A%E1%9E%B6%E1%9E%9F%E1%9E%B6%E1%9E%91%E1%9E%9C%E1%9E%8F%E1%9F%92%E1%9E%8F%E1%9E%96%E1%9F%92%E1%9E%9A%E1%9F%87%E1%9E%92%E1%9E%B6%E1%    0.00"],
+    province_slug: "tboung-khmum", province_km: "ត្បូងឃ្មុំ", province_en: "Tboung Khmum", views: 240,
   },
 ];
