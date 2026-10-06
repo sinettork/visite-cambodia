@@ -93,7 +93,7 @@ export default async function PlacePage({ params, searchParams }: {
           <i className="fa-solid fa-compass" aria-hidden="true" /> {t.moreInRegion}
         </Link>
       </div>
-      <p className="destination-disclaimer">{t.guideDisclaimer}</p>
+      <p className="destination-disclaimer"><i className="fa-solid fa-circle-info" aria-hidden="true" /> <span>{t.guideDisclaimer}</span></p>
       {nearby.length > 0 && <section className="region-section"><div className="section-head"><h2>{t.nearby}</h2></div><div className="review-grid">
         {nearby.map((place) => <PlaceCard key={place.slug} place={place} lang={lang} />)}
       </div></section>}
