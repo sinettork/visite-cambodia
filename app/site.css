@@ -3845,3 +3845,55 @@ main {
     gap: 9px;
   }
 }
+
+
+/* Utility/reference page polish */
+.site-map .browse-heading {
+  margin-bottom: 18px;
+}
+
+.site-map .place-map-section {
+  margin-top: 4px;
+}
+
+.site-saved .saved-count-badge {
+  display: inline-flex;
+  margin: 0 0 16px;
+  padding: 0 0 7px;
+  min-height: 0;
+  border-bottom: 1px solid var(--border);
+  color: #71675f;
+  background: transparent;
+}
+
+.site-saved .saved-empty-card {
+  border-style: solid;
+  background: #fff;
+}
+
+.site-saved .saved-empty-icon {
+  border-radius: 2px;
+}
+
+.site-laws .law-source-list {
+  gap: 10px;
+}
+
+.site-laws .law-source-card {
+  padding: 16px;
+  border-color: #ddd8d3;
+}
+
+.site-laws .law-source-label {
+  min-height: 28px;
+}
+
+.site-laws .law-disclaimer {
+  background: #faf8f5;
+}
+
+@media (max-width: 760px) {
+  .site-laws .law-source-list {
+    gap: 8px;
+  }
+}
