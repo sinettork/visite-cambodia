@@ -124,7 +124,7 @@ export default async function DiscoverPage({ searchParams }: {
   const t = T[lang];
   const content = guide[lang];
   return (
-    <Shell lang={lang} variant="editorial">
+    <Shell lang={lang} variant="discover">
       <nav className="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
         <Link href={`/?lang=${lang}`}>{t.home}</Link><span aria-hidden="true">›</span>
         <span aria-current="page">{t.discover}</span>
