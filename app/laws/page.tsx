@@ -21,7 +21,7 @@ const guides = {
 export default async function LawsPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const lang = getLang((await searchParams).lang);
   const km = lang === "km";
-  return <Shell lang={lang} variant="editorial">
+  return <Shell lang={lang} variant="laws">
     <header className="browse-heading directory-heading">
       <h1>{km ? "ស្គាល់ច្បាប់មុនធ្វើដំណើរ" : "Know the rules before you travel"}</h1>
       <p>{km ? "អានសេចក្តីសង្ខេបជាភាសាសាមញ្ញនៅទីនេះ។ យើងយោងតែឯកសារដែលក្រសួងទេសចរណ៍ផ្សព្វផ្សាយ ហើយបែងចែកឱ្យច្បាស់រវាងច្បាប់សម្រាប់អ្នកទេសចរ និងបទប្បញ្ញត្តិសម្រាប់អាជីវកម្មទេសចរណ៍។" : "Read plain-language guides here. These pages use documents published by the Ministry of Tourism and distinguish visitor information from rules for tourism businesses."}</p>
