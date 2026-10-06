@@ -82,7 +82,7 @@ export default function FavoriteButton({
         className={`favorite-btn ${size} ${className}`}
         aria-label={lang === "km" ? "រក្សាទុកទីកន្លែងនេះ" : "Save this place"}
       >
-        <i className="fa-regular fa-heart" aria-hidden="true" />
+        <i className="fa-regular fa-bookmark" aria-hidden="true" />
       </button>
     );
   }
@@ -95,7 +95,7 @@ export default function FavoriteButton({
       title={isSaved ? (lang === "km" ? "ដកចេញពីកន្លែងរក្សាទុក" : "Remove from saved places") : (lang === "km" ? "រក្សាទុកទីកន្លែងនេះ" : "Save this place")}
       aria-label={isSaved ? (lang === "km" ? "ដកចេញពីកន្លែងរក្សាទុក" : "Remove from saved places") : (lang === "km" ? "រក្សាទុកទីកន្លែងនេះ" : "Save this place")}
     >
-      <i className={`fa-${isSaved ? "solid" : "regular"} fa-heart`} style={isSaved ? { color: "#e11d48" } : undefined} aria-hidden="true" />
+      <i className={`fa-${isSaved ? "solid" : "regular"} fa-bookmark`} aria-hidden="true" />
     </button>
   );
 }
