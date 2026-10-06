@@ -81,6 +81,8 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
       history_en: `More verified historical detail for ${nameEn} will be added as source material is reviewed.`,
       culture_km: `ស្គាល់ម្ហូប ជីវភាព និងទំនៀមទម្លាប់មូលដ្ឋានរបស់ ${nameKm} តាមកន្លែង និងសហគមន៍ដែលបានចុះបញ្ជី។`,
       culture_en: `Discover local food, daily life and traditions through the places and communities listed for ${nameEn}.`,
+      travel_km: "សូមពិនិត្យស្ថានភាពផ្លូវ អាកាសធាតុ និងសេវាកម្មមូលដ្ឋានមុនចេញដំណើរ។",
+      travel_en: "Check current road conditions, weather and local services before travelling.",
       source_urls: null,
     } as ProvinceGuide;
   };
@@ -90,6 +92,7 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
     const [rows] = await db.query<ProvinceGuide[]>(
       `SELECT p.slug, p.name_km, p.name_en, g.overview_km, g.overview_en,
         g.story_km, g.story_en, g.history_km, g.history_en, g.culture_km, g.culture_en,
+        g.travel_km, g.travel_en,
         g.attractions_km, g.attractions_en, g.stay_guide_km, g.stay_guide_en,
         g.food_guide_km, g.food_guide_en, g.source_urls
       FROM provinces p
