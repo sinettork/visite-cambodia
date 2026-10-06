@@ -139,10 +139,11 @@ export default function PlaceMap({ places, lang }: { places: Place[]; lang: "km"
         <p className="map-intro-text">{t.intro}</p>
 
         <div className="map-filters-row">
-          <div className="map-type-pills" role="tablist">
+          <div className="map-type-pills" role="group" aria-label={lang === "km" ? "ច្រោះតាមប្រភេទ" : "Filter by type"}>
             <button
               type="button"
               className={`map-pill-btn ${!type ? "active" : ""}`}
+              aria-pressed={!type}
               onClick={() => setType("")}
             >
               {t.all}
@@ -150,6 +151,7 @@ export default function PlaceMap({ places, lang }: { places: Place[]; lang: "km"
             <button
               type="button"
               className={`map-pill-btn ${type === "attraction" ? "active" : ""}`}
+              aria-pressed={type === "attraction"}
               onClick={() => setType("attraction")}
             >
               <i className="fa-solid fa-landmark" aria-hidden="true" /> {t.attraction}
@@ -157,6 +159,7 @@ export default function PlaceMap({ places, lang }: { places: Place[]; lang: "km"
             <button
               type="button"
               className={`map-pill-btn ${type === "accommodation" ? "active" : ""}`}
+              aria-pressed={type === "accommodation"}
               onClick={() => setType("accommodation")}
             >
               <i className="fa-solid fa-hotel" aria-hidden="true" /> {t.accommodation}
@@ -164,6 +167,7 @@ export default function PlaceMap({ places, lang }: { places: Place[]; lang: "km"
             <button
               type="button"
               className={`map-pill-btn ${type === "restaurant" ? "active" : ""}`}
+              aria-pressed={type === "restaurant"}
               onClick={() => setType("restaurant")}
             >
               <i className="fa-solid fa-utensils" aria-hidden="true" /> {t.restaurant}
@@ -188,7 +192,7 @@ export default function PlaceMap({ places, lang }: { places: Place[]; lang: "km"
       </div>
 
       {filtered.length ? (
-        <div id="cambodia-place-map" className="leaflet-map" role="application" aria-label={t.map} />
+        <div id="cambodia-place-map" className="leaflet-map" role="region" aria-label={t.map} />
       ) : (
         <div className="map-empty-state">
           <p className="region-empty">{t.empty}</p>
