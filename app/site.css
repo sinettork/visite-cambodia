@@ -2251,40 +2251,48 @@ main {
 }
 .review-card-wrapper .favorite-btn {
   position: absolute;
-  z-index: 3;
-  top: 14px;
-  right: 14px;
+  z-index: 4;
+  top: 12px;
+  right: 12px;
 }
+
 .favorite-btn {
   display: grid;
   width: 34px;
   height: 34px;
   place-items: center;
-  border: 1px solid rgb(255 255 255 / 75%);
-  border-radius: 50%;
-  color: #666;
-  background: rgb(255 255 255 / 94%);
-  box-shadow: 0 3px 10px rgb(0 0 0 / 12%);
-  transition: transform .15s ease, background .15s ease, color .15s ease;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  background: rgb(20 20 20 / 22%);
+  box-shadow: none;
+  font-size: 16px;
+  line-height: 1;
+  text-shadow: 0 1px 5px rgb(0 0 0 / 65%);
+  transition: color .15s ease, background .15s ease, transform .15s ease;
 }
+
 .favorite-btn:hover {
-  color: #d94e21;
-  background: #fff;
+  color: #ffd2ae;
+  background: rgb(20 20 20 / 38%);
   transform: translateY(-1px);
 }
+
 .favorite-btn.large {
-  width: 42px;
-  height: 42px;
-  font-size: 17px;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
 }
+
 .favorite-btn.active {
-  color: #d94e21;
-  border-color: #e9bba7;
-  background: #fff8f5;
+  color: var(--accent);
+  background: rgb(20 20 20 / 30%);
 }
+
 .card-favorite-btn {
-  top: 14px;
-  right: 14px;
+  top: 12px;
+  right: 12px;
 }
 
 /* Province jump/navigation states */
