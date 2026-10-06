@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Shell from "@/components/Shell";
 import PlaceCard from "@/components/PlaceCard";
 import FavoriteButton from "@/components/FavoriteButton";
+import PlaceGuide from "@/components/PlaceGuide";
 import { getNearbyPlaces, getPlace } from "@/lib/queries";
 import { T, getLang, pick } from "@/lib/i18n";
 
@@ -38,6 +39,7 @@ export default async function PlacePage({ params, searchParams }: {
   const nearby = await getNearbyPlaces(slug);
   const name = pick(p, "name", lang);
   const summary = pick(p, "summary", lang);
+  const detailedDescription = pick(p.guide ?? {}, "about", lang) || summary;
   const heroImage = p.image_url ?? ({
     "angkor-wat": "/images/angkor-wat-header.jpg",
     "angkor-thom": "/images/angkor-wat-header.jpg",
@@ -46,7 +48,7 @@ export default async function PlacePage({ params, searchParams }: {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": p.listing_type === "restaurant" ? "Restaurant" : p.listing_type === "accommodation" ? "LodgingBusiness" : "TouristAttraction",
-    name, description: summary,
+    name, description: detailedDescription,
     ...(p.image_url ? { image: [p.image_url] } : {}),
     ...(p.lat && p.lng ? { geo: { "@type": "GeoCoordinates", latitude: Number(p.lat), longitude: Number(p.lng) } } : {}),
     ...(p.open_hours ? { openingHours: p.open_hours } : {}),
