@@ -3203,3 +3203,22 @@ main {
 [id] {
   scroll-margin-top: 58px;
 }
+
+
+/* Keyboard navigation */
+.skip-link {
+  position: fixed;
+  z-index: 200;
+  top: 10px;
+  left: 10px;
+  padding: 8px 12px;
+  transform: translateY(-160%);
+  color: #fff;
+  background: #1d1d1d;
+  border: 2px solid var(--accent);
+  font: 700 12px var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  color: #fff;
+}
