@@ -1,0 +1,18 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import type { Lang } from "../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+---
+<SiteLayout lang={lang} title={lang==="km"?"កន្លែងដែលបានរក្សាទុក":"Saved Places"} variant="saved">
+  <header class="page-header-block"><h1>{lang==="km"?"កន្លែងដែលបានរក្សាទុក":"Saved places"}</h1><p class="page-header-intro">{lang==="km"?"រក្សាទុកកន្លែងដែលអ្នកចង់ទៅ ហើយត្រឡប់មកមើលពេលក្រោយ។":"Save places you want to visit and come back to them later."}</p></header>
+  <div id="saved-content" class="saved-page-state"><p>{lang==="km"?"កំពុងផ្ទុកកន្លែងដែលបានរក្សាទុក...":"Loading saved places..."}</p></div>
+  <script>
+    const root = document.querySelector("#saved-content");
+    const lang = document.documentElement.lang;
+    const saved = JSON.parse(localStorage.getItem("visit-cambodia-favorites") ?? "[]");
+    if (!saved.length && root) root.innerHTML = "<p>" + (lang === "km" ? "អ្នកមិនទាន់បានរក្សាទុកកន្លែងណាទេ។" : "You have not saved any places yet.") + "</p>";
+    if (saved.length && root) root.innerHTML = '<p>' + saved.length + (lang === "km" ? ' កន្លែងត្រូវបានរក្សាទុក។ ចុចបេះដូងនៅលើកាតកន្លែងទេសចរណ៍ដើម្បីគ្រប់គ្រង។' : ' saved places. Use the heart button on destination cards to manage them.') + '</p>';
+  </script>
+</SiteLayout>
