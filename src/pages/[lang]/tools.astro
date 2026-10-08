@@ -2,31 +2,94 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { phrasebookCategories, emergencyContacts } from "../../data/tools-data";
 import type { Lang } from "../../lib/catalog";
-export const prerender=true;
-export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
-const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+
+export const prerender = true;
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "km" } }];
+}
+const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
+const currencyRate = 4100;
+const rielBanknotes = [100, 500, 1000, 2000, 5000, 10000, 20000, 50000];
 ---
-<SiteLayout lang={lang} title={lang==="km"?"ឧបករណ៍ធ្វើដំណើរ":"Travel Tools"} variant="tools">
-  <header class="page-header-block"><h1>{lang==="km"?"ឧបករណ៍ធ្វើដំណើរ":"Travel tools"}</h1><p class="page-header-intro">{lang==="km"?"ឧបករណ៍សាមញ្ញសម្រាប់អ្នកដំណើរ៖ ប្តូរប្រាក់ ឃ្លាខ្មែរ និងលេខសង្គ្រោះបន្ទាន់។":"Practical tools for travellers: currency, Khmer phrases and emergency contacts."}</p></header>
+<SiteLayout lang={lang} title={lang === "km" ? "ឧបករណ៍ធ្វើដំណើរ" : "Travel Tools"} variant="tools">
+  <div class="tools-page-container">
+    <header class="page-header-block">
+      <h1>{lang === "km" ? "ឧបករណ៍ធ្វើដំណើរ" : "Travel tools"}</h1>
+      <p class="page-header-intro">{lang === "km" ? "ឧបករណ៍សាមញ្ញសម្រាប់អ្នកដំណើរ៖ ប្តូរប្រាក់ ឃ្លាខ្មែរ និងលេខសង្គ្រោះបន្ទាន់។" : "Practical tools for travellers: currency, Khmer phrases and emergency contacts."}</p>
+    </header>
 
-  <section id="currency" class="tools-section"><div class="section-head"><h2>{lang==="km"?"ប្តូរប្រាក់ USD ↔ KHR":"Currency converter USD ↔ KHR"}</h2></div>
-    <div class="converter-grid"><label>USD<input id="usd" inputmode="decimal" value="1" /></label><span>=</span><label>KHR<input id="khr" inputmode="decimal" value="4000" /></label></div>
-    <p class="tools-note">{lang==="km"?"អត្រាឧទាហរណ៍ប៉ុណ្ណោះ។ សូមពិនិត្យអត្រាប្តូរប្រាក់ពិតប្រាកដ។":"Illustrative rate only. Check the current rate before making a transaction."}</p>
-  </section>
+    <section id="currency" class="tools-section">
+      <div class="section-head"><h2><i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i> {lang === "km" ? "ឧបករណ៍ប្តូរប្រាក់ ដុល្លារ (USD) ↔ រៀល (KHR)" : "Currency Converter (USD ↔ KHR)"}</h2></div>
+      <div class="currency-converter-card">
+        <div class="converter-header">
+          <h3>{lang === "km" ? "ប្រាក់ដុល្លារ ↔ ប្រាក់រៀល" : "USD ↔ KHR"}</h3>
+          <p class="converter-rate-note">{lang === "km" ? "អត្រាគោល៖" : "Benchmark rate:"} <strong>1 USD = {currencyRate.toLocaleString()} KHR</strong></p>
+        </div>
+        <div class="converter-inputs-grid">
+          <div class="converter-field"><label for="usd-input">{lang === "km" ? "ប្រាក់ដុល្លារ (USD)" : "US Dollar (USD)"}</label><div class="input-with-symbol"><span class="symbol">$</span><input id="usd-input" type="number" min="0" step="any" value="10" /></div></div>
+          <div class="converter-switch-icon" aria-hidden="true"><i class="fa-solid fa-right-left"></i></div>
+          <div class="converter-field"><label for="khr-input">{lang === "km" ? "ប្រាក់រៀល (KHR)" : "Cambodian Riel (KHR)"}</label><div class="input-with-symbol"><span class="symbol">៛</span><input id="khr-input" type="text" value="41,000" /></div></div>
+        </div>
+        <div class="quick-amount-chips"><span>{lang === "km" ? "តម្លៃរហ័ស៖" : "Quick presets:"}</span>{[1,5,10,20,50,100].map((amount) => <button type="button" class="chip-btn" data-usd-preset={amount}>&#36;{amount}</button>)}</div>
+        <div class="custom-rate-toggle"><details><summary><i class="fa-solid fa-sliders" aria-hidden="true"></i> {lang === "km" ? "កែប្រែអត្រាប្តូរប្រាក់" : "Customize exchange rate"}</summary><div class="custom-rate-form"><label>1 USD = <input id="custom-rate" class="rate-input" type="number" min="1" value={currencyRate} /> KHR</label><button id="reset-rate" type="button" class="btn-reset-rate">{lang === "km" ? "កំណត់ 4,100" : "Reset to 4,100"}</button></div></details></div>
+        <section class="riel-notes-guide"><div class="riel-notes-copy"><h4>{lang === "km" ? "ស្គាល់ក្រដាសប្រាក់រៀល" : "Recognize Cambodian Riel notes"}</h4><p>{lang === "km" ? "ស្គាល់តម្លៃក្រដាសប្រាក់រៀលដែលអ្នកអាចជួបប្រទះពេលធ្វើដំណើរ និងពិនិត្យលេខតម្លៃមុនពេលទូទាត់។" : "Recognize common Cambodian riel denominations and always check the printed value before paying."}</p></div><ul class="riel-banknote-grid">{rielBanknotes.map((amount) => <li class="riel-banknote-card"><figure><img src={"/images/riel-" + amount + ".jpg"} alt={(lang === "km" ? "ក្រដាសប្រាក់ " + amount + " រៀល" : amount + " riel banknote")} loading="lazy" /><figcaption><strong>{amount.toLocaleString()} ៛</strong></figcaption></figure></li>)}</ul></section>
+      </div>
+      <p class="tools-note">{lang === "km" ? "អត្រាគោលជាតម្លៃឧទាហរណ៍ប៉ុណ្ណោះ។ សូមពិនិត្យអត្រាប្តូរប្រាក់ពិតប្រាកដមុនធ្វើប្រតិបត្តិការ។" : "Benchmark rate only. Check the current exchange rate before making a transaction."}</p>
+    </section>
 
-  <section id="phrasebook" class="tools-section"><div class="section-head"><h2>{lang==="km"?"ឃ្លាសន្ទនាខ្មែរសំខាន់ៗ":"Khmer phrasebook"}</h2></div>
-    {phrasebookCategories.map((category)=><div class="phrasebook-category"><h3>{lang==="km"?category.category_km:category.category_en}</h3><div class="phrase-grid">{category.phrases.slice(0,8).map((phrase)=><div class="phrase-card"><strong>{phrase.km}</strong><small>{phrase.phonetic}</small><span>{phrase.en}</span></div>)}</div></div>)}
-  </section>
+    <section id="phrasebook" class="tools-section">
+      <div class="section-head"><h2><i class="fa-solid fa-comments" aria-hidden="true"></i> {lang === "km" ? "ឃ្លាសន្ទនាភាសាខ្មែរសំខាន់ៗ" : "Essential Khmer phrasebook"}</h2></div>
+      <div class="phrasebook-card">
+        <div class="phrasebook-header"><div><h3>{lang === "km" ? "ឃ្លាប្រចាំថ្ងៃសម្រាប់អ្នកដំណើរ" : "Practical daily phrases"}</h3><p class="phrasebook-intro">{lang === "km" ? "ស្វែងរកតាមអត្ថបទខ្មែរ សំឡេងអាន ឬអត្ថន័យជាភាសាអង់គ្លេស។" : "Search Khmer text, phonetics or English meaning."}</p></div><div class="phrasebook-search"><input id="phrase-search" type="search" placeholder={lang === "km" ? "ស្វែងរកពាក្យ..." : "Search phrases..."} /></div></div>
+        <div class="phrase-category-tabs" role="tablist">{phrasebookCategories.map((category,index) => <button type="button" class={"cat-tab-btn" + (index === 0 ? " active" : "")} data-category-tab={index}>{lang === "km" ? category.category_km : category.category_en}</button>)}</div>
+        <div class="phrases-grid" id="phrases-grid">{phrasebookCategories.flatMap((category,categoryIndex) => category.phrases.map((phrase) => <div class="phrase-item" data-category={categoryIndex} data-search={(phrase.km + " " + phrase.phonetic + " " + phrase.en).toLowerCase()}><div class="phrase-km">{phrase.km}</div><div class="phrase-phonetic"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> <em>{phrase.phonetic}</em></div><div class="phrase-en">{phrase.en}</div></div>))}</div>
+        <p id="phrase-empty" class="phrase-empty" hidden>{lang === "km" ? "រកមិនឃើញពាក្យដែលអ្នកស្វែងរកទេ។" : "No phrases matched your search."}</p>
+      </div>
+    </section>
 
-  <section id="emergency" class="tools-section"><div class="section-head"><h2>{lang==="km"?"លេខសង្គ្រោះបន្ទាន់":"Emergency directory"}</h2></div>
-    <div class="emergency-grid">{emergencyContacts.map((contact)=><a class="emergency-card" href={"tel:"+contact.number.replace(/[^\d+]/g,"")}><strong>{lang==="km"?contact.name_km:contact.name_en}</strong><b>{contact.number}</b><span>{lang==="km"?contact.description_km:contact.description_en}</span></a>)}</div>
-  </section>
+    <section id="emergency" class="tools-section emergency-contacts-section">
+      <div class="section-head"><h2><i class="fa-solid fa-phone-volume" aria-hidden="true"></i> {lang === "km" ? "លេខទូរស័ព្ទសង្គ្រោះបន្ទាន់សំខាន់ៗ" : "Essential emergency contacts"}</h2></div>
+      <p class="emergency-intro-text">{lang === "km" ? "សូមរក្សាទុកលេខទាំងនេះសម្រាប់តម្រូវការបន្ទាន់ ខណៈពេលធ្វើដំណើរនៅកម្ពុជា។" : "Keep these contacts handy for urgent assistance, tourist police or medical emergencies while travelling in Cambodia."}</p>
+      <div class="emergency-cards-grid">{emergencyContacts.map((contact) => <div class={"emergency-card emergency-" + contact.category}><div class="emergency-icon-badge"><i class={contact.category === "police" ? "fa-solid fa-shield-halved" : contact.category === "medical" ? "fa-solid fa-truck-medical" : "fa-solid fa-fire-extinguisher"} aria-hidden="true"></i></div><div class="emergency-card-info"><h3>{lang === "km" ? contact.name_km : contact.name_en}</h3><p>{lang === "km" ? contact.description_km : contact.description_en}</p><a href={"tel:" + contact.number.replace(/\s+/g, "")} class="emergency-call-btn"><i class="fa-solid fa-phone" aria-hidden="true"></i> {contact.number}</a></div></div>)}</div>
+    </section>
+  </div>
 
   <script>
-    const usd = document.querySelector("#usd") as HTMLInputElement | null;
-    const khr = document.querySelector("#khr") as HTMLInputElement | null;
-    const rate = 4000;
-    usd?.addEventListener("input", () => { if (khr && usd) khr.value = String((Number(usd.value || 0) * rate).toFixed(0)); });
-    khr?.addEventListener("input", () => { if (usd && khr) usd.value = String((Number(khr.value || 0) / rate).toFixed(2)); });
+    const usd = document.querySelector<HTMLInputElement>("#usd-input");
+    const khr = document.querySelector<HTMLInputElement>("#khr-input");
+    const rateInput = document.querySelector<HTMLInputElement>("#custom-rate");
+    let rate = 4100;
+    const formatKhr = (value: number) => Math.round(value).toLocaleString("en-US");
+    const updateFromUsd = () => { const value = Number(usd?.value || 0); if (khr) khr.value = formatKhr(value * rate); };
+    const updateFromKhr = () => { const value = Number((khr?.value || "0").replaceAll(",", "")); if (usd) usd.value = (value / rate).toFixed(2); };
+    usd?.addEventListener("input", updateFromUsd);
+    khr?.addEventListener("input", updateFromKhr);
+    document.querySelectorAll<HTMLButtonElement>("[data-usd-preset]").forEach((button) => button.addEventListener("click", () => { if (usd) { usd.value = button.dataset.usdPreset || "0"; updateFromUsd(); } }));
+    rateInput?.addEventListener("input", () => { const next = Number(rateInput.value); if (Number.isFinite(next) && next > 0) { rate = next; updateFromUsd(); } });
+    document.querySelector<HTMLButtonElement>("#reset-rate")?.addEventListener("click", () => { rate = 4100; if (rateInput) rateInput.value = "4100"; updateFromUsd(); });
+
+    const items = [...document.querySelectorAll<HTMLElement>(".phrase-item")];
+    const tabs = [...document.querySelectorAll<HTMLButtonElement>("[data-category-tab]")];
+    const search = document.querySelector<HTMLInputElement>("#phrase-search");
+    const empty = document.querySelector<HTMLElement>("#phrase-empty");
+    let activeCategory = 0;
+    const renderPhrases = () => {
+      const query = (search?.value || "").trim().toLowerCase();
+      let visible = 0;
+      items.forEach((item) => {
+        const categoryMatch = query ? true : Number(item.dataset.category) === activeCategory;
+        const searchMatch = !query || (item.dataset.search || "").includes(query);
+        item.hidden = !(categoryMatch && searchMatch);
+        if (!item.hidden) visible++;
+      });
+      if (empty) empty.hidden = visible !== 0;
+    };
+    tabs.forEach((tab) => tab.addEventListener("click", () => {
+      activeCategory = Number(tab.dataset.categoryTab || 0);
+      tabs.forEach((item) => item.classList.toggle("active", item === tab));
+      renderPhrases();
+    }));
+    search?.addEventListener("input", renderPhrases);
+    renderPhrases();
   </script>
 </SiteLayout>
