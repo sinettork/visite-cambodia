@@ -2,16 +2,15 @@
 import SiteLayout from "../../../layouts/SiteLayout.astro";
 import PlaceCard from "../../../components/PlaceCard.astro";
 import FavoriteButton from "../../../components/FavoriteButton.astro";
-import { getNearbyPlaces, getPlace, getPlaceGuide, type Lang } from "../../../lib/catalog";
+import { getAllPlaces, getNearbyPlaces, getPlace, getPlaceGuide, type Lang } from "../../../lib/catalog";
 import { T } from "../../../lib/i18n";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const { getPlaces } = await import("../../../lib/catalog");
-  const result = await getPlaces({ page: 1, pageSize: 48 });
+  const places = await getAllPlaces();
   return ["en", "km"].flatMap((lang) =>
-    result.items.map((place) => ({ params: { lang, slug: place.slug } })),
+    places.map((place) => ({ params: { lang, slug: place.slug } })),
   );
 }
 
