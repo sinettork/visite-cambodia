@@ -1,1 +1,475 @@
-{"types":"export type Json =\n  | string\n  | number\n  | boolean\n  | null\n  | { [key: string]: Json | undefined }\n  | Json[]\n\nexport type Database = {\n  // Allows to automatically instantiate createClient with right options\n  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)\n  __InternalSupabase: {\n    PostgrestVersion: \"14.18\"\n  }\n  public: {\n    Tables: {\n      admin_audit_log: {\n        Row: {\n          action: string\n          admin_user_id: string | null\n          changed_fields: Json\n          created_at: string\n          entity_id: number | null\n          entity_type: string\n          id: number\n        }\n        Insert: {\n          action: string\n          admin_user_id?: string | null\n          changed_fields?: Json\n          created_at?: string\n          entity_id?: number | null\n          entity_type: string\n          id?: number\n        }\n        Update: {\n          action?: string\n          admin_user_id?: string | null\n          changed_fields?: Json\n          created_at?: string\n          entity_id?: number | null\n          entity_type?: string\n          id?: number\n        }\n        Relationships: []\n      }\n      admin_users: {\n        Row: {\n          created_at: string\n          display_name: string\n          is_active: boolean\n          role: string\n          updated_at: string\n          user_id: string\n        }\n        Insert: {\n          created_at?: string\n          display_name: string\n          is_active?: boolean\n          role?: string\n          updated_at?: string\n          user_id: string\n        }\n        Update: {\n          created_at?: string\n          display_name?: string\n          is_active?: boolean\n          role?: string\n          updated_at?: string\n          user_id?: string\n        }\n        Relationships: []\n      }\n      place_guides: {\n        Row: {\n          about_en: string | null\n          about_km: string | null\n          created_at: string\n          highlights_en: string | null\n          highlights_km: string | null\n          history_en: string | null\n          history_km: string | null\n          id: number\n          place_id: number\n          source_urls: Json\n          tips_en: string | null\n          tips_km: string | null\n          updated_at: string\n          visit_plan_en: string | null\n          visit_plan_km: string | null\n        }\n        Insert: {\n          about_en?: string | null\n          about_km?: string | null\n          created_at?: string\n          highlights_en?: string | null\n          highlights_km?: string | null\n          history_en?: string | null\n          history_km?: string | null\n          id?: number\n          place_id: number\n          source_urls?: Json\n          tips_en?: string | null\n          tips_km?: string | null\n          updated_at?: string\n          visit_plan_en?: string | null\n          visit_plan_km?: string | null\n        }\n        Update: {\n          about_en?: string | null\n          about_km?: string | null\n          created_at?: string\n          highlights_en?: string | null\n          highlights_km?: string | null\n          history_en?: string | null\n          history_km?: string | null\n          id?: number\n          place_id?: number\n          source_urls?: Json\n          tips_en?: string | null\n          tips_km?: string | null\n          updated_at?: string\n          visit_plan_en?: string | null\n          visit_plan_km?: string | null\n        }\n        Relationships: [\n          {\n            foreignKeyName: \"place_guides_place_id_fkey\"\n            columns: [\"place_id\"]\n            isOneToOne: true\n            referencedRelation: \"places\"\n            referencedColumns: [\"id\"]\n          },\n        ]\n      }\n      places: {\n        Row: {\n          access_en: string | null\n          access_km: string | null\n          business_type: string | null\n          category: string\n          created_at: string\n          id: number\n          image_url: string | null\n          lat: number | null\n          listing_type: string\n          lng: number | null\n          name_en: string\n          name_km: string\n          open_hours: string | null\n          province_id: number\n          publication_status: string\n          slug: string\n          source_urls: Json\n          summary_en: string | null\n          summary_km: string | null\n          ticket_provider: string | null\n          ticket_status: string | null\n          ticket_url: string | null\n          ticket_usd: number | null\n          updated_at: string\n          views: number\n        }\n        Insert: {\n          access_en?: string | null\n          access_km?: string | null\n          business_type?: string | null\n          category: string\n          created_at?: string\n          id?: number\n          image_url?: string | null\n          lat?: number | null\n          listing_type?: string\n          lng?: number | null\n          name_en: string\n          name_km: string\n          open_hours?: string | null\n          province_id: number\n          publication_status?: string\n          slug: string\n          source_urls?: Json\n          summary_en?: string | null\n          summary_km?: string | null\n          ticket_provider?: string | null\n          ticket_status?: string | null\n          ticket_url?: string | null\n          ticket_usd?: number | null\n          updated_at?: string\n          views?: number\n        }\n        Update: {\n          access_en?: string | null\n          access_km?: string | null\n          business_type?: string | null\n          category?: string\n          created_at?: string\n          id?: number\n          image_url?: string | null\n          lat?: number | null\n          listing_type?: string\n          lng?: number | null\n          name_en?: string\n          name_km?: string\n          open_hours?: string | null\n          province_id?: number\n          publication_status?: string\n          slug?: string\n          source_urls?: Json\n          summary_en?: string | null\n          summary_km?: string | null\n          ticket_provider?: string | null\n          ticket_status?: string | null\n          ticket_url?: string | null\n          ticket_usd?: number | null\n          updated_at?: string\n          views?: number\n        }\n        Relationships: [\n          {\n            foreignKeyName: \"places_province_id_fkey\"\n            columns: [\"province_id\"]\n            isOneToOne: false\n            referencedRelation: \"provinces\"\n            referencedColumns: [\"id\"]\n          },\n        ]\n      }\n      province_guides: {\n        Row: {\n          attractions_en: string\n          attractions_km: string\n          created_at: string\n          culture_en: string | null\n          culture_km: string | null\n          food_guide_en: string\n          food_guide_km: string\n          history_en: string | null\n          history_km: string | null\n          id: number\n          overview_en: string\n          overview_km: string\n          province_id: number\n          source_urls: Json\n          stay_guide_en: string\n          stay_guide_km: string\n          story_en: string | null\n          story_km: string | null\n          travel_en: string | null\n          travel_km: string | null\n          updated_at: string\n        }\n        Insert: {\n          attractions_en: string\n          attractions_km: string\n          created_at?: string\n          culture_en?: string | null\n          culture_km?: string | null\n          food_guide_en: string\n          food_guide_km: string\n          history_en?: string | null\n          history_km?: string | null\n          id?: number\n          overview_en: string\n          overview_km: string\n          province_id: number\n          source_urls?: Json\n          stay_guide_en: string\n          stay_guide_km: string\n          story_en?: string | null\n          story_km?: string | null\n          travel_en?: string | null\n          travel_km?: string | null\n          updated_at?: string\n        }\n        Update: {\n          attractions_en?: string\n          attractions_km?: string\n          created_at?: string\n          culture_en?: string | null\n          culture_km?: string | null\n          food_guide_en?: string\n          food_guide_km?: string\n          history_en?: string | null\n          history_km?: string | null\n          id?: number\n          overview_en?: string\n          overview_km?: string\n          province_id?: number\n          source_urls?: Json\n          stay_guide_en?: string\n          stay_guide_km?: string\n          story_en?: string | null\n          story_km?: string | null\n          travel_en?: string | null\n          travel_km?: string | null\n          updated_at?: string\n        }\n        Relationships: [\n          {\n            foreignKeyName: \"province_guides_province_id_fkey\"\n            columns: [\"province_id\"]\n            isOneToOne: true\n            referencedRelation: \"provinces\"\n            referencedColumns: [\"id\"]\n          },\n        ]\n      }\n      provinces: {\n        Row: {\n          banner_image_url: string | null\n          created_at: string\n          id: number\n          name_en: string\n          name_km: string\n          slug: string\n          updated_at: string\n        }\n        Insert: {\n          banner_image_url?: string | null\n          created_at?: string\n          id?: number\n          name_en: string\n          name_km: string\n          slug: string\n          updated_at?: string\n        }\n        Update: {\n          banner_image_url?: string | null\n          created_at?: string\n          id?: number\n          name_en?: string\n          name_km?: string\n          slug?: string\n          updated_at?: string\n        }\n        Relationships: []\n      }\n    }\n    Views: {\n      [_ in never]: never\n    }\n    Functions: {\n      [_ in never]: never\n    }\n    Enums: {\n      [_ in never]: never\n    }\n    CompositeTypes: {\n      [_ in never]: never\n    }\n  }\n}\n\ntype DatabaseWithoutInternals = Omit<Database, \"__InternalSupabase\">\n\ntype DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, \"public\">]\n\nexport type Tables<\n  DefaultSchemaTableNameOrOptions extends\n    | keyof (DefaultSchema[\"Tables\"] & DefaultSchema[\"Views\"])\n    | { schema: keyof DatabaseWithoutInternals },\n  TableName extends (DefaultSchemaTableNameOrOptions extends {\n    schema: keyof DatabaseWithoutInternals\n  }\n    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Tables\"] &\n        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Views\"])\n    : never) = never,\n> = DefaultSchemaTableNameOrOptions extends {\n  schema: keyof DatabaseWithoutInternals\n}\n  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Tables\"] &\n      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Views\"])[TableName] extends {\n      Row: infer R\n    }\n    ? R\n    : never\n  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema[\"Tables\"] &\n        DefaultSchema[\"Views\"])\n    ? (DefaultSchema[\"Tables\"] &\n        DefaultSchema[\"Views\"])[DefaultSchemaTableNameOrOptions] extends {\n        Row: infer R\n      }\n      ? R\n      : never\n    : never\n\nexport type TablesInsert<\n  DefaultSchemaTableNameOrOptions extends\n    | keyof DefaultSchema[\"Tables\"]\n    | { schema: keyof DatabaseWithoutInternals },\n  TableName extends (DefaultSchemaTableNameOrOptions extends {\n    schema: keyof DatabaseWithoutInternals\n  }\n    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Tables\"]\n    : never) = never,\n> = DefaultSchemaTableNameOrOptions extends {\n  schema: keyof DatabaseWithoutInternals\n}\n  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Tables\"][TableName] extends {\n      Insert: infer I\n    }\n    ? I\n    : never\n  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema[\"Tables\"]\n    ? DefaultSchema[\"Tables\"][DefaultSchemaTableNameOrOptions] extends {\n        Insert: infer I\n      }\n      ? I\n      : never\n    : never\n\nexport type TablesUpdate<\n  DefaultSchemaTableNameOrOptions extends\n    | keyof DefaultSchema[\"Tables\"]\n    | { schema: keyof DatabaseWithoutInternals },\n  TableName extends (DefaultSchemaTableNameOrOptions extends {\n    schema: keyof DatabaseWithoutInternals\n  }\n    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Tables\"]\n    : never) = never,\n> = DefaultSchemaTableNameOrOptions extends {\n  schema: keyof DatabaseWithoutInternals\n}\n  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions[\"schema\"]][\"Tables\"][TableName] extends {\n      Update: infer U\n    }\n    ? U\n    : never\n  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema[\"Tables\"]\n    ? DefaultSchema[\"Tables\"][DefaultSchemaTableNameOrOptions] extends {\n        Update: infer U\n      }\n      ? U\n      : never\n    : never\n\nexport type Enums<\n  DefaultSchemaEnumNameOrOptions extends\n    | keyof DefaultSchema[\"Enums\"]\n    | { schema: keyof DatabaseWithoutInternals },\n  EnumName extends (DefaultSchemaEnumNameOrOptions extends {\n    schema: keyof DatabaseWithoutInternals\n  }\n    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions[\"schema\"]][\"Enums\"]\n    : never) = never,\n> = DefaultSchemaEnumNameOrOptions extends {\n  schema: keyof DatabaseWithoutInternals\n}\n  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions[\"schema\"]][\"Enums\"][EnumName]\n  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema[\"Enums\"]\n    ? DefaultSchema[\"Enums\"][DefaultSchemaEnumNameOrOptions]\n    : never\n\nexport type CompositeTypes<\n  PublicCompositeTypeNameOrOptions extends\n    | keyof DefaultSchema[\"CompositeTypes\"]\n    | { schema: keyof DatabaseWithoutInternals },\n  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {\n    schema: keyof DatabaseWithoutInternals\n  }\n    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions[\"schema\"]][\"CompositeTypes\"]\n    : never) = never,\n> = PublicCompositeTypeNameOrOptions extends {\n  schema: keyof DatabaseWithoutInternals\n}\n  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions[\"schema\"]][\"CompositeTypes\"][CompositeTypeName]\n  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema[\"CompositeTypes\"]\n    ? DefaultSchema[\"CompositeTypes\"][PublicCompositeTypeNameOrOptions]\n    : never\n\nexport const Constants = {\n  public: {\n    Enums: {},\n  },\n} as const\n"}
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.18"
+  }
+  public: {
+    Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_user_id: string | null
+          changed_fields: Json
+          created_at: string
+          entity_id: number | null
+          entity_type: string
+          id: number
+        }
+        Insert: {
+          action: string
+          admin_user_id?: string | null
+          changed_fields?: Json
+          created_at?: string
+          entity_id?: number | null
+          entity_type: string
+          id?: number
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string | null
+          changed_fields?: Json
+          created_at?: string
+          entity_id?: number | null
+          entity_type?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      admin_users: {
+        Row: {
+          created_at: string
+          display_name: string
+          is_active: boolean
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          is_active?: boolean
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          is_active?: boolean
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      place_guides: {
+        Row: {
+          about_en: string | null
+          about_km: string | null
+          created_at: string
+          highlights_en: string | null
+          highlights_km: string | null
+          history_en: string | null
+          history_km: string | null
+          id: number
+          place_id: number
+          source_urls: Json
+          tips_en: string | null
+          tips_km: string | null
+          updated_at: string
+          visit_plan_en: string | null
+          visit_plan_km: string | null
+        }
+        Insert: {
+          about_en?: string | null
+          about_km?: string | null
+          created_at?: string
+          highlights_en?: string | null
+          highlights_km?: string | null
+          history_en?: string | null
+          history_km?: string | null
+          id?: number
+          place_id: number
+          source_urls?: Json
+          tips_en?: string | null
+          tips_km?: string | null
+          updated_at?: string
+          visit_plan_en?: string | null
+          visit_plan_km?: string | null
+        }
+        Update: {
+          about_en?: string | null
+          about_km?: string | null
+          created_at?: string
+          highlights_en?: string | null
+          highlights_km?: string | null
+          history_en?: string | null
+          history_km?: string | null
+          id?: number
+          place_id?: number
+          source_urls?: Json
+          tips_en?: string | null
+          tips_km?: string | null
+          updated_at?: string
+          visit_plan_en?: string | null
+          visit_plan_km?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "place_guides_place_id_fkey"
+            columns: ["place_id"]
+            isOneToOne: true
+            referencedRelation: "places"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      places: {
+        Row: {
+          access_en: string | null
+          access_km: string | null
+          business_type: string | null
+          category: string
+          created_at: string
+          id: number
+          image_url: string | null
+          lat: number | null
+          listing_type: string
+          lng: number | null
+          name_en: string
+          name_km: string
+          open_hours: string | null
+          province_id: number
+          publication_status: string
+          slug: string
+          source_urls: Json
+          summary_en: string | null
+          summary_km: string | null
+          ticket_provider: string | null
+          ticket_status: string | null
+          ticket_url: string | null
+          ticket_usd: number | null
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          access_en?: string | null
+          access_km?: string | null
+          business_type?: string | null
+          category: string
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          lat?: number | null
+          listing_type?: string
+          lng?: number | null
+          name_en: string
+          name_km: string
+          open_hours?: string | null
+          province_id: number
+          publication_status?: string
+          slug: string
+          source_urls?: Json
+          summary_en?: string | null
+          summary_km?: string | null
+          ticket_provider?: string | null
+          ticket_status?: string | null
+          ticket_url?: string | null
+          ticket_usd?: number | null
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          access_en?: string | null
+          access_km?: string | null
+          business_type?: string | null
+          category?: string
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          lat?: number | null
+          listing_type?: string
+          lng?: number | null
+          name_en?: string
+          name_km?: string
+          open_hours?: string | null
+          province_id?: number
+          publication_status?: string
+          slug?: string
+          source_urls?: Json
+          summary_en?: string | null
+          summary_km?: string | null
+          ticket_provider?: string | null
+          ticket_status?: string | null
+          ticket_url?: string | null
+          ticket_usd?: number | null
+          updated_at?: string
+          views?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "places_province_id_fkey"
+            columns: ["province_id"]
+            isOneToOne: false
+            referencedRelation: "provinces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      province_guides: {
+        Row: {
+          attractions_en: string
+          attractions_km: string
+          created_at: string
+          culture_en: string | null
+          culture_km: string | null
+          food_guide_en: string
+          food_guide_km: string
+          history_en: string | null
+          history_km: string | null
+          id: number
+          overview_en: string
+          overview_km: string
+          province_id: number
+          source_urls: Json
+          stay_guide_en: string
+          stay_guide_km: string
+          story_en: string | null
+          story_km: string | null
+          travel_en: string | null
+          travel_km: string | null
+          updated_at: string
+        }
+        Insert: {
+          attractions_en: string
+          attractions_km: string
+          created_at?: string
+          culture_en?: string | null
+          culture_km?: string | null
+          food_guide_en: string
+          food_guide_km: string
+          history_en?: string | null
+          history_km?: string | null
+          id?: number
+          overview_en: string
+          overview_km: string
+          province_id: number
+          source_urls?: Json
+          stay_guide_en: string
+          stay_guide_km: string
+          story_en?: string | null
+          story_km?: string | null
+          travel_en?: string | null
+          travel_km?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attractions_en?: string
+          attractions_km?: string
+          created_at?: string
+          culture_en?: string | null
+          culture_km?: string | null
+          food_guide_en?: string
+          food_guide_km?: string
+          history_en?: string | null
+          history_km?: string | null
+          id?: number
+          overview_en?: string
+          overview_km?: string
+          province_id?: number
+          source_urls?: Json
+          stay_guide_en?: string
+          stay_guide_km?: string
+          story_en?: string | null
+          story_km?: string | null
+          travel_en?: string | null
+          travel_km?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "province_guides_province_id_fkey"
+            columns: ["province_id"]
+            isOneToOne: true
+            referencedRelation: "provinces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      provinces: {
+        Row: {
+          banner_image_url: string | null
+          created_at: string
+          id: number
+          name_en: string
+          name_km: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          banner_image_url?: string | null
+          created_at?: string
+          id?: number
+          name_en: string
+          name_km: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          banner_image_url?: string | null
+          created_at?: string
+          id?: number
+          name_en?: string
+          name_km?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const
