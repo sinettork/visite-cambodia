@@ -27,18 +27,22 @@ create policy "admins can delete provinces" on public.provinces
   for delete to authenticated using ((select private.is_editor_or_admin()));
 
 drop policy if exists "public can read published places" on public.places;
-drop policy if exists "admins can manage places" on public.places;
-create policy "public can read allowed places" on public.places
-  for select to anon, authenticated
-  using ((publication_status = 'published') or (select private.is_editor_or_admin()));
-create policy "admins can insert places" on public.places
-  for insert to authenticated with check ((select private.is_editor_or_admin()));
-create policy "admins can update places" on public.places
-  for update to authenticated
-  using ((select private.is_editor_or_admin()))
-  with check ((select private.is_editor_or_admin()));
-create policy "admins can delete places" on public.places
-  for delete to authenticated using ((select private.is_editor_or_admin()));
+drop policy if exists "public can read allowed places" on public.places;
+drop policy if exists "anon can read published places" on public.places;
+drop policy if exists "authenticated can read allowed places" on public.places;
+
+create policy "anon can read published places"
+  on public.places
+  for select to anon
+  using (publication_status = 'published');
+
+create policy "authenticated can read allowed places"
+  on public.places
+  for select to authenticated
+  using (
+    publication_status = 'published'
+    or (select private.is_editor_or_admin())
+  );
 
 drop policy if exists "public can read province guides" on public.province_guides;
 drop policy if exists "admins can manage province guides" on public.province_guides;
@@ -54,22 +58,35 @@ create policy "admins can delete province guides" on public.province_guides
   for delete to authenticated using ((select private.is_editor_or_admin()));
 
 drop policy if exists "public can read published place guides" on public.place_guides;
-drop policy if exists "admins can manage place guides" on public.place_guides;
-create policy "public can read allowed place guides" on public.place_guides
-  for select to anon, authenticated
+drop policy if exists "public can read allowed place guides" on public.place_guides;
+drop policy if exists "anon can read published place guides" on public.place_guides;
+drop policy if exists "authenticated can read allowed place guides" on public.place_guides;
+
+create policy "anon can read published place guides"
+  on public.place_guides
+  for select to anon
   using (
     exists (
       select 1
       from public.places p
       where p.id = place_guides.place_id
-        and (p.publication_status = 'published' or (select private.is_editor_or_admin()))
+        and p.publication_status = 'published'
     )
   );
-create policy "admins can insert place guides" on public.place_guides
-  for insert to authenticated with check ((select private.is_editor_or_admin()));
-create policy "admins can update place guides" on public.place_guides
-  for update to authenticated
-  using ((select private.is_editor_or_admin()))
-  with check ((select private.is_editor_or_admin()));
-create policy "admins can delete place guides" on public.place_guides
-  for delete to authenticated using ((select private.is_editor_or_admin()));
+
+create policy "authenticated can read allowed place guides"
+  on public.place_guides
+  for select to authenticated
+  using (
+    exists (
+      select 1
+      from public.places p
+      where p.id = place_guides.place_id
+        and (
+          p.publication_status = 'published'
+          or (select private.is_editor_or_admin())
+        )
+    )
+  );
+
+
