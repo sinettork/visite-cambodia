@@ -37,6 +37,7 @@ const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this 
         <p>{province.name_km} · Keep the regional hub and its travel guide in one place.</p>
       </div>
       <div class="admin-page-heading-actions">
+        <a class="admin-secondary-button" href={"/admin/provinces/" + id + "/preview"} target="_blank" rel="noreferrer"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview</a>
         <a class="admin-secondary-button" href={"/en/regions/" + province.slug} target="_blank" rel="noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Public page</a>
       </div>
     </header>
@@ -82,7 +83,7 @@ const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this 
       <div class="admin-save-bar">
         <div class="admin-save-bar-inner">
           <a class="admin-secondary-button" href="/admin/provinces">Back</a>
-          <a class="admin-secondary-button" href={"/en/regions/" + province.slug} target="_blank" rel="noreferrer"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview</a>
+          <a class="admin-secondary-button" href={"/admin/provinces/" + id + "/preview"} target="_blank" rel="noreferrer"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview</a>
           <button class="admin-secondary-button" type="submit" name="intent" value="save">Save changes</button>
           <button class="admin-primary-button" type="submit" name="intent" value="draft">Save draft</button>
           {canPublish
