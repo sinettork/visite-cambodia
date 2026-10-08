@@ -1,0 +1,69 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../../lib/admin";
+
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+const { data: provinces } = await context.supabase.from("provinces").select("id,name_en,name_km").order("name_en");
+const error = Astro.url.searchParams.get("error");
+---
+
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <nav class="admin-breadcrumb" aria-label="Breadcrumb">
+      <a class="admin-breadcrumb-link" href="/admin/places"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Places</a>
+      <span class="admin-breadcrumb-sep">/</span><span>New place</span>
+    </nav>
+
+    <header class="admin-page-heading">
+      <div>
+        <span class="admin-eyebrow">Content</span>
+        <h1>New place</h1>
+        <p>Create a draft first. Publish only after the required visitor information is complete.</p>
+      </div>
+    </header>
+
+    {error && <div class="admin-alert" role="alert">{error}</div>}
+
+    <form class="admin-editor-form" method="post" action="/api/admin/places">
+      <div class="admin-editor-body">
+        <section class="admin-panel">
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Identity</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field"><span class="admin-field-label">Name (English)</span><input name="name_en" required /></label>
+              <label class="admin-field"><span class="admin-field-label">Name (Khmer)</span><input name="name_km" required /></label>
+              <label class="admin-field"><span class="admin-field-label">Slug</span><input name="slug" required placeholder="angkor-wat" /><small>Use lowercase letters, numbers and hyphens.</small></label>
+              <label class="admin-field"><span class="admin-field-label">Province</span><select name="province_id" required><option value="">Select province</option>{(provinces ?? []).map((province)=><option value={province.id}>{province.name_en} · {province.name_km}</option>)}</select></label>
+            </div>
+          </div>
+
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Classification</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field"><span class="admin-field-label">Listing type</span><select name="listing_type"><option value="attraction">Attraction</option><option value="accommodation">Accommodation</option><option value="restaurant">Restaurant</option></select></label>
+              <label class="admin-field"><span class="admin-field-label">Category</span><select name="category"><option value="history">History</option><option value="nature">Nature</option><option value="beach">Beach</option><option value="adventure">Adventure</option><option value="culture">Culture</option><option value="food">Food</option></select></label>
+              <label class="admin-field"><span class="admin-field-label">Business type</span><input name="business_type" placeholder="hotel, cafe, guest_house…" /></label>
+            </div>
+          </div>
+
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Visitor content</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Summary (English)</span><textarea name="summary_en" rows="5"></textarea></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Summary (Khmer)</span><textarea name="summary_km" rows="5"></textarea></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Image URL</span><input name="image_url" placeholder="/images/…" /></label>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div class="admin-save-bar">
+        <div class="admin-save-bar-inner">
+          <a class="admin-secondary-button" href="/admin/places">Cancel</a>
+          <span class="admin-save-alert">New places start as drafts.</span>
+          <button class="admin-primary-button" type="submit">Create draft</button>
+        </div>
+      </div>
+    </form>
+  </section>
+</AdminLayout>
