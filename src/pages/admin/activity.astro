@@ -1,30 +1,67 @@
 ---
 import AdminLayout from "../../layouts/AdminLayout.astro";
 import { getAdminContext } from "../../lib/admin";
+
 const context = await getAdminContext(Astro.request, Astro.cookies);
 if (!context.user || !context.admin) return Astro.redirect("/admin/login");
-const { data: activity } = await context.supabase.from("admin_audit_log").select("id,admin_user_id,entity_type,entity_id,action,changed_fields,created_at").order("created_at", { ascending: false }).limit(100);
+
+const actionFilter = Astro.url.searchParams.get("action")?.trim() ?? "";
+let query = context.supabase
+  .from("admin_audit_log")
+  .select("id,admin_user_id,entity_type,entity_id,action,changed_fields,created_at")
+  .order("created_at", { ascending: false })
+  .limit(100);
+if (actionFilter) query = query.eq("action", actionFilter);
+const { data: activity } = await query;
+
+const actionLabel = (action: string) => action.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
+const fieldLabel = (field: string) => field.replace(/^guide$/, "Guide content").replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase());
+const fieldsFor = (value: unknown) => Array.isArray(value) ? value.filter((item): item is string => typeof item === "string").map(fieldLabel) : [];
 ---
+
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
   <section class="admin-page">
-    <header class="admin-page-heading"><h1>Activity log</h1><p>Audited content changes from the new Supabase runtime.</p></header>
+    <header class="admin-page-heading">
+      <div>
+        <span class="admin-eyebrow">System</span>
+        <h1>Activity log</h1>
+        <p>See who changed content, what they changed and when.</p>
+      </div>
+    </header>
+
     <section class="admin-records-panel">
+      <form class="admin-filter-panel" method="get" action="/admin/activity">
+        <label class="admin-filter-item">Action
+          <select class="admin-select" name="action" onchange="this.form.submit()">
+            <option value="">All actions</option>
+            <option value="create" selected={actionFilter === "create"}>Create</option>
+            <option value="update" selected={actionFilter === "update"}>Update</option>
+            <option value="save_draft" selected={actionFilter === "save_draft"}>Save draft</option>
+            <option value="publish" selected={actionFilter === "publish"}>Publish</option>
+            <option value="pause" selected={actionFilter === "pause"}>Pause</option>
+          </select>
+        </label>
+        {actionFilter && <a class="admin-clear-filters" href="/admin/activity">Clear</a>}
+      </form>
+
       <div class="admin-table-wrap">
         <table class="admin-data-table">
-          <thead><tr><th>Time</th><th>Entity</th><th>Action</th><th>Changes</th></tr></thead>
+          <thead><tr><th>Time</th><th>Content</th><th>Action</th><th>Changed</th></tr></thead>
           <tbody>
-            {(activity ?? []).map((item) => (
-              <tr>
-                <td>{new Date(item.created_at).toLocaleString()}</td>
-                <td>{item.entity_type} #{item.entity_id ?? "—"}</td>
-                <td>{item.action}</td>
-                <td><code>{JSON.stringify(item.changed_fields)}</code></td>
-              </tr>
-            ))}
+            {(activity ?? []).map((item) => {
+              const href = item.entity_type === "place" ? "/admin/places/" + item.entity_id : item.entity_type === "province" ? "/admin/provinces/" + item.entity_id : "#";
+              const fields = fieldsFor(item.changed_fields);
+              return <tr>
+                <td><time datetime={item.created_at}>{new Date(item.created_at).toLocaleString()}</time></td>
+                <td><a class="admin-table-title" href={href}><strong>{item.entity_type}</strong><small>#{item.entity_id ?? "—"}</small></a></td>
+                <td><span class={"admin-status-chip action-" + item.action}>{actionLabel(item.action)}</span></td>
+                <td>{fields.length ? <div class="admin-activity-fields">{fields.slice(0, 5).join(" · ")}{fields.length > 5 ? " +" + (fields.length - 5) : ""}</div> : "—"}</td>
+              </tr>;
+            })}
           </tbody>
         </table>
       </div>
-      {(!activity || activity.length === 0) && <p class="admin-empty-state">No activity recorded yet.</p>}
+      {(!activity || activity.length === 0) && <p class="admin-empty-state">No activity matches this filter.</p>}
     </section>
   </section>
 </AdminLayout>
