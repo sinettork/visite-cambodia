@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 import { getAdminContext } from "../../../../lib/admin";
 
+const textField = (form: FormData, name: string) => String(form.get(name) ?? "").trim();
+
 const urlsFromText = (value: FormDataEntryValue | null) =>
   String(value ?? "")
     .split(/\r?\n/)
@@ -16,9 +18,9 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
 
   const form = await request.formData();
   const payload = {
-    name_en: String(form.get("name_en") ?? "").trim(),
-    name_km: String(form.get("name_km") ?? "").trim(),
-    banner_image_url: String(form.get("banner_image_url") ?? "").trim() || null,
+    name_en: textField(form, "name_en"),
+    name_km: textField(form, "name_km"),
+    banner_image_url: textField(form, "banner_image_url") || null,
     updated_at: new Date().toISOString(),
   };
   if (!payload.name_en || !payload.name_km) return redirect("/admin/provinces/" + id + "?error=names-required", 303);
@@ -28,20 +30,20 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
 
   const guidePayload = {
     province_id: id,
-    overview_en: String(form.get("overview_en") ?? "").trim() || null,
-    overview_km: String(form.get("overview_km") ?? "").trim() || null,
-    history_en: String(form.get("history_en") ?? "").trim() || null,
-    history_km: String(form.get("history_km") ?? "").trim() || null,
-    culture_en: String(form.get("culture_en") ?? "").trim() || null,
-    culture_km: String(form.get("culture_km") ?? "").trim() || null,
-    travel_en: String(form.get("travel_en") ?? "").trim() || null,
-    travel_km: String(form.get("travel_km") ?? "").trim() || null,
-    attractions_en: String(form.get("attractions_en") ?? "").trim() || null,
-    attractions_km: String(form.get("attractions_km") ?? "").trim() || null,
-    stay_guide_en: String(form.get("stay_guide_en") ?? "").trim() || null,
-    stay_guide_km: String(form.get("stay_guide_km") ?? "").trim() || null,
-    food_guide_en: String(form.get("food_guide_en") ?? "").trim() || null,
-    food_guide_km: String(form.get("food_guide_km") ?? "").trim() || null,
+    overview_en: textField(form, "overview_en"),
+    overview_km: textField(form, "overview_km"),
+    history_en: textField(form, "history_en"),
+    history_km: textField(form, "history_km"),
+    culture_en: textField(form, "culture_en"),
+    culture_km: textField(form, "culture_km"),
+    travel_en: textField(form, "travel_en"),
+    travel_km: textField(form, "travel_km"),
+    attractions_en: textField(form, "attractions_en"),
+    attractions_km: textField(form, "attractions_km"),
+    stay_guide_en: textField(form, "stay_guide_en"),
+    stay_guide_km: textField(form, "stay_guide_km"),
+    food_guide_en: textField(form, "food_guide_en"),
+    food_guide_km: textField(form, "food_guide_km"),
     source_urls: urlsFromText(form.get("source_urls")),
     updated_at: new Date().toISOString(),
   };
