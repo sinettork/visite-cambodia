@@ -7029,3 +7029,225 @@ main {
     grid-column: span 1;
   }
 }
+
+
+/* ==========================================================================
+   UX/UI Foundation — 2026 production pass
+   One spacing rhythm, predictable containers, and consistent responsive flow.
+   ========================================================================== */
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --content-gutter: 30px;
+  --content-max: 1360px;
+  --control-height: 40px;
+  --card-radius: 3px;
+}
+
+.site {
+  max-width: var(--content-max);
+}
+
+.header-inner {
+  min-height: 82px;
+  height: 82px;
+  gap: var(--space-3);
+}
+
+.nav {
+  min-height: 42px;
+}
+
+.nav a {
+  min-height: 39px;
+  padding-inline: var(--space-2);
+}
+
+.columns {
+  grid-template-columns: 220px minmax(0, 1fr) 240px;
+}
+
+.left-side,
+.right-side {
+  padding: var(--space-6) var(--space-4) var(--space-8);
+}
+
+main {
+  --content-gutter: 30px;
+  padding: var(--space-7) var(--content-gutter) var(--space-9);
+}
+
+.section-head {
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+}
+
+.section-head h2 {
+  line-height: 1.2;
+}
+
+.review-grid {
+  gap: var(--space-4);
+}
+
+.review {
+  padding: var(--space-2);
+  border-radius: var(--card-radius);
+}
+
+.browse-toolbar {
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.place-type-filters {
+  gap: var(--space-2);
+  margin-bottom: 0;
+}
+
+.place-type-filters a,
+.clear-filters {
+  min-height: 36px;
+  padding-inline: var(--space-3);
+}
+
+.home-hero {
+  margin: calc(-1 * var(--content-gutter)) calc(-1 * var(--content-gutter)) var(--space-7);
+}
+
+.province-hero {
+  margin-bottom: var(--space-7);
+}
+
+.region-jump-nav {
+  gap: var(--space-2);
+  margin-bottom: var(--space-7);
+  padding: var(--space-2);
+}
+
+.site-footer {
+  padding-top: var(--space-9);
+}
+
+@media (max-width: 1100px) {
+  .columns {
+    grid-template-columns: 180px minmax(0, 1fr) 210px;
+  }
+
+  main {
+    --content-gutter: 24px;
+    padding-inline: var(--content-gutter);
+  }
+
+  .home-hero {
+    margin-inline: calc(-1 * var(--content-gutter));
+  }
+}
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+
+  .right-side {
+    display: none;
+  }
+
+  main {
+    --content-gutter: 18px;
+    padding-block: 24px 40px;
+  }
+
+  .review-grid {
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 760px) {
+  .columns {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-side {
+    order: 2;
+  }
+
+  main {
+    order: 1;
+    --content-gutter: 16px;
+    padding: 22px var(--content-gutter) 38px;
+  }
+
+  .review-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .home-hero {
+    margin-top: -22px;
+    margin-bottom: var(--space-7);
+  }
+}
+
+@media (max-width: 620px) {
+  .header-inner {
+    min-height: 96px;
+    height: auto;
+  }
+
+  main {
+    --content-gutter: 16px;
+    padding: 20px var(--content-gutter) 36px;
+  }
+
+  .section-head {
+    margin-bottom: var(--space-4);
+  }
+
+  .section-head h2 {
+    font-size: 21px;
+  }
+
+  .review-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .browse-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .place-type-filters {
+    gap: var(--space-2);
+  }
+
+  .clear-filters {
+    align-self: flex-start;
+  }
+
+  .home-hero {
+    margin-top: -20px;
+    margin-inline: calc(-1 * var(--content-gutter));
+  }
+
+  .region-jump-nav {
+    margin-bottom: var(--space-6);
+  }
+
+  .site-footer {
+    padding-top: var(--space-8);
+  }
+}
