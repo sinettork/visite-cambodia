@@ -6,6 +6,26 @@ if (!fs.existsSync(fontsDir)) {
   fs.mkdirSync(fontsDir, { recursive: true });
 }
 
+const requiredLocalFonts = [
+  "arimo-400-latin.woff2",
+  "arimo-500-latin.woff2",
+  "arimo-600-latin.woff2",
+  "arimo-700-latin.woff2",
+  "oswald-400-latin.woff2",
+  "oswald-500-latin.woff2",
+  "oswald-600-latin.woff2",
+  "oswald-700-latin.woff2",
+];
+
+const missingLocalFonts = requiredLocalFonts.filter(
+  (file) => !fs.existsSync(path.join(fontsDir, file)),
+);
+
+if (missingLocalFonts.length === 0) {
+  console.log("Arimo and Oswald local font files are already present; skipping download.");
+  process.exit(0);
+}
+
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
 async function fetchCss(url) {
@@ -39,6 +59,14 @@ async function main() {
     {
       name: "roboto-condensed",
       url: "https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;600;700&display=swap",
+    },
+    {
+      name: "arimo",
+      url: "https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&display=swap",
+    },
+    {
+      name: "oswald",
+      url: "https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap",
     },
   ];
 
