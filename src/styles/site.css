@@ -1,10 +1,9 @@
 @import url("/fonts/fonts.css");
 
 :root {
-  --font-roboto: "Roboto", Arial, sans-serif;
+  --font-roboto: "Roboto Condensed", "Arial Narrow", sans-serif;
   --font-roboto-condensed: "Roboto Condensed", "Arial Narrow", sans-serif;
-  --font-battambang: "Battambang", "Noto Sans Khmer", sans-serif;
-  --font-noto-sans-khmer: "Noto Sans Khmer", sans-serif;
+  --font-battambang: "Battambang", sans-serif;
 }
 
 :root {
@@ -15,7 +14,7 @@
   --text-secondary: #6d6d6d;
   --border: #e8e1da;
   --accent: #ee7b20;
-  font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif;
+  font-family: var(--font-roboto-condensed), sans-serif;
   color: #444;
   background: var(--page-bg);
   font-synthesis: none;
@@ -6689,8 +6688,17 @@ main {
    Production UX/UI pass — typography, hierarchy, responsive behavior
    ========================================================================== */
 
+html[lang="en"] {
+  --font-roboto: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --font-roboto-condensed: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --font-battambang: "Battambang", sans-serif;
+}
+
 html[lang="km"] {
-  font-family: var(--font-battambang), var(--font-roboto), sans-serif;
+  --font-roboto: "Battambang", sans-serif;
+  --font-roboto-condensed: "Battambang", sans-serif;
+  --font-battambang: "Battambang", sans-serif;
+  font-family: var(--font-battambang), sans-serif;
 }
 
 body {
@@ -7266,7 +7274,7 @@ main {
   max-width: 760px;
   margin: 0 0 18px;
   color: var(--text-secondary);
-  font: 400 14px/1.8 var(--font-roboto), var(--font-battambang), sans-serif;
+  font: 400 14px/1.8 var(--font-roboto-condensed), sans-serif;
 }
 
 .section-title + .section-intro {
@@ -7297,10 +7305,10 @@ main {
   border-bottom: 2px solid var(--accent);
 }
 
-/* Province story copy — keep English body text on the original Roboto family. */
+/* Public editorial copy follows the same condensed English type system. */
 .region-story-section > p,
 .region-section .section-head > div > p {
-  font-family: var(--font-roboto);
+  font-family: var(--font-roboto-condensed);
 }
 
 /* Province page section titles — use the same full-width rule as Sources. */
