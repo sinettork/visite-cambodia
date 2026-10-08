@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
@@ -38,6 +38,7 @@ export default function AdminShell({ children, email, role }: {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLButtonElement>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [error, setError] = useState("");
   const [signingOut, setSigningOut] = useState(false);
@@ -67,12 +68,26 @@ export default function AdminShell({ children, email, role }: {
   const initial = email.slice(0, 1).toUpperCase();
   const roleLabel = role === "super_admin" ? "Super admin" : role === "admin" ? "Admin" : "Editor";
 
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSidebarOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [sidebarOpen]);
+
+  useEffect(() => {
+    if (!sidebarOpen) mobileMenuRef.current?.focus();
+  }, [sidebarOpen]);
+
   return (
     <div className={`admin-layout${sidebarCollapsed ? " is-sidebar-collapsed" : ""}`}>
       {/* ── Topbar ── */}
       <header className="admin-topbar">
         <div className="admin-topbar-left">
           <button
+            ref={mobileMenuRef}
             className="admin-mobile-menu"
             type="button"
             aria-label={sidebarOpen ? "Close navigation" : "Open navigation"}
