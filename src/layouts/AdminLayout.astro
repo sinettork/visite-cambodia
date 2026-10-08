@@ -1,0 +1,71 @@
+---
+import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+import "@fortawesome/fontawesome-free/css/solid.min.css";
+import "@fortawesome/fontawesome-free/css/regular.min.css";
+import "../styles/admin.css";
+
+interface Props {
+  email: string;
+  displayName?: string;
+  role: "super_admin" | "admin" | "editor";
+}
+const { email, displayName = email.split("@")[0], role } = Astro.props;
+const pathname = Astro.url.pathname;
+const roleLabel = role === "super_admin" ? "Super admin" : role === "admin" ? "Admin" : "Editor";
+const sections = [
+  { title: "Workspace", items: [{ href: "/admin", label: "Dashboard", icon: "fa-house" }] },
+  { title: "Content", items: [
+    { href: "/admin/places", label: "Places", icon: "fa-location-dot" },
+    { href: "/admin/provinces", label: "Provinces", icon: "fa-map" },
+    { href: "/admin/media", label: "Media library", icon: "fa-images" },
+  ]},
+  { title: "System", items: [
+    { href: "/admin/activity", label: "Activity log", icon: "fa-clock-rotate-left" },
+    { href: "/admin/settings", label: "Settings", icon: "fa-gear" },
+    ...(role === "super_admin" ? [{ href: "/admin/users", label: "Administrators", icon: "fa-users-gear" }] : []),
+  ]},
+];
+---
+<div class="admin-layout">
+  <header class="admin-topbar">
+    <div class="admin-topbar-left">
+      <button class="admin-mobile-menu" type="button" aria-label="Open navigation">☰</button>
+      <a class="admin-topbar-brand" href="/admin">
+        <span class="admin-brand-mark"><i class="fa-solid fa-gem" aria-hidden="true"></i></span>
+        <span class="admin-brand-name">Visit Cambodia</span>
+      </a>
+    </div>
+    <div class="admin-topbar-actions">
+      <a class="admin-topbar-home" href="/en" target="_blank" rel="noreferrer">Public site</a>
+      <div class="admin-topbar-user" title={email}>
+        <div class="admin-topbar-avatar">{email.slice(0,1).toUpperCase()}</div>
+        <span class="admin-topbar-user-name">{displayName}</span>
+        <span class="admin-topbar-role">{roleLabel}</span>
+      </div>
+    </div>
+  </header>
+
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-heading"><span class="admin-sidebar-label">ADMIN</span></div>
+    <nav class="admin-navigation">
+      {sections.map((section) => <div class="admin-navigation-group">
+        <p class="admin-navigation-heading">{section.title}</p>
+        {section.items.map((item) => {
+          const active = item.href === "/admin" ? pathname === item.href : pathname === item.href || pathname.startsWith(item.href + "/");
+          return <a class={"admin-navigation-link" + (active ? " is-active" : "")} href={item.href} aria-current={active ? "page" : undefined}>
+            <i class={"fa-solid " + item.icon} aria-hidden="true"></i><span>{item.label}</span>
+          </a>;
+        })}
+      </div>)}
+    </nav>
+    <footer class="admin-sidebar-footer">
+      <a href="/en" target="_blank" rel="noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span>Public site</span></a>
+      <form method="post" action="/api/admin/logout"><button type="submit"><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i><span>Sign out</span></button></form>
+    </footer>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-main-content"><slot /></div>
+    <footer class="admin-footer"><span>© {new Date().getFullYear()} Visit Cambodia</span></footer>
+  </main>
+</div>
