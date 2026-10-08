@@ -3,9 +3,5 @@ import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   output: "server",
-  adapter: vercel({
-    isr: {
-      expiration: 3600,
-    },
-  }),
+  adapter: vercel(),
 });
