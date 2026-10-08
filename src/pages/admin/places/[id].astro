@@ -16,6 +16,18 @@ if (!place) return Astro.redirect("/admin/places");
 
 const message = Astro.url.searchParams.get("saved");
 const created = Astro.url.searchParams.get("created") === "1";
+const errorCode = Astro.url.searchParams.get("error");
+const errorLabels: Record<string, string> = {
+  "publish-forbidden": "Your role cannot publish content.",
+  "pause-forbidden": "Your role cannot pause content.",
+  "invalid-slug": "The slug is invalid.",
+  "province-required": "Please choose a province.",
+  "invalid-type": "The listing type is invalid.",
+  "invalid-ticket-status": "The ticket status is invalid.",
+  "names-required": "Both English and Khmer names are required.",
+  "save-failed": "We could not save this place. Review the form and try again.",
+};
+const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this place. Review the form and try again." : "";
 const canPublish = isAdminRole(context.admin.role);
 const publicUrl = "/en/destinations/" + place.slug;
 const sourceUrls = Array.isArray(place.source_urls) ? place.source_urls.filter((value): value is string => typeof value === "string") : [];
@@ -41,6 +53,7 @@ const sourceUrls = Array.isArray(place.source_urls) ? place.source_urls.filter((
       </div>
     </header>
 
+    {errorText && <div class="admin-alert" role="alert">{errorText}</div>}
     {message && <div class="admin-success" role="status">Saved. Current publication state: {message === "published" ? "published" : message === "paused" ? "paused" : "draft"}.</div>}
     {created && <div class="admin-success" role="status">Draft created. Complete the visitor information, then preview and publish.</div>}
 
