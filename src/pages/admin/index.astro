@@ -11,17 +11,69 @@ const [placesResult, provincesResult, draftsResult] = await Promise.all([
 ---
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
   <section class="admin-page">
-    <header class="admin-page-heading"><h1>Dashboard</h1><p>Content operations overview for Visit Cambodia.</p></header>
+    <header class="admin-page-heading">
+      <div class="admin-page-heading-copy">
+        <span class="admin-eyebrow">Workspace</span>
+        <h1>Dashboard</h1>
+        <p>Keep the Visit Cambodia content catalogue accurate, published and ready for visitors.</p>
+      </div>
+      <a class="admin-page-heading-action" href="/en" target="_blank" rel="noreferrer">
+        <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        View public site
+      </a>
+    </header>
+
     <div class="admin-stat-grid">
-      <article class="admin-stat-card"><span>Places</span><strong>{placesResult.count ?? 0}</strong><small>All records</small></article>
-      <article class="admin-stat-card"><span>Provinces</span><strong>{provincesResult.count ?? 0}</strong><small>Regions</small></article>
-      <article class="admin-stat-card"><span>Drafts</span><strong>{draftsResult.count ?? 0}</strong><small>Waiting for review</small></article>
+      <a class="admin-stat-card" href="/admin/places">
+        <span>Places</span>
+        <strong>{placesResult.count ?? 0}</strong>
+        <small>All destination and business records</small>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a class="admin-stat-card" href="/admin/provinces">
+        <span>Provinces</span>
+        <strong>{provincesResult.count ?? 0}</strong>
+        <small>Regional guides and destination hubs</small>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
+      <a class="admin-stat-card admin-stat-card-attention" href="/admin/places?status=draft">
+        <span>Drafts</span>
+        <strong>{draftsResult.count ?? 0}</strong>
+        <small>Content waiting for publication review</small>
+        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
     </div>
-    <section class="admin-panel">
-      <div class="admin-section-heading"><div><h2>Content workflow</h2><p>Move directly into the areas that need attention.</p></div></div>
+
+    <section class="admin-panel admin-dashboard-panel">
+      <div class="admin-section-heading admin-dashboard-section-heading">
+        <div>
+          <span class="admin-section-kicker">Daily workflow</span>
+          <h2>Content operations</h2>
+          <p>Start with the area that needs attention instead of navigating through the sidebar.</p>
+        </div>
+      </div>
+
       <div class="admin-overview-shortcuts">
-        <a href="/admin/places"><i class="fa-solid fa-location-dot"></i><span><strong>Places</strong><small>Review destinations and listings</small></span><i class="fa-solid fa-arrow-right"></i></a>
-        <a href="/admin/provinces"><i class="fa-solid fa-map"></i><span><strong>Provinces</strong><small>Manage regional guides</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        <a href="/admin/places">
+          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+          <span><strong>Manage places</strong><small>Review listings, status, views and details</small></span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a href="/admin/places?status=draft">
+          <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+          <span><strong>Review drafts</strong><small>Check content before it goes live</small></span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a href="/admin/provinces">
+          <i class="fa-solid fa-map" aria-hidden="true"></i>
+          <span><strong>Manage provinces</strong><small>Maintain all regional guide content</small></span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
+        <a href="/admin/media">
+          <i class="fa-solid fa-images" aria-hidden="true"></i>
+          <span><strong>Media library</strong><small>Keep destination imagery organised</small></span>
+          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </a>
       </div>
     </section>
   </section>
