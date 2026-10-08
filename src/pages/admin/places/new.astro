@@ -6,6 +6,7 @@ const context = await getAdminContext(Astro.request, Astro.cookies);
 if (!context.user || !context.admin) return Astro.redirect("/admin/login");
 const { data: provinces } = await context.supabase.from("provinces").select("id,name_en,name_km").order("name_en");
 const error = Astro.url.searchParams.get("error");
+const errorText = error === "create-failed" ? "We could not create the place. Check the required fields and slug, then try again." : "";
 ---
 
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
@@ -23,7 +24,7 @@ const error = Astro.url.searchParams.get("error");
       </div>
     </header>
 
-    {error && <div class="admin-alert" role="alert">{error}</div>}
+    {errorText && <div class="admin-alert" role="alert">{errorText}</div>}
 
     <form class="admin-editor-form" method="post" action="/api/admin/places">
       <div class="admin-editor-body">
