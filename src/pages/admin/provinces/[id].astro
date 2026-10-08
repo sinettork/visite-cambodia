@@ -14,6 +14,13 @@ if (!province) return Astro.redirect("/admin/provinces");
 
 const canPublish = isAdminRole(context.admin.role);
 const message = Astro.url.searchParams.get("saved");
+const errorCode = Astro.url.searchParams.get("error");
+const errorLabels: Record<string, string> = {
+  "publish-forbidden": "Your role cannot publish content.",
+  "names-required": "Both English and Khmer names are required.",
+  "save-failed": "We could not save this province guide. Review the form and try again.",
+};
+const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this province guide. Review the form and try again." : "";
 ---
 
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
@@ -34,6 +41,7 @@ const message = Astro.url.searchParams.get("saved");
       </div>
     </header>
 
+    {errorText && <div class="admin-alert" role="alert">{errorText}</div>}
     {message && <div class="admin-success" role="status">Province guide saved.</div>}
 
     <form class="admin-editor-form" method="post" action={"/api/admin/provinces/" + id}>
