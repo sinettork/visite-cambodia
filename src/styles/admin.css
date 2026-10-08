@@ -2521,3 +2521,194 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* ==========================================================================
+   UX/UI Foundation — 2026 production pass
+   ========================================================================== */
+
+:root {
+  --admin-space-1: 4px;
+  --admin-space-2: 8px;
+  --admin-space-3: 12px;
+  --admin-space-4: 16px;
+  --admin-space-5: 20px;
+  --admin-space-6: 24px;
+  --admin-space-7: 32px;
+}
+
+.admin-main-content {
+  max-width: 1480px;
+  padding: var(--admin-space-6) var(--admin-space-7) 48px;
+}
+
+.admin-page-heading {
+  gap: var(--admin-space-5);
+  margin-bottom: var(--admin-space-6);
+}
+
+.admin-page-heading h1 {
+  line-height: 1.2;
+}
+
+.admin-stat-grid {
+  gap: var(--admin-space-4);
+  margin-bottom: var(--admin-space-6);
+}
+
+.admin-overview-grid,
+.admin-settings-grid {
+  gap: var(--admin-space-6);
+}
+
+.admin-section-heading {
+  margin-bottom: var(--admin-space-4);
+}
+
+.admin-overview-shortcuts {
+  gap: var(--admin-space-3);
+}
+
+.admin-overview-shortcuts > a {
+  min-height: 64px;
+  padding: var(--admin-space-3) var(--admin-space-4);
+}
+
+.admin-record-toolbar,
+.admin-media-toolbar {
+  gap: var(--admin-space-4);
+  margin-bottom: var(--admin-space-4);
+}
+
+.admin-filter-bar,
+.admin-record-filters {
+  gap: var(--admin-space-3);
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-data-table {
+  font-size: 13px;
+}
+
+.admin-data-table th {
+  padding: 11px 14px;
+}
+
+.admin-data-table td {
+  padding: 12px 14px;
+}
+
+.admin-form {
+  gap: var(--admin-space-5);
+}
+
+.admin-fields-grid {
+  gap: var(--admin-space-5);
+}
+
+.admin-field {
+  gap: var(--admin-space-2);
+}
+
+.admin-form label,
+.admin-select-label,
+.admin-field {
+  font-size: 13px;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea,
+.admin-record-filters input,
+.admin-record-filters select,
+.admin-select-label select,
+.admin-search-input,
+.admin-select {
+  min-height: 40px;
+  border-radius: 4px;
+}
+
+.admin-form textarea {
+  min-height: 132px;
+}
+
+.admin-primary-button,
+.admin-secondary-button,
+.admin-danger-button {
+  min-height: 40px;
+  border-radius: 4px;
+}
+
+.admin-alert,
+.admin-success {
+  margin-bottom: var(--admin-space-5);
+}
+
+.admin-pagination {
+  gap: var(--admin-space-3);
+  margin-top: var(--admin-space-5);
+  padding-top: var(--admin-space-4);
+}
+
+.admin-media-grid {
+  gap: var(--admin-space-4);
+}
+
+.admin-media-card {
+  border-radius: 4px;
+}
+
+.admin-media-card-copy {
+  gap: var(--admin-space-2);
+  padding: var(--admin-space-3) var(--admin-space-4);
+}
+
+.admin-settings-list > div {
+  padding: var(--admin-space-2) 0;
+}
+
+.admin-check-list {
+  gap: var(--admin-space-2);
+}
+
+.admin-check {
+  padding: var(--admin-space-3) var(--admin-space-4);
+}
+
+@media (max-width: 1100px) {
+  .admin-main-content {
+    padding-inline: var(--admin-space-6);
+  }
+}
+
+@media (max-width: 860px) {
+  .admin-main-content {
+    padding: 22px var(--admin-space-5) 88px;
+  }
+
+  .admin-overview-grid,
+  .admin-settings-grid {
+    gap: var(--admin-space-5);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-main-content {
+    padding: 18px var(--admin-space-4) 88px;
+  }
+
+  .admin-page-heading {
+    margin-bottom: var(--admin-space-5);
+  }
+
+  .admin-data-table {
+    min-width: 720px;
+  }
+
+  .admin-media-grid {
+    gap: var(--admin-space-3);
+  }
+}
