@@ -1,0 +1,55 @@
+---
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../../../lib/admin";
+
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+const id = Number(Astro.params.id);
+const [{ data: place }, { data: guide }] = await Promise.all([
+  context.supabase.from("places").select("*, province:provinces!places_province_id_fkey(name_en,name_km)").eq("id", id).maybeSingle(),
+  context.supabase.from("place_guides").select("*").eq("place_id", id).maybeSingle(),
+]);
+if (!place) return Astro.redirect("/admin/places");
+const province = place.province?.name_en ?? "";
+const title = place.name_en;
+const sourceUrls = Array.isArray(place.source_urls) ? place.source_urls.filter((value): value is string => typeof value === "string") : [];
+---
+
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page admin-preview-page">
+    <header class="admin-page-heading">
+      <div>
+        <span class="admin-eyebrow">Preview</span>
+        <h1>{title}</h1>
+        <p>This preview reads directly from the current database record, including drafts. Visitors cannot see draft content.</p>
+      </div>
+      <a class="admin-secondary-button" href={"/admin/places/" + id}><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to editor</a>
+    </header>
+
+    <article class="admin-preview-shell">
+      <div class="admin-preview-hero">
+        <img src={place.image_url || "/images/angkor-wat-header.jpg"} alt="" />
+        <div>
+          <span>{province}</span>
+          <h2>{title}</h2>
+          <p>{place.summary_en ?? ""}</p>
+        </div>
+      </div>
+
+      <div class="admin-preview-facts">
+        {place.ticket_status && <div><strong>Ticket</strong><span>{place.ticket_status === "free" ? "Free" : place.ticket_usd ? "$" + place.ticket_usd : "Check current price"}</span></div>}
+        {place.open_hours && <div><strong>Opening hours</strong><span>{place.open_hours}</span></div>}
+        {place.lat != null && place.lng != null && <div><strong>Coordinates</strong><span>{place.lat}, {place.lng}</span></div>}
+        {place.access_en && <div><strong>Getting there</strong><span>{place.access_en}</span></div>}
+      </div>
+
+      {guide?.about_en && <section class="admin-preview-section"><h3>About this place</h3><p>{guide.about_en}</p></section>}
+      {guide?.history_en && <section class="admin-preview-section"><h3>History</h3><p>{guide.history_en}</p></section>}
+      {guide?.highlights_en && <section class="admin-preview-section"><h3>What to see</h3><p>{guide.highlights_en}</p></section>}
+      {guide?.visit_plan_en && <section class="admin-preview-section"><h3>Plan your visit</h3><p>{guide.visit_plan_en}</p></section>}
+      {guide?.tips_en && <section class="admin-preview-section"><h3>Traveler tips</h3><p>{guide.tips_en}</p></section>}
+
+      {sourceUrls.length > 0 && <section class="admin-preview-section"><h3>Sources</h3><ul>{sourceUrls.map((url)=><li><a href={url} target="_blank" rel="noreferrer">{new URL(url).hostname.replace(/^www\./, "")}</a></li>)}</ul></section>}
+    </article>
+  </section>
+</AdminLayout>
