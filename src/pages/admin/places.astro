@@ -1,21 +1,137 @@
 ---
 import AdminLayout from "../../layouts/AdminLayout.astro";
 import { getAdminContext } from "../../lib/admin";
-const context=await getAdminContext(Astro.request,Astro.cookies);
-if(!context.user||!context.admin)return Astro.redirect("/admin/login");
-const status=Astro.url.searchParams.get("status");
-let query=context.supabase.from("places").select("id,slug,name_en,name_km,listing_type,publication_status,views,province:provinces!places_province_id_fkey(slug,name_en)").order("views",{ascending:false}).limit(100);
-if(status && ["draft","published","paused"].includes(status)) query=query.eq("publication_status",status);
-const {data:places}=await query;
+
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+
+const url = Astro.url;
+const status = ["draft", "published", "paused"].includes(url.searchParams.get("status") ?? "")
+  ? url.searchParams.get("status")!
+  : "";
+const q = url.searchParams.get("q")?.trim() ?? "";
+const provinceId = Number(url.searchParams.get("province") ?? 0);
+const type = ["attraction", "accommodation", "restaurant"].includes(url.searchParams.get("type") ?? "")
+  ? url.searchParams.get("type")!
+  : "";
+
+const [{ data: provinces }, placesResult] = await Promise.all([
+  context.supabase.from("provinces").select("id,name_en,name_km").order("name_en"),
+  (async () => {
+    let query = context.supabase
+      .from("places")
+      .select("id,slug,name_en,name_km,listing_type,publication_status,views,province_id,image_url,updated_at,province:provinces!places_province_id_fkey(slug,name_en)", { count: "exact" })
+      .order("updated_at", { ascending: false, nullsFirst: false })
+      .order("views", { ascending: false })
+      .limit(100);
+
+    if (status) query = query.eq("publication_status", status);
+    if (provinceId) query = query.eq("province_id", provinceId);
+    if (type) query = query.eq("listing_type", type);
+    if (q) query = query.or("name_en.ilike.%" + q + "%,name_km.ilike.%" + q + "%,slug.ilike.%" + q + "%");
+
+    return query;
+  })(),
+]);
+
+const places = placesResult.data ?? [];
+const total = placesResult.count ?? places.length;
 ---
+
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
-<section class="admin-page">
-<header class="admin-page-heading"><h1>Places</h1><p>Manage destination and business listings without the legacy MySQL layer.</p></header>
-<section class="admin-records-panel">
-<div class="admin-filter-bar"><a class={"admin-tab" + (!status ? " is-active" : "")} href="/admin/places">All</a><a class={"admin-tab" + (status==="published" ? " is-active" : "")} href="/admin/places?status=published">Published</a><a class={"admin-tab" + (status==="draft" ? " is-active" : "")} href="/admin/places?status=draft">Drafts</a><a class={"admin-tab" + (status==="paused" ? " is-active" : "")} href="/admin/places?status=paused">Paused</a></div>
-<div class="admin-table-wrap"><table class="admin-data-table"><thead><tr><th>Name</th><th>Province</th><th>Type</th><th>Status</th><th>Views</th></tr></thead><tbody>
-{(places ?? []).map((place)=><tr><td><a class="admin-table-title" href={"/admin/places/" + place.id}>{place.name_en}<small>{place.name_km}</small></a></td><td>{place.province?.name_en ?? "—"}</td><td>{place.listing_type}</td><td>{place.publication_status}</td><td>{place.views}</td></tr>)}
-</tbody></table></div>
-</section>
-</section>
+  <section class="admin-page">
+    <header class="admin-page-heading">
+      <div>
+        <span class="admin-eyebrow">Content</span>
+        <h1>Places</h1>
+        <p>{total} records · Search, review and publish destination listings.</p>
+      </div>
+      <div class="admin-page-heading-actions">
+        <a class="admin-secondary-button" href="/admin">Dashboard</a>
+        <a class="admin-primary-button" href="/admin/places/new"><i class="fa-solid fa-plus" aria-hidden="true"></i> New place</a>
+      </div>
+    </header>
+
+    <section class="admin-records-panel">
+      <div class="admin-tab-bar" aria-label="Publication status">
+        <a class={"admin-tab" + (!status ? " is-active" : "")} href="/admin/places">All</a>
+        <a class={"admin-tab" + (status === "published" ? " is-active" : "")} href="/admin/places?status=published">Published</a>
+        <a class={"admin-tab" + (status === "draft" ? " is-active" : "")} href="/admin/places?status=draft">Drafts</a>
+        <a class={"admin-tab" + (status === "paused" ? " is-active" : "")} href="/admin/places?status=paused">Paused</a>
+      </div>
+
+      <form class="admin-filter-panel" method="get" action="/admin/places">
+        {status && <input type="hidden" name="status" value={status} />}
+        <label class="admin-filter-item">
+          Search
+          <span class="admin-search-wrap">
+            <i class="fa-solid fa-magnifying-glass admin-search-icon" aria-hidden="true"></i>
+            <input class="admin-search-input" name="q" value={q} placeholder="Name or slug" />
+          </span>
+        </label>
+        <label class="admin-filter-item">
+          Province
+          <select class="admin-select" name="province">
+            <option value="0">All provinces</option>
+            {(provinces ?? []).map((province) => <option value={province.id} selected={province.id === provinceId}>{province.name_en}</option>)}
+          </select>
+        </label>
+        <label class="admin-filter-item">
+          Type
+          <select class="admin-select" name="type">
+            <option value="">All types</option>
+            <option value="attraction" selected={type === "attraction"}>Attraction</option>
+            <option value="accommodation" selected={type === "accommodation"}>Accommodation</option>
+            <option value="restaurant" selected={type === "restaurant"}>Restaurant</option>
+          </select>
+        </label>
+        <button class="admin-primary-button" type="submit">Apply</button>
+        {(q || provinceId || type) && <a class="admin-clear-filters" href={status ? "/admin/places?status=" + status : "/admin/places"}>Clear filters</a>}
+      </form>
+
+      <div class="admin-record-toolbar">
+        <div>
+          <h2>Catalogue</h2>
+          <p>Showing up to 100 recently updated records.</p>
+        </div>
+        <span class="admin-record-count">{total} result{total === 1 ? "" : "s"}</span>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-data-table">
+          <thead>
+            <tr><th>Name</th><th>Province</th><th>Type</th><th>Status</th><th>Views</th><th></th></tr>
+          </thead>
+          <tbody>
+            {places.map((place) => (
+              <tr>
+                <td>
+                  <a class="admin-table-title" href={"/admin/places/" + place.id}>
+                    <strong>{place.name_en}</strong>
+                    <small>{place.name_km}</small>
+                  </a>
+                </td>
+                <td>{place.province?.name_en ?? "—"}</td>
+                <td>{place.listing_type}</td>
+                <td>
+                  <span class={"admin-publication-chip is-" + place.publication_status}>
+                    <span class="admin-status-dot"></span>{place.publication_status}
+                  </span>
+                </td>
+                <td>{place.views ?? 0}</td>
+                <td class="admin-td-actions">
+                  <a class="admin-action-btn" href={"/admin/places/" + place.id} aria-label={"Edit " + place.name_en} title="Edit">
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                  </a>
+                  {place.publication_status === "published" && <a class="admin-action-btn" href={"/" + "en/destinations/" + place.slug} target="_blank" rel="noreferrer" aria-label={"View " + place.name_en} title="View public page"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {places.length === 0 && <p class="admin-empty-state">No places match the current filters.</p>}
+    </section>
+  </section>
 </AdminLayout>
