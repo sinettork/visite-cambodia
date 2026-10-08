@@ -28,8 +28,9 @@ const [attractions, stays, restaurants] = await Promise.all([
 const name = guide ? (lang === "km" ? guide.name_km : guide.name_en) : "";
 const overview = guide ? (lang === "km" ? guide.overview_km : guide.overview_en) : "";
 const banner = guide?.banner_image_url || "/images/angkor-wat-header.jpg";
-const sourceUrls = Array.isArray(guide?.source_urls)
-  ? guide.source_urls.filter((url): url is string => typeof url === "string" && url.startsWith("http"))
+const sourceJson = guide?.source_urls;
+const sourceUrls = Array.isArray(sourceJson)
+  ? sourceJson.filter((url): url is string => typeof url === "string" && url.startsWith("http"))
   : [];
 
 const groups: Array<{ id: string; title: string; intro: string; places: Place[] }> = [
