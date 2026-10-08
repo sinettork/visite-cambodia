@@ -1,0 +1,28 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../lib/admin";
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+const [placesResult, provincesResult, draftsResult] = await Promise.all([
+  context.supabase.from("places").select("id", { count: "exact", head: true }),
+  context.supabase.from("provinces").select("id", { count: "exact", head: true }),
+  context.supabase.from("places").select("id", { count: "exact", head: true }).eq("publication_status", "draft"),
+]);
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <header class="admin-page-heading"><h1>Dashboard</h1><p>Content operations overview for Visit Cambodia.</p></header>
+    <div class="admin-stat-grid">
+      <article class="admin-stat-card"><span>Places</span><strong>{placesResult.count ?? 0}</strong><small>All records</small></article>
+      <article class="admin-stat-card"><span>Provinces</span><strong>{provincesResult.count ?? 0}</strong><small>Regions</small></article>
+      <article class="admin-stat-card"><span>Drafts</span><strong>{draftsResult.count ?? 0}</strong><small>Waiting for review</small></article>
+    </div>
+    <section class="admin-panel">
+      <div class="admin-section-heading"><div><h2>Content workflow</h2><p>Move directly into the areas that need attention.</p></div></div>
+      <div class="admin-overview-shortcuts">
+        <a href="/admin/places"><i class="fa-solid fa-location-dot"></i><span><strong>Places</strong><small>Review destinations and listings</small></span><i class="fa-solid fa-arrow-right"></i></a>
+        <a href="/admin/provinces"><i class="fa-solid fa-map"></i><span><strong>Provinces</strong><small>Manage regional guides</small></span><i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </section>
+  </section>
+</AdminLayout>
