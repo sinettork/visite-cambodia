@@ -1,0 +1,32 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../../lib/admin";
+const context=await getAdminContext(Astro.request,Astro.cookies);
+if(!context.user||!context.admin)return Astro.redirect("/admin/login");
+const id=Number(Astro.params.id);
+const {data:place}=await context.supabase.from("places").select("*").eq("id",id).maybeSingle();
+if(!place)return Astro.redirect("/admin/places");
+const message=Astro.url.searchParams.get("saved");
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+<section class="admin-page">
+<header class="admin-page-heading"><h1>Edit place</h1><p>{place.name_en}</p></header>
+{message&&<div class="admin-alert" role="status">Saved.</div>}
+<form class="admin-form-grid" method="post" action={"/api/admin/places/" + id}>
+<div class="admin-panel">
+<label>Name EN<input name="name_en" value={place.name_en} required /></label>
+<label>Name KM<input name="name_km" value={place.name_km} required /></label>
+<label>Summary EN<textarea name="summary_en" rows="5">{place.summary_en ?? ""}</textarea></label>
+<label>Summary KM<textarea name="summary_km" rows="5">{place.summary_km ?? ""}</textarea></label>
+<label>Image URL<input name="image_url" value={place.image_url ?? "" /></label>
+</div>
+<div class="admin-panel">
+<label>Publication status<select name="publication_status"><option selected={place.publication_status==="draft"} value="draft">Draft</option><option selected={place.publication_status==="published"} value="published">Published</option><option selected={place.publication_status==="paused"} value="paused">Paused</option></select></label>
+<label>Listing type<select name="listing_type"><option selected={place.listing_type==="attraction"} value="attraction">Attraction</option><option selected={place.listing_type==="accommodation"} value="accommodation">Accommodation</option><option selected={place.listing_type==="restaurant"} value="restaurant">Restaurant</option></select></label>
+<label>Ticket USD<input name="ticket_usd" value={place.ticket_usd ?? ""} /></label>
+<label>Open hours<input name="open_hours" value={place.open_hours ?? ""} /></label>
+<button class="admin-primary-button" type="submit">Save changes</button>
+</div>
+</form>
+</section>
+</AdminLayout>
