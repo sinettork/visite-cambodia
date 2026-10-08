@@ -36,23 +36,28 @@ const sections = [
 <div class="admin-layout">
   <header class="admin-topbar">
     <div class="admin-topbar-left">
-      <button class="admin-mobile-menu" type="button" aria-label="Open navigation">☰</button>
-      <a class="admin-topbar-brand" href="/admin">
+      <button class="admin-mobile-menu" type="button" aria-label="Open navigation" aria-controls="admin-sidebar" aria-expanded="false">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <a class="admin-topbar-brand" href="/admin" aria-label="Visit Cambodia Admin dashboard">
         <span class="admin-brand-mark"><i class="fa-solid fa-gem" aria-hidden="true"></i></span>
         <span class="admin-brand-name">Visit Cambodia</span>
       </a>
     </div>
     <div class="admin-topbar-actions">
-      <a class="admin-topbar-home" href="/en" target="_blank" rel="noreferrer">Public site</a>
+      <a class="admin-topbar-home" href="/en" target="_blank" rel="noreferrer">
+        <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        <span>Public site</span>
+      </a>
       <div class="admin-topbar-user" title={email}>
-        <div class="admin-topbar-avatar">{email.slice(0,1).toUpperCase()}</div>
+        <div class="admin-topbar-avatar" aria-hidden="true">{email.slice(0,1).toUpperCase()}</div>
         <span class="admin-topbar-user-name">{displayName}</span>
         <span class="admin-topbar-role">{roleLabel}</span>
       </div>
     </div>
   </header>
 
-  <aside class="admin-sidebar">
+  <aside id="admin-sidebar" class="admin-sidebar" aria-label="Admin navigation">
     <div class="admin-sidebar-heading"><span class="admin-sidebar-label">ADMIN</span></div>
     <nav class="admin-navigation">
       {sections.map((section) => <div class="admin-navigation-group">
@@ -73,6 +78,28 @@ const sections = [
 
   <main class="admin-main">
     <div class="admin-main-content"><slot /></div>
-    <footer class="admin-footer"><span>© {new Date().getFullYear()} Visit Cambodia</span></footer>
+    <footer class="admin-footer"><span>© 2026 Visit Cambodia</span></footer>
   </main>
 </div>
+
+<script>
+  const menu = document.querySelector<HTMLButtonElement>(".admin-mobile-menu");
+  const sidebar = document.querySelector<HTMLElement>("#admin-sidebar");
+  if (menu && sidebar) {
+    const closeSidebar = () => {
+      sidebar.classList.remove("is-open");
+      menu.setAttribute("aria-expanded", "false");
+    };
+    const openSidebar = () => {
+      sidebar.classList.add("is-open");
+      menu.setAttribute("aria-expanded", "true");
+    };
+    menu.addEventListener("click", () => {
+      sidebar.classList.contains("is-open") ? closeSidebar() : openSidebar();
+    });
+    sidebar.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => link.addEventListener("click", closeSidebar));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeSidebar();
+    });
+  }
+</script>
