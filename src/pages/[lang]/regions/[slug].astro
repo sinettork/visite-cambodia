@@ -1,0 +1,95 @@
+---
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import PlaceCard from "../../../components/PlaceCard.astro";
+import { getPlaces, getProvinceGuide, type Lang, type Place } from "../../../lib/catalog";
+import { T } from "../../../lib/i18n";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const { getProvinces } = await import("../../../lib/catalog");
+  const provinces = await getProvinces();
+  return ["en", "km"].flatMap((lang) => provinces.map((p) => ({ params: { lang, slug: p.slug } })));
+}
+
+const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
+const slug = Astro.params.slug ?? "";
+const guide = await getProvinceGuide(slug);
+const t = T[lang];
+
+if (!guide) Astro.redirect("/" + lang + "/explore");
+
+const [attractions, stays, restaurants] = await Promise.all([
+  getPlaces({ province: slug, type: "attraction", pageSize: 12 }),
+  getPlaces({ province: slug, type: "accommodation", pageSize: 12 }),
+  getPlaces({ province: slug, type: "restaurant", pageSize: 12 }),
+]);
+
+const name = guide ? (lang === "km" ? guide.name_km : guide.name_en) : "";
+const overview = guide ? (lang === "km" ? guide.overview_km : guide.overview_en) : "";
+const banner = guide?.banner_image_url || "/images/angkor-wat-header.jpg";
+const groups: Array<{ id: string; title: string; intro: string; places: Place[] }> = [
+  { id: "region-attraction", title: t.thingsToDo, intro: lang === "km" ? guide?.attractions_km ?? "" : guide?.attractions_en ?? "", places: attractions.items },
+  { id: "region-accommodation", title: t.whereToStay, intro: lang === "km" ? guide?.stay_guide_km ?? "" : guide?.stay_guide_en ?? "", places: stays.items },
+  { id: "region-restaurant", title: t.whereToEat, intro: lang === "km" ? guide?.food_guide_km ?? "" : guide?.food_guide_en ?? "", places: restaurants.items },
+];
+---
+<SiteLayout lang={lang} title={name + " Travel Guide"} description={overview} active={slug} variant="region">
+  {guide && (
+    <>
+      <nav class="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
+        <a href={"/" + lang + "/explore"}>{t.destinations}</a><span aria-hidden="true">›</span><span aria-current="page">{name}</span>
+      </nav>
+
+      <header class="province-hero has-photo">
+        <img src={banner} alt={name} loading="eager" />
+        <div class="province-hero-content">
+          <h1>{name}</h1>
+          <p>{overview}</p>
+        </div>
+      </header>
+
+      <nav class="region-jump-nav" aria-label={lang === "km" ? "មើលផ្នែក" : "Jump to section"}>
+        <a href="#province-about"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>{t.aboutProvince}</span></a>
+        <a href="#province-history"><i class="fa-solid fa-landmark" aria-hidden="true"></i><span>{t.historyAndHeritage}</span></a>
+        <a href="#province-plan"><i class="fa-solid fa-route" aria-hidden="true"></i><span>{t.planYourVisit}</span></a>
+      </nav>
+
+      <section id="province-about" class="region-story-section">
+        <div class="section-head"><h2>{t.aboutProvince}</h2></div>
+        <p>{overview}</p>
+      </section>
+
+      {guide.history_en || guide.history_km ? (
+        <section id="province-history" class="region-story-section">
+          <div class="section-head"><h2>{t.historyAndHeritage}</h2></div>
+          <p>{lang === "km" ? guide.history_km : guide.history_en}</p>
+        </section>
+      ) : null}
+
+      {guide.culture_en || guide.culture_km ? (
+        <section class="region-story-section">
+          <div class="section-head"><h2>{t.cultureLocalLife}</h2></div>
+          <p>{lang === "km" ? guide.culture_km : guide.culture_en}</p>
+        </section>
+      ) : null}
+
+      {guide.travel_en || guide.travel_km ? (
+        <section id="province-plan" class="region-story-section">
+          <div class="section-head"><h2>{t.planYourVisit}</h2></div>
+          <p>{lang === "km" ? guide.travel_km : guide.travel_en}</p>
+        </section>
+      ) : null}
+
+      {groups.map((group) => (
+        <section class="region-section" id={group.id}>
+          <div class="section-head">
+            <div><h2>{group.title}</h2><p>{group.intro}</p></div>
+            {group.places.length > 0 && <a href={"/" + lang + "/explore?province=" + slug + "&type=" + group.id.replace("region-","")}>{t.all} ›</a>}
+          </div>
+          {group.places.length > 0 ? <div class="review-grid">{group.places.slice(0, 6).map((place) => <PlaceCard place={place} lang={lang} />)}</div> : <p class="region-empty">{lang === "km" ? "មិនទាន់មានបញ្ជីកន្លែងដែលបានផ្ទៀងផ្ទាត់។" : "No verified listings are available yet."}</p>}
+        </section>
+      ))}
+    </>
+  )}
+</SiteLayout>
