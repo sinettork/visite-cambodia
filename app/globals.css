@@ -5,8 +5,8 @@
 :root {
   --font-battambang: "Battambang";
   --font-noto-sans-khmer: "Noto Sans Khmer";
-  --font-arimo: "Arimo Variable";
-  --font-oswald: "Oswald Variable";
+  --font-arimo: "Arimo";
+  --font-oswald: "Oswald";
   /* Legacy aliases kept so existing selectors inherit the corrected typography. */
   --font-roboto: var(--font-arimo);
   --font-roboto-condensed: var(--font-oswald);
