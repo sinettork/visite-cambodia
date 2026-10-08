@@ -78,13 +78,13 @@ const sections = [
 
   <main class="admin-main">
     <div class="admin-main-content"><slot /></div>
-    <footer class="admin-footer"><span>© 2026 Visit Cambodia</span></footer>
+    <footer class="admin-footer"><span>© {new Date().getFullYear()} Visit Cambodia</span></footer>
   </main>
 </div>
 
 <script>
-  const menu = document.querySelector<HTMLButtonElement>(".admin-mobile-menu");
-  const sidebar = document.querySelector<HTMLElement>("#admin-sidebar");
+  const menu = document.querySelector(".admin-mobile-menu");
+  const sidebar = document.querySelector("#admin-sidebar");
   if (menu && sidebar) {
     const closeSidebar = () => {
       sidebar.classList.remove("is-open");
@@ -97,7 +97,7 @@ const sections = [
     menu.addEventListener("click", () => {
       sidebar.classList.contains("is-open") ? closeSidebar() : openSidebar();
     });
-    sidebar.querySelectorAll<HTMLAnchorElement>("a").forEach((link) => link.addEventListener("click", closeSidebar));
+    sidebar.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeSidebar));
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeSidebar();
     });
