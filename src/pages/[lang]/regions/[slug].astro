@@ -33,6 +33,16 @@ const groups: Array<{ id: string; title: string; intro: string; places: Place[] 
   { id: "region-accommodation", title: t.whereToStay, intro: lang === "km" ? guide?.stay_guide_km ?? "" : guide?.stay_guide_en ?? "", places: stays.items },
   { id: "region-restaurant", title: t.whereToEat, intro: lang === "km" ? guide?.food_guide_km ?? "" : guide?.food_guide_en ?? "", places: restaurants.items },
 ];
+const gallery = [
+  { image: banner, alt: name, label: name },
+  ...[...attractions.items, ...stays.items, ...restaurants.items]
+    .filter((place) => place.image_url)
+    .map((place) => ({
+      image: place.image_url as string,
+      alt: lang === "km" ? place.name_km : place.name_en,
+      label: lang === "km" ? place.name_km : place.name_en,
+    })),
+].filter((slide, index, items) => items.findIndex((item) => item.image === slide.image) === index).slice(0, 4);
 ---
 <SiteLayout lang={lang} title={name + " Travel Guide"} description={overview} active={slug} variant="region">
   {guide && (
@@ -41,13 +51,53 @@ const groups: Array<{ id: string; title: string; intro: string; places: Place[] 
         <a href={"/" + lang + "/explore"}>{t.destinations}</a><span aria-hidden="true">›</span><span aria-current="page">{name}</span>
       </nav>
 
-      <header class="province-hero has-photo">
-        <img src={banner} alt={name} loading="eager" />
-        <div class="province-hero-content">
-          <h1>{name}</h1>
+      <header class="province-hero has-photo" aria-labelledby="province-title">
+        <div class="province-gallery-slides" aria-label={name + " photo gallery"}>
+          {gallery.map((slide, index) => (
+            <img
+              class={"province-gallery-slide" + (index === 0 ? " is-active" : "")}
+              src={slide.image}
+              alt={slide.alt}
+              loading={index === 0 ? "eager" : "lazy"}
+              aria-hidden={index !== 0}
+            />
+          ))}
+        </div>
+        <div class="province-hero-shade" aria-hidden="true"></div>
+        <div class="province-hero-copy">
+          <span class="province-gallery-label" data-gallery-label>{gallery[0]?.label}</span>
+          <h1 id="province-title">{name}</h1>
           <p>{overview}</p>
         </div>
+        {gallery.length > 1 && (
+          <div class="province-gallery-dots" aria-label={lang === "km" ? "ជ្រើសរូបភាព" : "Choose photo"}>
+            {gallery.map((slide, index) => (
+              <button type="button" class={index === 0 ? "is-active" : ""} data-gallery-dot={index} aria-label={(lang === "km" ? "រូបភាព " : "Photo ") + (index + 1)} aria-current={index === 0 ? "true" : undefined}></button>
+            ))}
+          </div>
+        )}
       </header>
+
+      <script define:vars={{ gallery }}>
+        const slides = [...document.querySelectorAll<HTMLImageElement>(".province-gallery-slide")];
+        const dots = [...document.querySelectorAll<HTMLButtonElement>("[data-gallery-dot]")];
+        const label = document.querySelector<HTMLElement>("[data-gallery-label]");
+        let index = 0;
+        const renderGallery = (nextIndex: number) => {
+          index = nextIndex;
+          slides.forEach((slide, slideIndex) => {
+            slide.classList.toggle("is-active", slideIndex === index);
+            slide.setAttribute("aria-hidden", String(slideIndex !== index));
+          });
+          dots.forEach((dot, dotIndex) => {
+            dot.classList.toggle("is-active", dotIndex === index);
+            dot.toggleAttribute("aria-current", dotIndex === index);
+          });
+          if (label) label.textContent = gallery[index]?.label ?? "";
+        };
+        dots.forEach((dot) => dot.addEventListener("click", () => renderGallery(Number(dot.dataset.galleryDot || 0))));
+        if (slides.length > 1) window.setInterval(() => renderGallery((index + 1) % slides.length), 5200);
+      </script>
 
       <nav class="region-jump-nav" aria-label={lang === "km" ? "មើលផ្នែក" : "Jump to section"}>
         <a href="#province-about"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>{t.aboutProvince}</span></a>
