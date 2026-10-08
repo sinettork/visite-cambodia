@@ -1,18 +1,79 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import type { Lang } from "../../lib/catalog";
-export const prerender=true;
-export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
-const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+import PlaceCard from "../../components/PlaceCard.astro";
+import { getPlaces, type Lang } from "../../lib/catalog";
+
+export const prerender = true;
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "km" } }];
+}
+const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
+const result = await getPlaces({ page: 1, pageSize: 48 });
+const places = result.items;
 ---
-<SiteLayout lang={lang} title={lang==="km"?"កន្លែងដែលបានរក្សាទុក":"Saved Places"} variant="saved">
-  <header class="page-header-block"><h1>{lang==="km"?"កន្លែងដែលបានរក្សាទុក":"Saved places"}</h1><p class="page-header-intro">{lang==="km"?"រក្សាទុកកន្លែងដែលអ្នកចង់ទៅ ហើយត្រឡប់មកមើលពេលក្រោយ។":"Save places you want to visit and come back to them later."}</p></header>
-  <div id="saved-content" class="saved-page-state"><p>{lang==="km"?"កំពុងផ្ទុកកន្លែងដែលបានរក្សាទុក...":"Loading saved places..."}</p></div>
+<SiteLayout lang={lang} title={lang === "km" ? "កន្លែងដែលបានរក្សាទុក" : "Saved Places"} variant="saved">
+  <div class="saved-places-container">
+    <div class="saved-header-row">
+      <div>
+        <h1>{lang === "km" ? "កន្លែងដែលបានរក្សាទុក" : "Saved places"}</h1>
+        <p class="saved-intro">{lang === "km" ? "រក្សាទុកកន្លែងដែលអ្នកចង់ទៅ ហើយត្រឡប់មកមើលពេលក្រោយ។" : "Save places you want to visit and come back to them later."}</p>
+      </div>
+      <button id="saved-clear-all" type="button" class="saved-clear-btn" hidden>
+        <i class="fa-solid fa-trash-can" aria-hidden="true"></i> {lang === "km" ? "សម្អាតទាំងអស់" : "Clear all"}
+      </button>
+    </div>
+
+    <div id="saved-count-badge" class="saved-count-badge" hidden>
+      <span><i class="fa-solid fa-heart" aria-hidden="true"></i> <strong data-saved-total>0</strong> {lang === "km" ? "ទីតាំងត្រូវបានរក្សាទុក" : "places saved"}</span>
+    </div>
+
+    <div class="review-grid">
+      {places.map((place) => (
+        <div class="saved-card-item" data-saved-slug={place.slug}>
+          <PlaceCard place={place} lang={lang} />
+        </div>
+      ))}
+    </div>
+
+    <div id="saved-empty" class="saved-empty-card" hidden>
+      <div class="saved-empty-icon"><i class="fa-regular fa-heart" aria-hidden="true"></i></div>
+      <h3>{lang === "km" ? "មិនទាន់មានកន្លែងរក្សាទុក" : "No saved places yet"}</h3>
+      <p>{lang === "km" ? "ចុចបេះដូងនៅលើកាតកន្លែងទេសចរណ៍ ដើម្បីរក្សាទុកវាសម្រាប់ពេលក្រោយ។" : "Tap the heart on any destination card to save it for later."}</p>
+      <a href={"/" + lang + "/explore"} class="saved-explore-link">{lang === "km" ? "ស្វែងរកគោលដៅ" : "Explore destinations"} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+
   <script>
-    const root = document.querySelector("#saved-content");
-    const lang = document.documentElement.lang;
-    const saved = JSON.parse(localStorage.getItem("visit-cambodia-favorites") ?? "[]");
-    if (!saved.length && root) root.innerHTML = "<p>" + (lang === "km" ? "អ្នកមិនទាន់បានរក្សាទុកកន្លែងណាទេ។" : "You have not saved any places yet.") + "</p>";
-    if (saved.length && root) root.innerHTML = '<p>' + saved.length + (lang === "km" ? ' កន្លែងត្រូវបានរក្សាទុក។ ចុចបេះដូងនៅលើកាតកន្លែងទេសចរណ៍ដើម្បីគ្រប់គ្រង។' : ' saved places. Use the heart button on destination cards to manage them.') + '</p>';
+    const savedKey = "visit-cambodia-favorites";
+    const updateSavedPage = () => {
+      const saved = new Set<string>(JSON.parse(localStorage.getItem(savedKey) ?? "[]"));
+      const items = document.querySelectorAll<HTMLElement>("[data-saved-slug]");
+      let visible = 0;
+      items.forEach((item) => {
+        const show = saved.has(item.dataset.savedSlug ?? "");
+        item.hidden = !show;
+        if (show) visible++;
+      });
+      const badge = document.querySelector<HTMLElement>("#saved-count-badge");
+      const total = document.querySelector<HTMLElement>("[data-saved-total]");
+      const clear = document.querySelector<HTMLButtonElement>("#saved-clear-all");
+      const empty = document.querySelector<HTMLElement>("#saved-empty");
+      if (total) total.textContent = String(visible);
+      if (badge) badge.hidden = visible === 0;
+      if (clear) clear.hidden = visible === 0;
+      if (empty) empty.hidden = visible !== 0;
+    };
+    document.querySelector<HTMLButtonElement>("#saved-clear-all")?.addEventListener("click", () => {
+      const message = document.documentElement.lang === "km"
+        ? "តើអ្នកប្រាកដជាចង់សម្អាតបញ្ជីរក្សាទុកទាំងអស់មែនទេ?"
+        : "Are you sure you want to clear all saved places?";
+      if (!window.confirm(message)) return;
+      localStorage.removeItem(savedKey);
+      updateSavedPage();
+      window.dispatchEvent(new CustomEvent("cambodia_favorites_updated", { detail: { favorites: [] } }));
+    });
+    updateSavedPage();
+    window.addEventListener("storage", updateSavedPage);
+    window.addEventListener("cambodia_favorites_updated", updateSavedPage);
   </script>
 </SiteLayout>
