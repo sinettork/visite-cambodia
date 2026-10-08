@@ -7340,3 +7340,81 @@ main {
   font-size: 13px;
   line-height: 1.75;
 }
+
+
+/* ==========================================================================
+   UX completion pass — public navigation, mobile clarity and flatter content
+   ========================================================================== */
+
+.nav > .nav-dropdown {
+  flex: 1 1 0;
+}
+
+.nav > .nav-dropdown > summary {
+  min-height: 41px;
+  border: 0;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.nav > .nav-dropdown.current > summary,
+.nav > .nav-dropdown:hover > summary {
+  color: #fff;
+  background: #ea7925;
+}
+
+.nav > .nav-dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.review {
+  padding: 0 0 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.review:hover {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.review-business-type {
+  border-radius: 0;
+  padding: 0;
+  color: #7a5a43;
+  background: transparent;
+  font-weight: 600;
+}
+
+.section-head {
+  border-bottom-width: 1px;
+}
+
+@media (max-width: 620px) {
+  .nav > .nav-dropdown {
+    flex: 0 0 50%;
+    border-right: 1px solid #373737;
+  }
+
+  .nav > .nav-dropdown > summary {
+    min-height: 42px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .nav > .nav-dropdown-menu {
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .nav > a {
+    flex: 0 0 50%;
+  }
+
+  .nav.open {
+    display: flex;
+  }
+}
