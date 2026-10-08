@@ -156,8 +156,8 @@ const sourceLabel = (url: string) => {
           </div>
           <ul>
             {guide.source_urls
-              .filter((url: string) => url.startsWith("http"))
-              .map((url: string) => (
+              .filter((url) => url.startsWith("http"))
+              .map((url) => (
                 <li>
                   <a href={url} target="_blank" rel="noopener noreferrer">{sourceLabel(url)}</a>
                 </li>
