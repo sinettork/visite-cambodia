@@ -1,0 +1,34 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../lib/admin";
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+
+const media = [
+  { path: "/images/angkor-wat-header.jpg", title: "Angkor Wat header" },
+  { path: "/images/food/fish-amok.jpg", title: "Fish Amok" },
+  { path: "/images/food/beef-lok-lak.jpg", title: "Beef Lok Lak" },
+  { path: "/images/food/kampot-pepper-crab.jpg", title: "Kampot pepper crab" },
+  { path: "/images/food/kep-crab-market.jpg", title: "Kep Crab Market" },
+  { path: "/images/food/nom-banh-chok.jpg", title: "Nom Banh Chok" },
+];
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <header class="admin-page-heading"><h1>Media library</h1><p>Current production-safe media assets shipped with the site.</p></header>
+    <section class="admin-panel">
+      <div class="admin-media-grid">
+        {media.map((item) => (
+          <article class="admin-media-card">
+            <img src={item.path} alt="" loading="lazy" />
+            <div class="admin-media-card-copy">
+              <strong>{item.title}</strong>
+              <span>{item.path}</span>
+              <a class="admin-secondary-button" href={item.path} target="_blank" rel="noreferrer">Open</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </section>
+</AdminLayout>

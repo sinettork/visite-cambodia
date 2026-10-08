@@ -1,0 +1,32 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import type { Lang } from "../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+const sections=lang==="km"?[
+  ["ប្រវត្តិសាស្ត្រ","អរិយធម៌ខ្មែរបានរីកចម្រើនអស់រយៈពេលជាច្រើនសតវត្សរ៍។ សម័យអង្គរបានបន្សល់ទុកនូវប្រាសាទ និងស្នាដៃសិល្បៈដ៏អស្ចារ្យ។"],
+  ["ភូមិសាស្ត្រ និងធម្មជាតិ","ទន្លេមេគង្គ បឹងទន្លេសាប ជួរភ្នំ ព្រៃឈើ ទឹកជ្រោះ និងឆ្នេរសមុទ្រធ្វើឱ្យកម្ពុជាមានទេសភាពចម្រុះ។"],
+  ["វប្បធម៌ និងប្រពៃណី","ភាសាខ្មែរ ព្រះពុទ្ធសាសនា របាំ តន្ត្រី សិប្បកម្ម និងម្ហូបអាហារជាផ្នែកសំខាន់នៃអត្តសញ្ញាណខ្មែរ។"],
+  ["គន្លឹះមុនចេញដំណើរ","រៀបចំផែនការតាមតំបន់ ពិនិត្យស្ថានភាពផ្លូវ អាកាសធាតុ និងព័ត៌មានផ្លូវការមុនធ្វើដំណើរ។"]
+]:[
+  ["History","Khmer civilization developed across many centuries, with the Angkorian period leaving an exceptional architectural and artistic legacy."],
+  ["Geography and nature","The Mekong, Tonle Sap, mountain ranges, forests, waterfalls and southern coastline give Cambodia a remarkably varied landscape."],
+  ["Culture and traditions","Khmer language, Theravada Buddhism, dance, music, crafts and food are central to Cambodia's living cultural identity."],
+  ["Before you travel","Plan by region, allow time for road journeys, and verify current transport, safety and opening information before setting out."]
+];
+---
+<SiteLayout lang={lang} title={lang==="km"?"ស្វែងយល់ពីកម្ពុជា":"Discover Cambodia"} variant="discover">
+  <header class="discover-page-heading">
+    <h1>{lang==="km"?"ស្វែងយល់ពីកម្ពុជា":"Discover Cambodia"}</h1>
+    <p>{lang==="km"?"កម្ពុជា​ជាប្រទេសដែលមានប្រវត្តិសាស្ត្រយូរអង្វែង វប្បធម៌រស់រវើក និងទេសភាពចម្រុះ។":"Cambodia is a country of long history, living traditions and varied landscapes."}</p>
+  </header>
+  <nav class="discover-actions" aria-label={lang==="km"?"ជំហានបន្ទាប់":"Next steps"}>
+    <a href={"/"+lang+"/explore"}>{lang==="km"?"ស្វែងរកគោលដៅ":"Explore destinations"} ›</a>
+    <a href={"/"+lang+"/food"}>{lang==="km"?"ស្វែងរកម្ហូប":"Explore food"} ›</a>
+    <a href={"/"+lang+"/itineraries"}>{lang==="km"?"គម្រោងដំណើរ":"Itineraries"} ›</a>
+  </nav>
+  <div class="discover-sections">
+    {sections.map((section,index)=><section class="discover-section"><span class="discover-number">{String(index+1).padStart(2,"0")}</span><div><h2>{section[0]}</h2><p>{section[1]}</p></div></section>)}
+  </div>
+</SiteLayout>

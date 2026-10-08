@@ -1,0 +1,31 @@
+---
+import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+import "@fortawesome/fontawesome-free/css/solid.min.css";
+import "../../styles/admin.css";
+import { createServerSupabase } from "../../lib/supabase";
+const supabase = createServerSupabase({ request: Astro.request, cookies: Astro.cookies });
+const { data: { user } } = await supabase.auth.getUser();
+if (user) return Astro.redirect("/admin");
+const error = Astro.url.searchParams.get("error");
+---
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width" /><title>Admin sign in | Visit Cambodia</title></head>
+<body class="admin-auth-page">
+  <main class="admin-login-page">
+    <section class="admin-login-card">
+      <div class="admin-login-brand"><span class="admin-brand-mark"><i class="fa-solid fa-gem" aria-hidden="true"></i></span><strong>Visit Cambodia</strong></div>
+      <h1>Admin sign in</h1>
+      <p>Manage destinations, province guides and publishing.</p>
+      {error && <div class="admin-alert" role="alert">{error}</div>}
+      <form method="post" action="/api/admin/signin" class="admin-login-form">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required />
+        <button class="admin-primary-button" type="submit">Sign in</button>
+      </form>
+      <a href="/en" class="admin-login-back">← Back to Visit Cambodia</a>
+    </section>
+  </main>
+</body>
+</html>

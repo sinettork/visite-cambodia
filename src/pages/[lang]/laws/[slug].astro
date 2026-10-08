@@ -1,0 +1,24 @@
+---
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import type { Lang } from "../../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return ["en","km"].flatMap((lang)=>["road-traffic","tourism-law","ministry-instruments"].map((slug)=>({params:{lang,slug}})));}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+const slug=Astro.params.slug ?? "";
+const content=lang==="km"?{
+ "road-traffic":["ច្បាប់ស្តីពីចរាចរណ៍ផ្លូវគោក","ព័ត៌មានផ្លូវចរាចរណ៍គួរតែផ្ទៀងផ្ទាត់ពីប្រភពរដ្ឋបច្ចុប្បន្ន។","កុំអនុវត្តព័ត៌មានចាស់អំពីល្បឿន កម្រិតអាល់កុល ឬទោសពិន័យដោយមិនពិនិត្យឯកសារផ្លូវការ។"],
+ "tourism-law":["ច្បាប់ស្តីពីទេសចរណ៍","ច្បាប់ និងលិខិតបទដ្ឋានទេសចរណ៍ជាក្របខណ្ឌសម្រាប់គ្រប់គ្រងវិស័យ និងអ្នកផ្តល់សេវា។","សម្រាប់អ្នកដំណើរ ត្រូវតែបញ្ជាក់តម្រូវការជាក់លាក់តាមសេវា និងទីតាំង។"],
+ "ministry-instruments":["លិខិតបទដ្ឋាន និងបទប្បញ្ញត្តិទេសចរណ៍","ក្រសួងទេសចរណ៍ផ្សព្វផ្សាយច្បាប់ ព្រះរាជក្រឹត្យ អនុក្រឹត្យ ប្រកាស និងសេចក្តីណែនាំជាច្រើនកម្រិត។","ពិនិត្យឈ្មោះឯកសារ កាលបរិច្ឆេទ និងវិសាលភាពមុនយកទៅប្រើ។"]
+}[slug as "road-traffic"|"tourism-law"|"ministry-instruments"] : {
+ "road-traffic":["Law on Road Traffic","Traffic requirements should be checked against current official government sources.","Do not rely on old speed, alcohol or penalty figures without checking the current legal text."],
+ "tourism-law":["Law on Tourism","Tourism laws and related instruments form the regulatory framework for Cambodia's tourism sector.","For travelers, verify any specific requirement with the responsible authority or service provider."],
+ "ministry-instruments":["Tourism regulations and legal instruments","The Ministry of Tourism maintains laws, Royal Decrees, Sub-Decrees, Prakas and guidance documents.","Check each document's title, date and scope before relying on it."]
+}[slug as "road-traffic"|"tourism-law"|"ministry-instruments"];
+---
+<SiteLayout lang={lang} title={content?.[0] ?? "Travel law"} variant="editorial">
+  {content && <>
+    <nav class="detail-breadcrumb"><a href={"/"+lang+"/laws"}>{lang==="km"?"ច្បាប់":"Travel laws"}</a><span aria-hidden="true">›</span><span>{content[0]}</span></nav>
+    <header class="browse-heading directory-heading law-guide-heading"><h1>{content[0]}</h1><p>{content[1]}</p></header>
+    <div class="law-guide-sections"><section class="law-guide-section"><h2>{lang==="km"?"វិសាលភាព":"Scope"}</h2><p>{content[2]}</p></section></div>
+  </>}
+</SiteLayout>

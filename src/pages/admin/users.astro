@@ -1,0 +1,32 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getAdminContext, isAdminRole } from "../../lib/admin";
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+if (!isAdminRole(context.admin.role)) return Astro.redirect("/admin");
+const { data: users } = await context.supabase.from("admin_users").select("user_id,display_name,role,is_active,created_at,updated_at").order("created_at");
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <header class="admin-page-heading"><h1>Administrators</h1><p>Role assignments are linked to Supabase Auth user IDs.</p></header>
+    <section class="admin-records-panel">
+      <div class="admin-table-wrap">
+        <table class="admin-data-table">
+          <thead><tr><th>User ID</th><th>Name</th><th>Role</th><th>Status</th><th>Created</th></tr></thead>
+          <tbody>
+            {(users ?? []).map((user) => (
+              <tr>
+                <td><code>{user.user_id}</code></td>
+                <td>{user.display_name}</td>
+                <td>{user.role}</td>
+                <td>{user.is_active ? "Active" : "Disabled"}</td>
+                <td>{new Date(user.created_at).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {(!users || users.length === 0) && <p class="admin-empty-state">No admin users are linked yet. Create the first user in Supabase Auth, then add its UUID to public.admin_users.</p>}
+    </section>
+  </section>
+</AdminLayout>

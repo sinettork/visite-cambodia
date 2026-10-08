@@ -1,0 +1,58 @@
+---
+import type { Lang, Place } from "../lib/catalog";
+
+interface Props {
+  place: Place;
+  lang: Lang;
+}
+
+const { place, lang } = Astro.props;
+const name = lang === "km" ? place.name_km : place.name_en;
+const province = place.province ? (lang === "km" ? place.province.name_km : place.province.name_en) : "";
+const businessLabels: Record<string, string> = {
+  hotel: lang === "km" ? "សណ្ឋាគារ" : "Hotel",
+  guest_house: lang === "km" ? "ផ្ទះសំណាក់" : "Guest house",
+  restaurant: lang === "km" ? "ភោជនីយដ្ឋាន" : "Restaurant",
+  cafe: lang === "km" ? "ហាងកាហ្វេ" : "Cafe",
+  other: lang === "km" ? "អាជីវកម្ម" : "Business",
+};
+---
+<div class="review-card-wrapper">
+  <a href={"/" + lang + "/destinations/" + place.slug} class="review" aria-label={name}>
+    <div class="review-thumb-wrapper">
+      {place.image_url ? <img src={place.image_url} alt="" loading="lazy" decoding="async" /> : <div class="review-thumb-empty" aria-hidden="true"><span>Visit Cambodia</span></div>}
+    </div>
+    <h3>{name}</h3>
+    <div class="review-meta">
+      {place.business_type && <span class="review-business-type">{businessLabels[place.business_type] ?? place.business_type}</span>}
+      <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {province}</span>
+    </div>
+  </a>
+  <button class="card-favorite-btn" type="button" data-favorite={place.slug} aria-label={lang === "km" ? "រក្សាទុកកន្លែងនេះ" : "Save this place"} aria-pressed="false">
+    <i class="fa-regular fa-heart" aria-hidden="true"></i>
+  </button>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-favorite]");
+  buttons.forEach((button) => {
+    const slug = button.dataset.favorite;
+    if (!slug) return;
+    const key = "visit-cambodia-favorites";
+    const saved = new Set(JSON.parse(localStorage.getItem(key) ?? "[]"));
+    const update = () => {
+      const active = saved.has(slug);
+      button.setAttribute("aria-pressed", String(active));
+      button.innerHTML = active
+        ? '<i class="fa-solid fa-heart" aria-hidden="true"></i>'
+        : '<i class="fa-regular fa-heart" aria-hidden="true"></i>';
+    };
+    update();
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (saved.has(slug)) saved.delete(slug); else saved.add(slug);
+      localStorage.setItem(key, JSON.stringify([...saved]));
+      update();
+    });
+  });
+</script>

@@ -1,0 +1,19 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import PlaceCard from "../../components/PlaceCard.astro";
+import { getPlaces, type Lang } from "../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+const result=await getPlaces({category:"food",page:1,pageSize:48});
+---
+<SiteLayout lang={lang} title={lang==="km"?"ម្ហូបខ្មែរ":"Cambodian Food"} variant="food">
+  <header class="page-header-block">
+    <h1>{lang==="km"?"រសជាតិ និងម្ហូបខ្មែរ":"Cambodian food & flavours"}</h1>
+    <p class="page-header-intro">{lang==="km"?"ស្វែងរកម្ហូបប្រចាំតំបន់ ភោជនីយដ្ឋាន និងទីផ្សារអាហារនៅទូទាំងប្រទេស។":"Explore Cambodian dishes, local flavours, markets and food-focused places across the country."}</p>
+  </header>
+  <section class="food-intro-panel">
+    <p>{lang==="km"?"ម្ហូបខ្មែរមានរសជាតិជ្រៅពីគ្រឿងទេស ស្លឹកឈើ និងគ្រឿងផ្សំតាមតំបន់។ កន្លែងខ្លះអាចផ្លាស់ប្តូរម៉ោងបើក ឬតម្លៃតាមរដូវ។":"Cambodian cooking draws deeply on herbs, spices and regional ingredients. Opening hours and prices can change by season."}</p>
+  </section>
+  <div class="review-grid">{result.items.map((place)=><PlaceCard place={place} lang={lang}/>)}</div>
+</SiteLayout>

@@ -1,10 +1,8 @@
-# Dependencies and generated Next.js output
+# Dependencies and generated Astro output
 node_modules/
-.next/
-.next-dev/
-out/
-build/
-uploads/
+dist/
+.astro/
+.vercel/
 
 # Local environment and credentials
 .env
@@ -13,10 +11,13 @@ uploads/
 
 # Local tooling and OS files
 .vscode/
+.idea/
 .DS_Store
 Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
-
 tsconfig.tsbuildinfo
+
+# Local uploads / data
+uploads/

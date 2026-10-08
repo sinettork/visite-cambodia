@@ -1,0 +1,23 @@
+---
+const path = (Astro.params.path ?? "").replace(/^\/+|\/+$/g, "");
+const query = new URLSearchParams(Astro.url.searchParams);
+const requested = query.get("lang");
+const lang = requested === "en" ? "en" : requested === "km" ? "km" : "km";
+query.delete("lang");
+
+const legacyRoutes = new Set([
+  "explore","discover","events","food","itineraries","laws","map","saved","tools"
+]);
+const isLegacyRoute =
+  legacyRoutes.has(path) ||
+  path.startsWith("destinations/") ||
+  path.startsWith("regions/") ||
+  path.startsWith("laws/");
+
+if (isLegacyRoute) {
+  const target = "/" + lang + "/" + path + (query.toString() ? "?" + query.toString() : "");
+  return Astro.redirect(target, 301);
+}
+
+return Astro.redirect("/" + lang, 404);
+---

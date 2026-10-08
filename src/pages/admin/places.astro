@@ -1,0 +1,21 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../lib/admin";
+const context=await getAdminContext(Astro.request,Astro.cookies);
+if(!context.user||!context.admin)return Astro.redirect("/admin/login");
+const status=Astro.url.searchParams.get("status");
+let query=context.supabase.from("places").select("id,slug,name_en,name_km,listing_type,publication_status,views,province:provinces!places_province_id_fkey(slug,name_en)").order("views",{ascending:false}).limit(100);
+if(status && ["draft","published","paused"].includes(status)) query=query.eq("publication_status",status);
+const {data:places}=await query;
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+<section class="admin-page">
+<header class="admin-page-heading"><h1>Places</h1><p>Manage destination and business listings without the legacy MySQL layer.</p></header>
+<section class="admin-records-panel">
+<div class="admin-filter-bar"><a class={"admin-tab" + (!status ? " is-active" : "")} href="/admin/places">All</a><a class={"admin-tab" + (status==="published" ? " is-active" : "")} href="/admin/places?status=published">Published</a><a class={"admin-tab" + (status==="draft" ? " is-active" : "")} href="/admin/places?status=draft">Drafts</a><a class={"admin-tab" + (status==="paused" ? " is-active" : "")} href="/admin/places?status=paused">Paused</a></div>
+<div class="admin-table-wrap"><table class="admin-data-table"><thead><tr><th>Name</th><th>Province</th><th>Type</th><th>Status</th><th>Views</th></tr></thead><tbody>
+{(places ?? []).map((place)=><tr><td><a class="admin-table-title" href={"/admin/places/" + place.id}>{place.name_en}<small>{place.name_km}</small></a></td><td>{place.province?.name_en ?? "—"}</td><td>{place.listing_type}</td><td>{place.publication_status}</td><td>{place.views}</td></tr>)}
+</tbody></table></div>
+</section>
+</section>
+</AdminLayout>

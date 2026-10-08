@@ -1,0 +1,29 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../lib/admin";
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+const { data: provinces } = await context.supabase.from("provinces").select("id,slug,name_en,name_km,banner_image_url").order("name_en");
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <header class="admin-page-heading"><h1>Provinces</h1><p>Manage the 25 province and capital-region guides used by the public site.</p></header>
+    <section class="admin-records-panel">
+      <div class="admin-table-wrap">
+        <table class="admin-data-table">
+          <thead><tr><th>Province</th><th>Slug</th><th>Banner</th><th></th></tr></thead>
+          <tbody>
+            {(provinces ?? []).map((province) => (
+              <tr>
+                <td><strong>{province.name_en}</strong><small>{province.name_km}</small></td>
+                <td>{province.slug}</td>
+                <td>{province.banner_image_url ? "Configured" : "Fallback"}</td>
+                <td><a class="admin-row-action" href={"/admin/provinces/" + province.id}>Open</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</AdminLayout>
