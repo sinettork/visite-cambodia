@@ -19,7 +19,7 @@ const rielBanknotes = [100, 500, 1000, 2000, 5000, 10000, 20000, 50000];
     </header>
 
     <section id="currency" class="tools-section">
-      <div class="section-head"><h2><i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i> {lang === "km" ? "ឧបករណ៍ប្តូរប្រាក់ ដុល្លារ (USD) ↔ រៀល (KHR)" : "Currency Converter (USD ↔ KHR)"}</h2></div>
+      <div class="section-head no-action"><h2 class="section-title"><i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i> {lang === "km" ? "ឧបករណ៍ប្តូរប្រាក់ ដុល្លារ (USD) ↔ រៀល (KHR)" : "Currency Converter (USD ↔ KHR)"}</h2></div>
       <div class="currency-converter-card">
         <div class="converter-header">
           <h3>{lang === "km" ? "ប្រាក់ដុល្លារ ↔ ប្រាក់រៀល" : "USD ↔ KHR"}</h3>
@@ -38,7 +38,7 @@ const rielBanknotes = [100, 500, 1000, 2000, 5000, 10000, 20000, 50000];
     </section>
 
     <section id="phrasebook" class="tools-section">
-      <div class="section-head"><h2><i class="fa-solid fa-comments" aria-hidden="true"></i> {lang === "km" ? "ឃ្លាសន្ទនាភាសាខ្មែរសំខាន់ៗ" : "Essential Khmer phrasebook"}</h2></div>
+      <div class="section-head no-action"><h2 class="section-title"><i class="fa-solid fa-comments" aria-hidden="true"></i> {lang === "km" ? "ឃ្លាសន្ទនាភាសាខ្មែរសំខាន់ៗ" : "Essential Khmer phrasebook"}</h2></div>
       <div class="phrasebook-card">
         <div class="phrasebook-header"><div><h3>{lang === "km" ? "ឃ្លាប្រចាំថ្ងៃសម្រាប់អ្នកដំណើរ" : "Practical daily phrases"}</h3><p class="phrasebook-intro">{lang === "km" ? "ស្វែងរកតាមអត្ថបទខ្មែរ សំឡេងអាន ឬអត្ថន័យជាភាសាអង់គ្លេស។" : "Search Khmer text, phonetics or English meaning."}</p></div><div class="phrasebook-search"><input id="phrase-search" type="search" placeholder={lang === "km" ? "ស្វែងរកពាក្យ..." : "Search phrases..."} /></div></div>
         <div class="phrase-category-tabs" role="tablist">{phrasebookCategories.map((category,index) => <button type="button" class={"cat-tab-btn" + (index === 0 ? " active" : "")} data-category-tab={index}>{lang === "km" ? category.category_km : category.category_en}</button>)}</div>
@@ -48,7 +48,7 @@ const rielBanknotes = [100, 500, 1000, 2000, 5000, 10000, 20000, 50000];
     </section>
 
     <section id="emergency" class="tools-section emergency-contacts-section">
-      <div class="section-head"><h2><i class="fa-solid fa-phone-volume" aria-hidden="true"></i> {lang === "km" ? "លេខទូរស័ព្ទសង្គ្រោះបន្ទាន់សំខាន់ៗ" : "Essential emergency contacts"}</h2></div>
+      <div class="section-head no-action"><h2 class="section-title"><i class="fa-solid fa-phone-volume" aria-hidden="true"></i> {lang === "km" ? "លេខទូរស័ព្ទសង្គ្រោះបន្ទាន់សំខាន់ៗ" : "Essential emergency contacts"}</h2></div>
       <p class="emergency-intro-text">{lang === "km" ? "សូមរក្សាទុកលេខទាំងនេះសម្រាប់តម្រូវការបន្ទាន់ ខណៈពេលធ្វើដំណើរនៅកម្ពុជា។" : "Keep these contacts handy for urgent assistance, tourist police or medical emergencies while travelling in Cambodia."}</p>
       <div class="emergency-cards-grid">{emergencyContacts.map((contact) => <div class={"emergency-card emergency-" + contact.category}><div class="emergency-icon-badge"><i class={contact.category === "police" ? "fa-solid fa-shield-halved" : contact.category === "medical" ? "fa-solid fa-truck-medical" : "fa-solid fa-fire-extinguisher"} aria-hidden="true"></i></div><div class="emergency-card-info"><h3>{lang === "km" ? contact.name_km : contact.name_en}</h3><p>{lang === "km" ? contact.description_km : contact.description_en}</p><a href={"tel:" + contact.number.replace(/\s+/g, "")} class="emergency-call-btn"><i class="fa-solid fa-phone" aria-hidden="true"></i> {contact.number}</a></div></div>)}</div>
     </section>
