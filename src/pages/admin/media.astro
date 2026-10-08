@@ -7,10 +7,8 @@ if (!context.user || !context.admin) return Astro.redirect("/admin/login");
 const media = [
   { path: "/images/angkor-wat-header.jpg", title: "Angkor Wat header" },
   { path: "/images/food/fish-amok.jpg", title: "Fish Amok" },
-  { path: "/images/food/beef-lok-lak.jpg", title: "Beef Lok Lak" },
   { path: "/images/food/kampot-pepper-crab.jpg", title: "Kampot pepper crab" },
   { path: "/images/food/kep-crab-market.jpg", title: "Kep Crab Market" },
-  { path: "/images/food/nom-banh-chok.jpg", title: "Nom Banh Chok" },
 ];
 ---
 
@@ -29,7 +27,7 @@ const media = [
       <div class="admin-media-grid" id="media-grid">
         {media.map((item) => (
           <article class="admin-media-card" data-media-search={(item.title + " " + item.path).toLowerCase()}>
-            <img src={item.path} alt="" loading="lazy" />
+            <img src={item.path} alt={item.title} loading="lazy" />
             <div class="admin-media-card-copy">
               <strong>{item.title}</strong>
               <span>{item.path}</span>

@@ -183,11 +183,11 @@ const siteClass = "site site-" + variant;
       mobileMenu?.addEventListener("click", () => {
         const open = mobileMenu.getAttribute("aria-expanded") === "true";
         mobileMenu.setAttribute("aria-expanded", String(!open));
-        siteNavigation?.classList.toggle("open", !open);
+        siteNavigation?.classList.toggle("is-open", !open);
       });
       const closeNavigation = () => {
         mobileMenu?.setAttribute("aria-expanded", "false");
-        siteNavigation?.classList.remove("open");
+        siteNavigation?.classList.remove("is-open");
         document.querySelectorAll<HTMLDetailsElement>(".nav-dropdown[open]").forEach((menu) => { menu.open = false; });
       };
       siteNavigation?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeNavigation));

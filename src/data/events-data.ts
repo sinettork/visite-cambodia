@@ -62,7 +62,7 @@ export const sampleEvents: FestivalEvent[] = [
     location_km: "មុខព្រះបរមរាជវាំង មាត់ទន្លេចតុមុខ រាជធានីភ្នំពេញ",
     location_en: "Riverfront in front of the Royal Palace, Phnom Penh",
     type: "national",
-    image_url: "/images/royal-palace.svg",
+    image_url: "/images/angkor-wat-header.jpg",
     summary_km: "ពិធីបុណ្យជាតិដ៏មហោឡារិក ដើម្បីរំលឹកដល់កងទ័ពជើងទឹកខ្មែរបុរាណ និងអបអរសាទរបាតុភូតធម្មជាតិដ៏កម្រនៃការប្តូរទិសដៅចរន្តទឹកទន្លេសាប។",
     summary_en: "Spectacular multi-day boat racing extravaganza commemorating ancient naval victories and celebrating the unique reversal of the Tonle Sap River flow.",
     highlights_km: [
@@ -92,7 +92,7 @@ export const sampleEvents: FestivalEvent[] = [
     location_km: "វត្តអារាមទូទាំងប្រទេសកម្ពុជា",
     location_en: "Buddhist pagodas nationwide",
     type: "traditional",
-    image_url: "/images/angkor-wat.svg",
+    image_url: "/images/angkor-wat-header.jpg",
     summary_km: "ពិធីបុណ្យសាសនាដ៏ពិសិដ្ឋបំផុត ដែលប្រជាជនខ្មែរទៅវត្តអារាម ដើម្បីវេរចង្ហាន់ដល់ព្រះសង្ឃ ឧទ្ទិសកុសលផលបុណ្យជូនដល់វិញ្ញាណក្ខន្ធបុព្វការីជន និងញាតិការ ៧ សន្តាន។",
     summary_en: "Deeply spiritual 15-day religious period where families visit pagodas at dawn to offer food and transfer merits to departed ancestors and relatives.",
     highlights_km: [
@@ -120,7 +120,7 @@ export const sampleEvents: FestivalEvent[] = [
     location_km: "ខេត្តតំបន់ឆ្នេរសមុទ្រកម្ពុជា",
     location_en: "Coastal provinces (Sihanoukville, Kep, Kampot, Koh Kong)",
     type: "cultural",
-    image_url: "/images/koh-rong.svg",
+    image_url: "/images/food/kep-crab-market.jpg",
     summary_km: "ព្រឹត្តិការណ៍ទេសចរណ៍ និងកីឡាប្រចាំឆ្នាំ ដើម្បីលើកកម្ពស់តំបន់ឆ្នេរសមុទ្រកម្ពុជាដែលជាសមាជិកក្លឹបឆ្នេរសមុទ្រដែលស្អាតបំផុតនៅលើពិភពលោក។",
     summary_en: "Annual coastal tourism festival featuring marine sports, seafood exhibitions, live concerts, and beach fireworks.",
     highlights_km: [
@@ -148,7 +148,7 @@ export const sampleEvents: FestivalEvent[] = [
     location_km: "បណ្តាខេត្តជាប់ដងទន្លេ (កំពង់ចាម, ក្រចេះ, ស្ទឹងត្រែង, កណ្ដាល, សៀមរាប...)",
     location_en: "Riverine provinces along the Mekong and Tonle Sap",
     type: "cultural",
-    image_url: "/images/bokor-national-park.svg",
+    image_url: "/images/food/kampot-pepper-crab.jpg",
     summary_km: "ព្រឹត្តិការណ៍អបអរសាទរធនធានធម្មជាតិ និងជីវភាពរស់នៅតាមដងទន្លេមេគង្គ និងទន្លេសាប ដោយមានការតាំងពិព័រណ៍ម្ហូប និងសិល្បៈ។",
     summary_en: "Eco-tourism celebration highlighting the ecological value of Cambodia's waterways, local freshwater gastronomy, and river heritage.",
     highlights_km: [
