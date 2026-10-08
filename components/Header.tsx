@@ -52,6 +52,15 @@ export default function Header({
   const isPlanRoute = routePath === "/itineraries" || routePath === "/events";
   const languageHref = (nextLang: Lang) => `/${nextLang}${routePath === "/" ? "" : routePath}`;
 
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeAllMenus();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   return (
     <>
       <a className="skip-link" href="#main-content">{lang === "km" ? "រំលងទៅមាតិកា" : "Skip to content"}</a>
