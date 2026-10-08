@@ -1,0 +1,39 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../lib/admin";
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <header class="admin-page-heading"><h1>Settings</h1><p>Runtime and migration status for the production platform.</p></header>
+    <div class="admin-settings-grid">
+      <section class="admin-panel">
+        <h2>Platform</h2>
+        <dl class="admin-settings-list">
+          <div><dt>Framework</dt><dd>Astro 7</dd></div>
+          <div><dt>Database</dt><dd>Supabase PostgreSQL 17</dd></div>
+          <div><dt>Authentication</dt><dd>Supabase Auth</dd></div>
+          <div><dt>Deployment</dt><dd>Vercel</dd></div>
+        </dl>
+      </section>
+      <section class="admin-panel">
+        <h2>Project</h2>
+        <dl class="admin-settings-list">
+          <div><dt>Project</dt><dd>cambo-turism</dd></div>
+          <div><dt>Public URL</dt><dd>votiwwvilkrabcrcrkzy.supabase.co</dd></div>
+          <div><dt>Current admin</dt><dd>{context.admin.display_name}</dd></div>
+          <div><dt>Role</dt><dd>{context.admin.role}</dd></div>
+        </dl>
+      </section>
+      <section class="admin-panel admin-settings-wide">
+        <h2>Operational notes</h2>
+        <ul class="admin-check-list">
+          <li class="admin-check is-ok"><span>✓</span><div><strong>RLS enabled</strong><small>Public content is readable; writes require an authenticated admin role.</small></div></li>
+          <li class="admin-check is-ok"><span>✓</span><div><strong>Legacy Next/MySQL runtime removed</strong><small>The migration branch no longer shares the old Next or MySQL runtime.</small></div></li>
+          <li class="admin-check is-warning"><span>!</span><div><strong>Media uploads</strong><small>Versioned public images remain available. Supabase Storage upload wiring is a separate production phase.</small></div></li>
+        </ul>
+      </section>
+    </div>
+  </section>
+</AdminLayout>
