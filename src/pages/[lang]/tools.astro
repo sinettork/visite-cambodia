@@ -1,0 +1,32 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { phrasebookCategories, emergencyContacts } from "../../data/tools-data";
+import type { Lang } from "../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+---
+<SiteLayout lang={lang} title={lang==="km"?"ឧបករណ៍ធ្វើដំណើរ":"Travel Tools"} variant="tools">
+  <header class="page-header-block"><h1>{lang==="km"?"ឧបករណ៍ធ្វើដំណើរ":"Travel tools"}</h1><p class="page-header-intro">{lang==="km"?"ឧបករណ៍សាមញ្ញសម្រាប់អ្នកដំណើរ៖ ប្តូរប្រាក់ ឃ្លាខ្មែរ និងលេខសង្គ្រោះបន្ទាន់។":"Practical tools for travellers: currency, Khmer phrases and emergency contacts."}</p></header>
+
+  <section id="currency" class="tools-section"><div class="section-head"><h2>{lang==="km"?"ប្តូរប្រាក់ USD ↔ KHR":"Currency converter USD ↔ KHR"}</h2></div>
+    <div class="converter-grid"><label>USD<input id="usd" inputmode="decimal" value="1" /></label><span>=</span><label>KHR<input id="khr" inputmode="decimal" value="4000" /></label></div>
+    <p class="tools-note">{lang==="km"?"អត្រាឧទាហរណ៍ប៉ុណ្ណោះ។ សូមពិនិត្យអត្រាប្តូរប្រាក់ពិតប្រាកដ។":"Illustrative rate only. Check the current rate before making a transaction."}</p>
+  </section>
+
+  <section id="phrasebook" class="tools-section"><div class="section-head"><h2>{lang==="km"?"ឃ្លាសន្ទនាខ្មែរសំខាន់ៗ":"Khmer phrasebook"}</h2></div>
+    {phrasebookCategories.map((category)=><div class="phrasebook-category"><h3>{lang==="km"?category.category_km:category.category_en}</h3><div class="phrase-grid">{category.phrases.slice(0,8).map((phrase)=><div class="phrase-card"><strong>{phrase.km}</strong><small>{phrase.phonetic}</small><span>{phrase.en}</span></div>)}</div></div>)}
+  </section>
+
+  <section id="emergency" class="tools-section"><div class="section-head"><h2>{lang==="km"?"លេខសង្គ្រោះបន្ទាន់":"Emergency directory"}</h2></div>
+    <div class="emergency-grid">{emergencyContacts.map((contact)=><a class="emergency-card" href={"tel:"+contact.number.replace(/[^\d+]/g,"")}><strong>{lang==="km"?contact.name_km:contact.name_en}</strong><b>{contact.number}</b><span>{lang==="km"?contact.description_km:contact.description_en}</span></a>)}</div>
+  </section>
+
+  <script>
+    const usd = document.querySelector("#usd");
+    const khr = document.querySelector("#khr");
+    const rate = 4000;
+    usd?.addEventListener("input", () => { if (khr && usd) khr.value = String((Number(usd.value || 0) * rate).toFixed(0)); });
+    khr?.addEventListener("input", () => { if (usd && khr) usd.value = String((Number(khr.value || 0) / rate).toFixed(2)); });
+  </script>
+</SiteLayout>
