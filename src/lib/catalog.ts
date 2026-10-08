@@ -157,3 +157,20 @@ export async function getPlaceGuide(placeId: number) {
   if (error) throw error;
   return data;
 }
+
+export async function getNearbyPlaces(place: Place, limit = 6) {
+  const result = await getPlaces({ page: 1, pageSize: 48 });
+  if (place.lat == null || place.lng == null) return result.items.slice(0, limit);
+  const lat = Number(place.lat);
+  const lng = Number(place.lng);
+  const toRad = (n: number) => (n * Math.PI) / 180;
+  const distance = (item: Place) => {
+    if (item.lat == null || item.lng == null || item.slug === place.slug) return Number.POSITIVE_INFINITY;
+    const pLat = Number(item.lat);
+    const pLng = Number(item.lng);
+    const a = Math.sin(toRad(pLat - lat) / 2) ** 2 +
+      Math.cos(toRad(lat)) * Math.cos(toRad(pLat)) * Math.sin(toRad(pLng - lng) / 2) ** 2;
+    return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  };
+  return result.items.sort((a, b) => distance(a) - distance(b)).slice(0, limit);
+}
