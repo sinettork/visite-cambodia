@@ -1,0 +1,8 @@
+---
+const requested = Astro.url.searchParams.get("lang");
+const lang = requested === "en" ? "en" : "km";
+const query = new URLSearchParams(Astro.url.searchParams);
+query.delete("lang");
+const target = "/" + lang + (query.toString() ? "?" + query.toString() : "");
+return Astro.redirect(target, 301);
+---
