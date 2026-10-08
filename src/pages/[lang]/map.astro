@@ -1,0 +1,14 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { getPlaces, type Lang } from "../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+const result=await getPlaces({page:1,pageSize:48});
+---
+<SiteLayout lang={lang} title={lang==="km"?"ផែនទី":"Places Map"} variant="map">
+  <header class="page-header-block"><h1>{lang==="km"?"ផែនទីកន្លែងទេសចរណ៍":"Explore on the map"}</h1><p class="page-header-intro">{lang==="km"?"មើលគោលដៅជាមួយកូអរដោនេ និងបើកវានៅលើ Google Maps។":"Browse mapped places and open any location in Google Maps."}</p></header>
+  <div class="map-place-list">
+    {result.items.map((place)=><article class="map-place-row"><div><h2>{lang==="km"?place.name_km:place.name_en}</h2><p>{place.province?.name_en ?? ""}</p></div><a href={"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(String(place.lat)+","+String(place.lng))} target="_blank" rel="noopener noreferrer">Open map ↗</a></article>)}
+  </div>
+</SiteLayout>
