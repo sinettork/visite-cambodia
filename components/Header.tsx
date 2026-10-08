@@ -20,6 +20,7 @@ export default function Header({
   const [open, setOpen] = useState(false);
   const [savedCount, setSavedCount] = useState<number>(0);
   const guidesMenu = useRef<HTMLDetailsElement>(null);
+  const planMenu = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
   const t = T[lang];
 
@@ -42,11 +43,13 @@ export default function Header({
   const closeAllMenus = () => {
     setOpen(false);
     if (guidesMenu.current) guidesMenu.current.open = false;
+    if (planMenu.current) planMenu.current.open = false;
   };
 
   const routePath = pathname.replace(/^\/(?:km|en)(?=\/|$)/, "") || "/";
   const isProvincesRoute = routePath.startsWith("/regions/");
   const isGuidesRoute = routePath === "/discover" || routePath === "/food" || routePath === "/laws" || routePath.startsWith("/laws/") || routePath === "/tools";
+  const isPlanRoute = routePath === "/itineraries" || routePath === "/events";
   const languageHref = (nextLang: Lang) => `/${nextLang}${routePath === "/" ? "" : routePath}`;
 
   return (
@@ -130,27 +133,25 @@ export default function Header({
           {lang === "km" ? "ផែនទី" : "Map"}
         </Link>
 
-        {/* 5. Itineraries */}
-        <Link
-          href={`/${lang}/itineraries`}
-          onClick={closeAllMenus}
-          className={routePath === "/itineraries" ? "current" : ""}
-          aria-current={routePath === "/itineraries" ? "page" : undefined}
-        >
-          {t.itineraries}
-        </Link>
+        {/* 5. Trip planning */}
+        <details ref={planMenu} className={`nav-dropdown${isPlanRoute ? " current" : ""}`}>
+          <summary aria-label={lang === "km" ? "រៀបចំដំណើរ" : "Plan your trip"} aria-current={isPlanRoute ? "page" : undefined}>
+            {lang === "km" ? "រៀបចំដំណើរ" : "Plan"} <i className="fa-solid fa-chevron-down" aria-hidden="true" style={{ fontSize: "0.75em", marginLeft: 4 }} />
+          </summary>
+          <div className="nav-dropdown-menu nav-dropdown-plan-menu">
+            <Link href={`/${lang}/itineraries`} onClick={closeAllMenus} aria-current={routePath === "/itineraries" ? "page" : undefined}>
+              {t.itineraries}
+            </Link>
+            <Link href={`/${lang}/events`} onClick={closeAllMenus} aria-current={routePath === "/events" ? "page" : undefined}>
+              {t.events}
+            </Link>
+            <Link href={`/${lang}/map`} onClick={closeAllMenus} aria-current={routePath === "/map" ? "page" : undefined}>
+              {lang === "km" ? "ផែនទី" : "Map"}
+            </Link>
+          </div>
+        </details>
 
-        {/* 6. Events & Festivals */}
-        <Link
-          href={`/${lang}/events`}
-          onClick={closeAllMenus}
-          className={routePath === "/events" ? "current" : ""}
-          aria-current={routePath === "/events" ? "page" : undefined}
-        >
-          {t.events}
-        </Link>
-
-        {/* 7. Saved Places */}
+        {/* 6. Saved Places */}
         <Link
           href={`/${lang}/saved`}
           onClick={closeAllMenus}
@@ -161,7 +162,7 @@ export default function Header({
           {savedCount > 0 && <span className="nav-saved-badge">{savedCount}</span>}
         </Link>
 
-        {/* 8. Guides & Tools Dropdown */}
+        {/* 7. Guides & Tools Dropdown */}
         <details ref={guidesMenu} className={`nav-dropdown${isGuidesRoute ? " current" : ""}`}>
           <summary aria-label={t.guideAndTools} aria-current={isGuidesRoute ? "page" : undefined}>
             {t.guideAndTools} <i className="fa-solid fa-chevron-down" aria-hidden="true" style={{ fontSize: "0.75em", marginLeft: 4 }} />
