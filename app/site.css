@@ -6,7 +6,7 @@
   --text-secondary: #777;
   --border: #e6e6e6;
   --accent: #ee7b20;
-  font-family: var(--font-roboto), Arial, sans-serif;
+  font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif;
   color: #444;
   background: var(--page-bg);
   font-synthesis: none;
@@ -6672,5 +6672,336 @@ main {
 
   .admin-bulk-toolbar > span {
     flex: 1 0 100%;
+  }
+}
+
+
+/* ==========================================================================
+   Production UX/UI pass — typography, hierarchy, responsive behavior
+   ========================================================================== */
+
+html[lang="km"] {
+  font-family: var(--font-battambang), var(--font-roboto), sans-serif;
+}
+
+body {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+main {
+  padding-block: clamp(24px, 3vw, 36px) 52px;
+}
+
+.header-inner {
+  min-height: 84px;
+  height: auto;
+}
+
+.logo {
+  width: 220px;
+  min-height: 54px;
+  height: auto;
+}
+
+.search {
+  min-height: 42px;
+  height: 42px;
+}
+
+.search input {
+  font-size: 14px;
+}
+
+.search select {
+  font-size: 12px;
+}
+
+.nav a,
+.nav > .nav-dropdown > summary {
+  min-height: 44px;
+  font-size: 13px;
+}
+
+.section-head h2 {
+  font-size: clamp(21px, 2.2vw, 26px);
+}
+
+.review h3 {
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.review-meta,
+.discover-place span,
+.news-meta {
+  font-size: 12px;
+}
+
+.region-section-intro,
+.discover-section p,
+.discover-page-heading p,
+.food-dish p,
+.food-tips-card p,
+.food-dietary-note p,
+.map-intro-text,
+.itinerary-overview,
+.event-summary,
+.saved-intro {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.review-thumb-wrapper,
+.news-image {
+  background: #eee;
+}
+
+.review-thumb-wrapper img,
+.news-image img,
+.home-region-links img {
+  display: block;
+}
+
+.home-region-links a {
+  min-height: 150px;
+}
+
+.browse-toolbar {
+  gap: 10px;
+}
+
+.place-type-filters a,
+.clear-filters,
+.map-pill-btn,
+.btn-reset-map-filters {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.destination-actions {
+  gap: 10px;
+}
+
+.destination-map-link,
+.destination-region-link {
+  min-height: 40px;
+}
+
+.footer-group a {
+  font-size: 13px;
+}
+
+/* Public navigation: keep all existing features, but make the primary row easier to scan. */
+.nav {
+  overflow: visible;
+}
+
+.nav > a,
+.nav > .nav-dropdown {
+  min-width: 0;
+}
+
+.nav > a {
+  flex: 1 1 0;
+}
+
+.nav > .nav-dropdown > summary {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  color: #eee;
+  font: 700 13px var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+  cursor: pointer;
+}
+
+.nav > .nav-dropdown > summary:hover,
+.nav > .nav-dropdown[open] > summary,
+.nav > .nav-dropdown.current > summary {
+  color: #fff;
+  background: #ea7925;
+}
+
+.nav-dropdown-menu a {
+  min-height: 40px;
+  font-size: 13px;
+}
+
+.favorite-btn {
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 1100px) {
+  .header-inner {
+    padding-inline: 18px;
+  }
+
+  .logo {
+    width: 195px;
+  }
+
+  .columns {
+    grid-template-columns: 178px minmax(0, 1fr) 210px;
+  }
+
+  main {
+    padding-inline: 22px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header-inner {
+    gap: 12px;
+  }
+
+  .search {
+    flex-basis: 320px;
+  }
+
+  .columns {
+    grid-template-columns: 160px minmax(0, 1fr);
+  }
+
+  .right-side {
+    display: none;
+  }
+
+  .review-grid {
+    gap: 14px;
+  }
+}
+
+@media (max-width: 760px) {
+  body {
+    font-size: 15px;
+  }
+
+  .header-inner {
+    min-height: 96px;
+  }
+
+  .logo {
+    width: auto;
+    flex: 1 1 auto;
+  }
+
+  .nav > a,
+  .nav > .nav-dropdown {
+    flex: 0 0 50%;
+  }
+
+  .nav > a {
+    min-height: 46px;
+  }
+
+  .nav > .nav-dropdown > summary {
+    justify-content: flex-start;
+    padding-inline: 12px;
+  }
+
+  .review-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  main {
+    padding-inline: 18px;
+  }
+}
+
+@media (max-width: 620px) {
+  .header-inner {
+    min-height: 112px;
+    padding-inline: 14px;
+  }
+
+  .logo {
+    min-height: 36px;
+    font-size: 20px;
+  }
+
+  .search {
+    min-height: 40px;
+    height: 40px;
+  }
+
+  .search input {
+    font-size: 13px;
+  }
+
+  .mobile-menu {
+    min-height: 46px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  .nav a,
+  .nav > .nav-dropdown > summary {
+    min-height: 46px;
+    font-size: 13px;
+  }
+
+  .columns {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .left-side {
+    order: 2;
+  }
+
+  main {
+    order: 1;
+    padding: 22px 14px 38px;
+  }
+
+  .review-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .review {
+    padding: 8px;
+  }
+
+  .review h3 {
+    font-size: 18px;
+  }
+
+  .section-head {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .section-head h2 {
+    font-size: 22px;
+  }
+
+  .browse-heading h1,
+  .directory-heading h1,
+  .saved-header-row h1 {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+
+  .browse-query {
+    overflow-wrap: anywhere;
+  }
+
+  .site-footer {
+    padding-top: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
