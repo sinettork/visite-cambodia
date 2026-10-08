@@ -86,7 +86,10 @@ const siteClass = "site site-" + variant;
           </div>
         </details>
 
-        <a href={"/" + lang + "/saved"} class={cleanPath === "/saved" ? "current" : ""}>{t.savedPlaces}</a>
+        <a href={"/" + lang + "/saved"} class={"nav-saved-link" + (cleanPath === "/saved" ? " current" : "")}>
+          <span>{t.savedPlaces}</span>
+          <span class="nav-saved-badge" data-saved-count hidden>0</span>
+        </a>
 
         <details class="nav-dropdown">
           <summary>{t.guideAndTools} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
@@ -177,6 +180,42 @@ const siteClass = "site site-" + variant;
           siteNavigation?.classList.remove("is-open");
         });
       });
+
+      const favoriteKey = "visit-cambodia-favorites";
+      const savedButtons = () => document.querySelectorAll<HTMLButtonElement>("[data-favorite]");
+      const refreshFavorites = () => {
+        const saved = new Set<string>(JSON.parse(localStorage.getItem(favoriteKey) ?? "[]"));
+        savedButtons().forEach((button) => {
+          const slug = button.dataset.favorite;
+          if (!slug) return;
+          const active = saved.has(slug);
+          button.setAttribute("aria-pressed", String(active));
+          button.innerHTML = active
+            ? '<i class="fa-solid fa-heart" aria-hidden="true"></i>'
+            : '<i class="fa-regular fa-heart" aria-hidden="true"></i>';
+        });
+        const count = saved.size;
+        document.querySelectorAll<HTMLElement>("[data-saved-count]").forEach((badge) => {
+          badge.textContent = String(count);
+          badge.hidden = count === 0;
+        });
+      };
+      document.addEventListener("click", (event) => {
+        const target = event.target as HTMLElement;
+        const button = target.closest<HTMLButtonElement>("[data-favorite]");
+        if (!button) return;
+        event.preventDefault();
+        const slug = button.dataset.favorite;
+        if (!slug) return;
+        const saved = new Set<string>(JSON.parse(localStorage.getItem(favoriteKey) ?? "[]"));
+        if (saved.has(slug)) saved.delete(slug); else saved.add(slug);
+        localStorage.setItem(favoriteKey, JSON.stringify([...saved]));
+        refreshFavorites();
+        window.dispatchEvent(new CustomEvent("cambodia_favorites_updated", { detail: { favorites: [...saved] } }));
+      });
+      refreshFavorites();
+      window.addEventListener("storage", refreshFavorites);
+      window.addEventListener("cambodia_favorites_updated", refreshFavorites);
 
       const btn = document.querySelector(".back-to-top");
       const onScroll = () => btn?.classList.toggle("visible", window.scrollY > 500);
