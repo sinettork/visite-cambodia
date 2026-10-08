@@ -35,12 +35,31 @@ const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
     {q && <p class="browse-query">{t.selectedSearch}: <strong>{q}</strong></p>}
   </header>
 
-  <div class="browse-toolbar">
+  <div class="browse-toolbar browse-toolbar-enhanced">
     <nav class="place-type-filters" aria-label={t.browseByType}>
       <a href={buildExploreUrl(lang, { q, province, category })} class={!type ? "active" : ""}>{t.allTypes}</a>
       {Object.entries(t.placeTypes).map(([value, label]) => <a href={buildExploreUrl(lang, { q, province, category, type: value })} class={type === value ? "active" : ""}>{label}</a>)}
     </nav>
-    {(q || province || category || type) && <a class="clear-filters" href={"/" + lang + "/explore"}>{t.clearFilters}</a>}
+
+    <form class="browse-refinement-form" method="get" action={"/" + lang + "/explore"}>
+      {q && <input type="hidden" name="q" value={q} />}
+      {type && <input type="hidden" name="type" value={type} />}
+      <label>
+        <span>{t.provinces}</span>
+        <select name="province" onchange="this.form.submit()">
+          <option value="">{t.all}</option>
+          {provinces.map((item) => <option value={item.slug} selected={province === item.slug}>{lang === "km" ? item.name_km : item.name_en}</option>)}
+        </select>
+      </label>
+      <label>
+        <span>{t.category}</span>
+        <select name="category" onchange="this.form.submit()">
+          <option value="">{t.all}</option>
+          {Object.entries(t.cats).map(([value, label]) => <option value={value} selected={category === value}>{label}</option>)}
+        </select>
+      </label>
+      {(q || province || category || type) && <a class="clear-filters" href={"/" + lang + "/explore"}>{t.clearFilters}</a>}
+    </form>
   </div>
 
   <div class="section-head browse-results-head"><h2>{t.results}</h2><span>{result.total}</span></div>
