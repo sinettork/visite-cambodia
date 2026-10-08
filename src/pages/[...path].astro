@@ -19,5 +19,6 @@ if (isLegacyRoute) {
   return Astro.redirect(target, 301);
 }
 
-return Astro.redirect("/" + lang, 404);
+Astro.response.status = 404;
+return Astro.rewrite("/404");
 ---
