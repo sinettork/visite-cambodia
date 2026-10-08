@@ -1,5 +1,13 @@
 @import url("/fonts/fonts.css");
 
+:root {
+  --font-roboto: "Roboto", Arial, sans-serif;
+  --font-roboto-condensed: "Roboto Condensed", "Arial Narrow", sans-serif;
+  --font-battambang: "Battambang", "Noto Sans Khmer", sans-serif;
+  --font-noto-sans-khmer: "Noto Sans Khmer", sans-serif;
+}
+
+
 /* ==========================================================================
    Admin Design System — Clean, Professional, Operational
    - No badge cards, no uppercase
