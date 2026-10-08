@@ -3391,3 +3391,155 @@
     border-bottom: 0;
   }
 }
+
+/* ==========================================================================
+   Admin authentication
+   ========================================================================== */
+
+.admin-auth-page {
+  min-height: 100vh;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  color: var(--admin-text-main);
+  background: #fffaf6;
+  font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.admin-auth-page,
+.admin-auth-page * {
+  box-sizing: border-box;
+}
+
+.admin-login-page {
+  width: min(100%, 440px);
+}
+
+.admin-login-card {
+  width: 100%;
+  padding: 32px;
+  border: 1px solid var(--admin-border-soft);
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+.admin-login-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  color: var(--admin-text-main);
+}
+
+.admin-login-brand strong {
+  font: 700 18px/1.1 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+}
+
+.admin-login-brand .admin-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #ffffff;
+  background: var(--admin-orange);
+  font-size: 12px;
+}
+
+.admin-login-card h1 {
+  margin: 0;
+  color: var(--admin-text-main);
+  font: 700 30px/1.1 var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+}
+
+.admin-login-card > p {
+  margin: 8px 0 22px;
+  color: var(--admin-text-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.admin-login-form {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-login-form label {
+  margin-top: 6px;
+  color: var(--admin-text-main);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.admin-login-form input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--admin-border-mid);
+  border-radius: 3px;
+  color: var(--admin-text-main);
+  background: #ffffff;
+  font: inherit;
+  font-size: 14px;
+}
+
+.admin-login-form input:hover {
+  border-color: #c8b9ad;
+}
+
+.admin-login-form input:focus {
+  border-color: var(--admin-orange);
+  outline: none;
+  background: #fffdfb;
+  box-shadow: inset 0 0 0 1px var(--admin-orange);
+}
+
+.admin-login-form .admin-primary-button {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 3px;
+  color: #ffffff;
+  background: var(--admin-orange);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-login-form .admin-primary-button:hover {
+  background: var(--admin-blue-hover);
+}
+
+.admin-login-back {
+  display: inline-flex;
+  margin-top: 20px;
+  color: var(--admin-text-muted);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.admin-login-back:hover {
+  color: var(--admin-orange);
+}
+
+.admin-auth-page .admin-alert {
+  margin-bottom: 16px;
+}
+
+@media (max-width: 520px) {
+  .admin-auth-page {
+    padding: 20px 12px;
+  }
+
+  .admin-login-card {
+    padding: 24px 18px;
+  }
+
+  .admin-login-card h1 {
+    font-size: 26px;
+  }
+}
+
