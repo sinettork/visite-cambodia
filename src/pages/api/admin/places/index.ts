@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   const { data, error } = await context.supabase.from("places").insert(payload).select("id").single();
   if (error || !data) {
-    return redirect("/admin/places/new?error=" + encodeURIComponent(error?.message ?? "Unable to create place."), 303);
+    return redirect("/admin/places/new?error=create-failed", 303);
   }
 
   await context.supabase.from("admin_audit_log").insert({
