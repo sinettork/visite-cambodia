@@ -1,7 +1,7 @@
 ---
 import "leaflet/dist/leaflet.css";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import { getPlaces, type Lang } from "../../lib/catalog";
+import { getAllPlaces, type Lang } from "../../lib/catalog";
 
 export const prerender = true;
 export function getStaticPaths() {
@@ -9,8 +9,8 @@ export function getStaticPaths() {
 }
 
 const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
-const result = await getPlaces({ page: 1, pageSize: 48 });
-const places = result.items.filter((place) => Number.isFinite(Number(place.lat)) && Number.isFinite(Number(place.lng)));
+const allPlaces = await getAllPlaces();
+const places = allPlaces.filter((place) => Number.isFinite(Number(place.lat)) && Number.isFinite(Number(place.lng)));
 ---
 <SiteLayout lang={lang} title={lang === "km" ? "ផែនទី" : "Places Map"} variant="map">
   <header class="browse-heading directory-heading">
