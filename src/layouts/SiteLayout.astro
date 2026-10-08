@@ -26,8 +26,9 @@ const provinces = await getProvinces();
 const popular = await getPopular();
 const cleanPath = Astro.url.pathname.replace(/^\/(?:km|en)(?=\/|$)/, "") || "/";
 const otherLang = lang === "en" ? "km" : "en";
+const isExploreRoute = ["/explore", "/regions/", "/destinations/", "/map", "/food"].some((path) => cleanPath === path || cleanPath.startsWith(path));
 const isPlanRoute = cleanPath === "/itineraries" || cleanPath === "/events";
-const isGuideRoute = ["/discover", "/food", "/laws", "/tools"].some((path) => cleanPath === path || cleanPath.startsWith(path + "/"));
+const isGuideRoute = ["/discover", "/laws", "/tools"].some((path) => cleanPath === path || cleanPath.startsWith(path + "/"));
 
 const pageTitle = title ? title + " | Visit Cambodia" : "Visit Cambodia | ទេសចរណ៍កម្ពុជា";
 const pageDescription = description ?? "Discover places to visit, food, stays and travel ideas across Cambodia.";
@@ -80,8 +81,16 @@ const siteClass = "site site-" + variant;
 
       <nav id="site-navigation" class="nav" aria-label={lang === "km" ? "ការរុករកចម្បង" : "Main navigation"}>
         <a href={"/" + lang} class={cleanPath === "/" ? "current" : ""}>{t.home}</a>
-        <a href={"/" + lang + "/explore"} class={cleanPath === "/explore" ? "current" : ""}>{t.destinations}</a>
-        <a href={"/" + lang + "/#province-list"} class={cleanPath.startsWith("/regions/") ? "current" : ""}>{t.provinces}</a>
+
+        <details class={"nav-dropdown" + (isExploreRoute ? " current" : "")}>
+          <summary aria-current={isExploreRoute ? "page" : undefined}>{t.explore} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <div class="nav-dropdown-menu nav-dropdown-explore-menu">
+            <a href={"/" + lang + "/explore"}>{t.destinations}</a>
+            <a href={"/" + lang + "/#province-list"}>{t.provinces}</a>
+            <a href={"/" + lang + "/map"}>{lang === "km" ? "ផែនទី" : "Map"}</a>
+            <a href={"/" + lang + "/food"}>{t.cats.food}</a>
+          </div>
+        </details>
 
         <details class={"nav-dropdown" + (isPlanRoute ? " current" : "")}>
           <summary aria-current={isPlanRoute ? "page" : undefined}>{lang === "km" ? "រៀបចំដំណើរ" : "Plan"} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
@@ -97,18 +106,15 @@ const siteClass = "site site-" + variant;
         </a>
 
         <details class={"nav-dropdown" + (isGuideRoute ? " current" : "")}>
-          <summary aria-current={isGuideRoute ? "page" : undefined}>{t.guideAndTools} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <summary aria-current={isGuideRoute ? "page" : undefined}>{lang === "km" ? "មគ្គុទ្ទេសក៍" : "Guides"} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
           <div class="nav-dropdown-menu nav-dropdown-guides-menu">
             <a href={"/" + lang + "/discover"}>{t.discover}</a>
-            <a href={"/" + lang + "/food"}>{t.cats.food}</a>
             <a href={"/" + lang + "/laws"}>{lang === "km" ? "ច្បាប់សម្រាប់អ្នកទេសចរណ៍" : "Travel laws"}</a>
-            <a href={"/" + lang + "/tools#currency"}>{lang === "km" ? "ប្តូរប្រាក់" : "Currency Converter"}</a>
-            <a href={"/" + lang + "/tools#phrasebook"}>{lang === "km" ? "ឃ្លាសន្ទនាខ្មែរ" : "Khmer Phrasebook"}</a>
-            <a href={"/" + lang + "/tools#emergency"}>{lang === "km" ? "លេខសង្គ្រោះបន្ទាន់" : "Emergency Directory"}</a>
+            <a href={"/" + lang + "/tools#currency"}>{lang === "km" ? "ប្តូរប្រាក់" : "Currency converter"}</a>
+            <a href={"/" + lang + "/tools#phrasebook"}>{lang === "km" ? "ឃ្លាសន្ទនាខ្មែរ" : "Khmer phrasebook"}</a>
+            <a href={"/" + lang + "/tools#emergency"}>{lang === "km" ? "លេខសង្គ្រោះបន្ទាន់" : "Emergency contacts"}</a>
           </div>
         </details>
-
-        <a href={"/" + lang + "/map"} class={cleanPath === "/map" ? "current" : ""}>{lang === "km" ? "ផែនទី" : "Map"}</a>
       </nav>
 
       <div class="columns">
