@@ -24,6 +24,9 @@ const provinces = await getProvinces();
 const popular = await getPopular();
 const cleanPath = Astro.url.pathname.replace(/^\/(?:km|en)(?=\/|$)/, "") || "/";
 const otherLang = lang === "en" ? "km" : "en";
+const isPlanRoute = cleanPath === "/itineraries" || cleanPath === "/events";
+const isGuideRoute = ["/discover", "/food", "/laws", "/tools"].some((path) => cleanPath === path || cleanPath.startsWith(path + "/"));
+
 const pageTitle = title ? title + " | Visit Cambodia" : "Visit Cambodia | ទេសចរណ៍កម្ពុជា";
 const pageDescription = description ?? "Discover places to visit, food, stays and travel ideas across Cambodia.";
 const langHref = (nextLang: Lang) => "/" + nextLang + (cleanPath === "/" ? "" : cleanPath);
@@ -78,8 +81,8 @@ const siteClass = "site site-" + variant;
         <a href={"/" + lang + "/explore"} class={cleanPath === "/explore" ? "current" : ""}>{t.destinations}</a>
         <a href={"/" + lang + "/#province-list"} class={cleanPath.startsWith("/regions/") ? "current" : ""}>{t.provinces}</a>
 
-        <details class="nav-dropdown">
-          <summary>{lang === "km" ? "រៀបចំដំណើរ" : "Plan"} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+        <details class={"nav-dropdown" + (isPlanRoute ? " current" : "")}>
+          <summary aria-current={isPlanRoute ? "page" : undefined}>{lang === "km" ? "រៀបចំដំណើរ" : "Plan"} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
           <div class="nav-dropdown-menu nav-dropdown-plan-menu">
             <a href={"/" + lang + "/itineraries"}>{t.itineraries}</a>
             <a href={"/" + lang + "/events"}>{t.events}</a>
@@ -91,8 +94,8 @@ const siteClass = "site site-" + variant;
           <span class="nav-saved-badge" data-saved-count hidden>0</span>
         </a>
 
-        <details class="nav-dropdown">
-          <summary>{t.guideAndTools} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+        <details class={"nav-dropdown" + (isGuideRoute ? " current" : "")}>
+          <summary aria-current={isGuideRoute ? "page" : undefined}>{t.guideAndTools} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
           <div class="nav-dropdown-menu nav-dropdown-guides-menu">
             <a href={"/" + lang + "/discover"}>{t.discover}</a>
             <a href={"/" + lang + "/food"}>{t.cats.food}</a>
@@ -174,11 +177,17 @@ const siteClass = "site site-" + variant;
         mobileMenu.setAttribute("aria-expanded", String(!open));
         siteNavigation?.classList.toggle("is-open", !open);
       });
-      siteNavigation?.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          mobileMenu?.setAttribute("aria-expanded", "false");
-          siteNavigation?.classList.remove("is-open");
-        });
+      const closeNavigation = () => {
+        mobileMenu?.setAttribute("aria-expanded", "false");
+        siteNavigation?.classList.remove("is-open");
+        document.querySelectorAll<HTMLDetailsElement>(".nav-dropdown[open]").forEach((menu) => { menu.open = false; });
+      };
+      siteNavigation?.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeNavigation));
+      siteNavigation?.querySelectorAll("summary").forEach((summary) => summary.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeNavigation();
+      }));
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeNavigation();
       });
 
       const favoriteKey = "visit-cambodia-favorites";
