@@ -34,8 +34,8 @@ const t = copy[lang];
     <div class="feature-grid">
       {[
         ["Angkor Wat", lang === "km" ? "សៀមរាប" : "Siem Reap", "/images/angkor-wat-header.jpg"],
-        ["Phnom Penh", lang === "km" ? "រាជធានីភ្នំពេញ" : "Capital city", "/images/regions/phnom-penh.jpg"],
-        ["Kampot", lang === "km" ? "កំពត" : "Riverside & countryside", "/images/regions/kampot.jpg"],
+        ["Phnom Penh", lang === "km" ? "រាជធានីភ្នំពេញ" : "Capital city", "/images/food/kep-crab-market.jpg"],
+        ["Kampot", lang === "km" ? "កំពត" : "Riverside & countryside", "/images/food/kampot-pepper-crab.jpg"],
       ].map(([name, meta, image]) => (
         <a class="feature-card" href={langHref(lang, "/explore")}>
           <img src={image} alt="" loading="lazy" decoding="async" />
