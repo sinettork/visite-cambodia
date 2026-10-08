@@ -77,11 +77,11 @@ export async function getPlaces(filters: {
 
   let query = supabase
     .from("places")
-    .select("*, province:provinces!places_province_id_fkey(*)", { count: "exact" })
+    .select("*, province:provinces!places_province_id_fkey!inner(*)", { count: "exact" })
     .eq("publication_status", "published")
     .order("views", { ascending: false });
 
-  if (filters.province) query = query.eq("provinces.slug", filters.province);
+  if (filters.province) query = query.eq("province.slug", filters.province);
   if (filters.category) query = query.eq("category", filters.category);
   if (filters.type) query = query.eq("listing_type", filters.type);
   if (filters.q?.trim()) {
@@ -110,7 +110,7 @@ export async function getPlace(slug: string): Promise<Place | null> {
   const supabase = getSupabase();
   const { data, error } = await supabase
     .from("places")
-    .select("*, province:provinces!places_province_id_fkey(*)")
+    .select("*, province:provinces!places_province_id_fkey!inner(*)")
     .eq("slug", slug)
     .eq("publication_status", "published")
     .maybeSingle();
