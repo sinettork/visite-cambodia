@@ -28,7 +28,7 @@ const [attractions, stays, restaurants] = await Promise.all([
 const name = guide ? (lang === "km" ? guide.name_km : guide.name_en) : "";
 const overview = guide ? (lang === "km" ? guide.overview_km : guide.overview_en) : "";
 const banner = guide?.banner_image_url || "/images/angkor-wat-header.jpg";
-const sourceUrls = Array.isArray(guide.source_urls)
+const sourceUrls = Array.isArray(guide?.source_urls)
   ? guide.source_urls.filter((url): url is string => typeof url === "string" && url.startsWith("http"))
   : [];
 
@@ -159,9 +159,7 @@ const sourceLabel = (url: string) => {
             <h2 id="guide-sources-title">{lang === "km" ? "ប្រភពព័ត៌មាន" : "Sources"}</h2>
           </div>
           <ul>
-            {guide.source_urls
-              .filter((url) => url.startsWith("http"))
-              .map((url) => (
+            {sourceUrls.map((url) => (
                 <li>
                   <a href={url} target="_blank" rel="noopener noreferrer">{sourceLabel(url)}</a>
                 </li>
