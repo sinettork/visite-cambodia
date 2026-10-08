@@ -29,7 +29,7 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
   if (!payload.name_en || !payload.name_km) return redirect("/admin/provinces/" + id + "?error=names-required", 303);
 
   const { error } = await context.supabase.from("provinces").update(payload).eq("id", id);
-  if (error) return redirect("/admin/provinces/" + id + "?error=" + encodeURIComponent(error.message), 303);
+  if (error) return redirect("/admin/provinces/" + id + "?error=save-failed", 303);
 
   const guidePayload = {
     province_id: id,
@@ -51,7 +51,7 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
     updated_at: new Date().toISOString(),
   };
   const { error: guideError } = await context.supabase.from("province_guides").upsert(guidePayload, { onConflict: "province_id" });
-  if (guideError) return redirect("/admin/provinces/" + id + "?error=" + encodeURIComponent(guideError.message), 303);
+  if (guideError) return redirect("/admin/provinces/" + id + "?error=save-failed", 303);
 
   await context.supabase.from("admin_audit_log").insert({
     admin_user_id: context.user.id,
