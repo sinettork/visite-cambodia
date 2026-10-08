@@ -7016,3 +7016,16 @@ main {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media (max-width: 620px) {
+  #site-navigation {
+    display: none;
+  }
+  #site-navigation.is-open {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  #site-navigation.is-open > .nav-dropdown {
+    grid-column: span 1;
+  }
+}
