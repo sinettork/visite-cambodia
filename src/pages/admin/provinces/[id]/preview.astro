@@ -1,0 +1,54 @@
+---
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../../../lib/admin";
+
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+
+const id = Number(Astro.params.id);
+const [{ data: province }, { data: guide }] = await Promise.all([
+  context.supabase.from("provinces").select("*").eq("id", id).maybeSingle(),
+  context.supabase.from("province_guides").select("*").eq("province_id", id).maybeSingle(),
+]);
+if (!province) return Astro.redirect("/admin/provinces");
+const sourceUrls = Array.isArray(guide?.source_urls) ? guide.source_urls.filter((value): value is string => typeof value === "string") : [];
+---
+
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page admin-preview-page">
+    <header class="admin-page-heading">
+      <div>
+        <span class="admin-eyebrow">Preview</span>
+        <h1>{province.name_en}</h1>
+        <p>This preview reads the current database record, including guide content. Visitors only see published place data.</p>
+      </div>
+      <a class="admin-secondary-button" href={"/admin/provinces/" + id}><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to editor</a>
+    </header>
+
+    <article class="admin-preview-shell">
+      <div class="admin-preview-hero">
+        <img src={province.banner_image_url || "/images/angkor-wat-header.jpg"} alt="" />
+        <div>
+          <span>Province guide</span>
+          <h2>{province.name_en}</h2>
+          <p>{guide?.overview_en ?? "No English overview has been added yet."}</p>
+        </div>
+      </div>
+
+      <div class="admin-preview-facts">
+        <div><strong>English name</strong><span>{province.name_en}</span></div>
+        <div><strong>Khmer name</strong><span>{province.name_km}</span></div>
+        <div><strong>Banner</strong><span>{province.banner_image_url ? "Configured" : "Fallback image"}</span></div>
+        <div><strong>Sources</strong><span>{sourceUrls.length}</span></div>
+      </div>
+
+      {guide?.history_en && <section class="admin-preview-section"><h3>History & heritage</h3><p>{guide.history_en}</p></section>}
+      {guide?.culture_en && <section class="admin-preview-section"><h3>Culture & local life</h3><p>{guide.culture_en}</p></section>}
+      {guide?.travel_en && <section class="admin-preview-section"><h3>Plan your visit</h3><p>{guide.travel_en}</p></section>}
+      {guide?.attractions_en && <section class="admin-preview-section"><h3>Things to do</h3><p>{guide.attractions_en}</p></section>}
+      {guide?.stay_guide_en && <section class="admin-preview-section"><h3>Where to stay</h3><p>{guide.stay_guide_en}</p></section>}
+      {guide?.food_guide_en && <section class="admin-preview-section"><h3>Where to eat</h3><p>{guide.food_guide_en}</p></section>}
+      {sourceUrls.length > 0 && <section class="admin-preview-section"><h3>Sources</h3><ul>{sourceUrls.map((url)=><li><a href={url} target="_blank" rel="noreferrer">{new URL(url).hostname.replace(/^www\./, "")}</a></li>)}</ul></section>}
+    </article>
+  </section>
+</AdminLayout>
