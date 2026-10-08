@@ -141,7 +141,6 @@ const sourceUrls = Array.isArray(place.source_urls) ? place.source_urls.filter((
 
   <script>
     const form = document.querySelector<HTMLFormElement>("#place-editor-form");
-    const publish = document.querySelector<HTMLButtonElement>("[data-publish-button]");
     form?.addEventListener("submit", (event) => {
       const submitter = (event as SubmitEvent).submitter as HTMLButtonElement | null;
       if (submitter?.value === "publish" && !window.confirm("Publish this place to the public site?")) event.preventDefault();
