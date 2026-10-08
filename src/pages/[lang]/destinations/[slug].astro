@@ -1,0 +1,81 @@
+---
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import PlaceCard from "../../../components/PlaceCard.astro";
+import { getNearbyPlaces, getPlace, getPlaceGuide, type Lang } from "../../../lib/catalog";
+import { T } from "../../../lib/i18n";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const { getPlaces } = await import("../../../lib/catalog");
+  const result = await getPlaces({ page: 1, pageSize: 48 });
+  const paths = [];
+  for (const lang of ["en", "km"] as const) {
+    for (const place of result.items) paths.push({ params: { lang, slug: place.slug } });
+  }
+  return paths;
+}
+
+const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
+const place = Astro.params.slug ? await getPlace(Astro.params.slug) : null;
+if (!place) Astro.redirect("/" + lang + "/explore");
+const guide = place ? await getPlaceGuide(place.id) : null;
+const nearby = place ? await getNearbyPlaces(place) : [];
+const t = T[lang];
+const name = place ? (lang === "km" ? place.name_km : place.name_en) : "";
+const summary = place ? (lang === "km" ? place.summary_km : place.summary_en) : "";
+const province = place?.province ? (lang === "km" ? place.province.name_km : place.province.name_en) : "";
+---
+<SiteLayout lang={lang} title={name} description={summary ?? undefined} active={place?.province?.slug} variant="place">
+  {place && (
+    <>
+      <nav class="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
+        <a href={"/" + lang + "/explore"}>{t.destinations}</a><span aria-hidden="true">›</span>
+        <a href={"/" + lang + "/regions/" + place.province?.slug}>{province}</a><span aria-hidden="true">›</span>
+        <span aria-current="page">{name}</span>
+      </nav>
+
+      <article class="place-detail">
+        <header class="place-detail-head">
+          <div>
+            <h1>{name}</h1>
+            <p class="place-detail-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {province}</p>
+          </div>
+          <div class="place-detail-actions">
+            {place.ticket_url && <a class="place-ticket-link" href={place.ticket_url} target="_blank" rel="noopener noreferrer">{lang === "km" ? "ព័ត៌មានសំបុត្រ" : "Ticket information"} ↗</a>}
+          </div>
+        </header>
+
+        <div class="place-detail-hero">
+          <img src={place.image_url || "/images/angkor-wat-header.jpg"} alt={name} loading="eager" />
+        </div>
+
+        <div class="place-detail-grid">
+          <div class="place-detail-main">
+            {summary && <p class="place-detail-lead">{summary}</p>}
+            {guide?.about_km || guide?.about_en ? <section class="place-guide-section"><h2>{t.about}</h2><p>{lang === "km" ? guide?.about_km : guide?.about_en}</p></section> : null}
+            {guide?.history_km || guide?.history_en ? <section class="place-guide-section"><h2>{t.history}</h2><p>{lang === "km" ? guide?.history_km : guide?.history_en}</p></section> : null}
+            {guide?.highlights_km || guide?.highlights_en ? <section class="place-guide-section"><h2>{t.highlights}</h2><p>{lang === "km" ? guide?.highlights_km : guide?.highlights_en}</p></section> : null}
+            {guide?.visit_plan_km || guide?.visit_plan_en ? <section class="place-guide-section"><h2>{t.planYourVisit}</h2><p>{lang === "km" ? guide?.visit_plan_km : guide?.visit_plan_en}</p></section> : null}
+            {guide?.tips_km || guide?.tips_en ? <section class="place-guide-section"><h2>{t.travelTips}</h2><p>{lang === "km" ? guide?.tips_km : guide?.tips_en}</p></section> : null}
+          </div>
+
+          <aside class="place-detail-facts">
+            <h2>{t.quickFacts}</h2>
+            {place.ticket_status && <div><strong>{t.ticket}</strong><span>{place.ticket_status === "free" ? t.free : place.ticket_usd ? "$" + place.ticket_usd : t.check}</span></div>}
+            {place.open_hours && <div><strong>{t.hours}</strong><span>{place.open_hours}</span></div>}
+            {place.lat != null && <div><strong>{t.location}</strong><span>{Number(place.lat).toFixed(4)}, {Number(place.lng).toFixed(4)}</span></div>}
+            {place.access_en && <div><strong>{lang === "km" ? "ការធ្វើដំណើរ" : "Access"}</strong><span>{lang === "km" ? place.access_km : place.access_en}</span></div>}
+          </aside>
+        </div>
+      </article>
+
+      {nearby.length > 0 && (
+        <section class="region-section">
+          <div class="section-head"><h2>{t.nearby}</h2></div>
+          <div class="review-grid">{nearby.map((item) => <PlaceCard place={item} lang={lang} />)}</div>
+        </section>
+      )}
+    </>
+  )}
+</SiteLayout>
