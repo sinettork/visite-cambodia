@@ -8,12 +8,12 @@
 }
 
 :root {
-  --page-bg: #eaeaea;
+  --page-bg: #fff;
   --surface: #fff;
-  --surface-muted: #fafafa;
+  --surface-muted: #fff;
   --text-primary: #353535;
-  --text-secondary: #777;
-  --border: #e6e6e6;
+  --text-secondary: #6d6d6d;
+  --border: #e8e1da;
   --accent: #ee7b20;
   font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif;
   color: #444;
@@ -69,7 +69,7 @@ textarea:focus-visible {
   min-height: 100vh;
   margin: 0 auto;
   background: var(--surface);
-  box-shadow: 0 0 17px rgb(0 0 0 / 13%);
+  box-shadow: none;
 }
 
 /* Header and search */
@@ -216,13 +216,13 @@ textarea:focus-visible {
 .columns {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr) 240px;
-  border-top: 1px solid #eee;
+  border-top: 0;
 }
 
 .left-side,
 .right-side {
   padding: 22px 16px 40px;
-  background: var(--surface-muted);
+  background: var(--surface);
 }
 
 .left-side {
