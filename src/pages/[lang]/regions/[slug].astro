@@ -53,7 +53,7 @@ const gallery = [
 
       <header class="province-hero has-photo" aria-labelledby="province-title">
         <div class="province-gallery-slides" aria-label={name + " photo gallery"}>
-          {gallery.map((_, index) => (
+          {gallery.map((slide, index) => (
             <img
               class={"province-gallery-slide" + (index === 0 ? " is-active" : "")}
               src={slide.image}
@@ -71,7 +71,7 @@ const gallery = [
         </div>
         {gallery.length > 1 && (
           <div class="province-gallery-dots" aria-label={lang === "km" ? "ជ្រើសរូបភាព" : "Choose photo"}>
-            {gallery.map((slide, index) => (
+            {gallery.map((_, index) => (
               <button type="button" class={index === 0 ? "is-active" : ""} data-gallery-dot={index} aria-label={(lang === "km" ? "រូបភាព " : "Photo ") + (index + 1)} aria-current={index === 0 ? "true" : undefined}></button>
             ))}
           </div>
