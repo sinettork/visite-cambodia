@@ -7296,3 +7296,9 @@ main {
   padding-bottom: 10px;
   border-bottom: 2px solid var(--accent);
 }
+
+/* Province story copy — keep English body text on the original Roboto family. */
+.region-story-section > p,
+.region-section .section-head > div > p {
+  font-family: var(--font-roboto);
+}
