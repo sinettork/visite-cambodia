@@ -1,0 +1,29 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { sampleEvents } from "../../data/events-data";
+import type { Lang } from "../../lib/catalog";
+
+export const prerender = true;
+export function getStaticPaths(){ return [{params:{lang:"en"}},{params:{lang:"km"}}]; }
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+---
+<SiteLayout lang={lang} title={lang==="km"?"ព្រឹត្តិការណ៍ និងពិធីបុណ្យ":"Events & Festivals"} variant="events">
+  <header class="page-header-block">
+    <h1>{lang==="km"?"ព្រឹត្តិការណ៍ និងពិធីបុណ្យ":"Events & Festivals"}</h1>
+    <p class="page-header-intro">{lang==="km"?"ស្វែងរកព្រឹត្តិការណ៍ និងពិធីបុណ្យសំខាន់ៗនៅកម្ពុជា។ កាលបរិច្ឆេទអាចផ្លាស់ប្តូរ ដូច្នេះសូមបញ្ជាក់ជាមុន។":"Explore Cambodia's major festivals and cultural events. Dates can vary, so confirm locally before travelling."}</p>
+  </header>
+  <div class="events-list">
+    {sampleEvents.map((event) => (
+      <article class="event-card" id={event.slug}>
+        <div class="event-date-badge"><span class="event-month">{lang==="km"?event.month_km:event.month_en}</span><span class="event-dates">{lang==="km"?event.typical_dates_km:event.typical_dates_en}</span></div>
+        <div class="event-card-content">
+          <h2>{lang==="km"?event.title_km:event.title_en}</h2>
+          <p class="event-location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {lang==="km"?event.location_km:event.location_en}</p>
+          <p>{lang==="km"?event.summary_km:event.summary_en}</p>
+          <ul>{(lang==="km"?event.highlights_km:event.highlights_en).map((item)=><li>{item}</li>)}</ul>
+          <aside class="event-tip"><strong>{lang==="km"?"អ្នកទេសចរគួរដឹង":"Visitor tip"}</strong><p>{lang==="km"?event.visitor_tips_km:event.visitor_tips_en}</p></aside>
+        </div>
+      </article>
+    ))}
+  </div>
+</SiteLayout>
