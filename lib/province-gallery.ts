@@ -73,6 +73,7 @@ async function searchCommonsImage(query: string): Promise<ProvinceGallerySlide |
       const info = page?.imageinfo?.[0];
       if (!info?.thumburl && !info?.url) continue;
       if (info?.mime && (!String(info.mime).startsWith("image/") || info.mime === "image/svg+xml")) continue;
+      if (!Number.isFinite(info.width) || !Number.isFinite(info.height) || info.width / info.height < 1.4) continue;
 
       const title = String(page?.title ?? "").replace(/^File:/, "");
       const meta = info?.extmetadata ?? {};
@@ -97,9 +98,10 @@ async function searchCommonsImage(query: string): Promise<ProvinceGallerySlide |
 export async function getProvinceGallery(
   slug: string,
   hero?: Omit<ProvinceGallerySlide, "label"> | null,
+  useHeroOnly = false,
 ): Promise<ProvinceGallerySlide[]> {
   const highlights = provinceHighlights[slug] ?? [];
-  const fetched = await Promise.all(highlights.map(searchCommonsImage));
+  const fetched = useHeroOnly ? [] : await Promise.all(highlights.map(searchCommonsImage));
   const gallery = hero
     ? [{ ...hero, label: hero.alt.split(" in ")[0] || hero.alt }, ...fetched.filter(Boolean)]
     : (fetched.filter(Boolean) as ProvinceGallerySlide[]);

@@ -4,6 +4,7 @@ export type Province = RowDataPacket & {
   slug: string;
   name_km: string;
   name_en: string;
+  banner_image_url?: string | null;
 };
 
 export type PlaceGuide = {
@@ -24,7 +25,11 @@ export type Place = RowDataPacket & {
   slug: string;
   category: string;
   listing_type: "attraction" | "accommodation" | "restaurant";
+  business_type?: "hotel" | "guest_house" | "restaurant" | "cafe" | "other" | null;
+  publication_status?: "draft" | "published" | "paused";
   ticket_status?: "free" | "unknown" | "check" | null;
+  ticket_url?: string | null;
+  ticket_provider?: string | null;
   image_url: string | null;
   access_km?: string | null;
   access_en?: string | null;

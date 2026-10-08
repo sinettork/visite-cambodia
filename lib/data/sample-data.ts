@@ -2,6 +2,7 @@ export type SampleProvince = {
   slug: string;
   name_km: string;
   name_en: string;
+  banner_image_url?: string | null;
 };
 
 export type SamplePlace = {
@@ -14,6 +15,8 @@ export type SamplePlace = {
   summary_km: string | null;
   summary_en: string | null;
   ticket_usd: string | null;
+  ticket_url?: string | null;
+  ticket_provider?: string | null;
   ticket_status?: "free" | "unknown" | "check";
   open_hours: string | null;
   lat: string | null;

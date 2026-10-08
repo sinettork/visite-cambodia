@@ -22,8 +22,13 @@ const CACHE_TTL_MS = 60_000;
 let provincesCache: { value: Province[]; expiresAt: number } | null = null;
 const popularCache = new Map<number, { value: Place[]; expiresAt: number }>();
 
+export function clearPlaceRepositoryCache(): void {
+  provincesCache = null;
+  popularCache.clear();
+}
+
 function buildPlaceWhere(filters: PlaceFilters) {
-  const where: string[] = [];
+  const where: string[] = ["p.publication_status = 'published'"];
   const args: string[] = [];
   if (filters.province) { where.push("pr.slug = ?"); args.push(filters.province); }
   if (filters.category) { where.push("p.category = ?"); args.push(filters.category); }
@@ -92,6 +97,7 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
       ...province,
       overview_km: `${nameKm} — ស្វែងរកកន្លែងកម្សាន្ត កន្លែងស្នាក់នៅ និងម្ហូបក្នុងតំបន់នេះ។ ព័ត៌មានខ្លះកំពុងរៀបចំបន្ថែម។`,
       overview_en: `Explore attractions, places to stay and local food in ${nameEn}. Some local listings are still being added.`,
+      banner_image_url: province.banner_image_url ?? null,
       attractions_km: "មើលបញ្ជីកន្លែងកម្សាន្តដែលមានខាងក្រោម។ យើងនឹងបន្ថែមព័ត៌មាននៅពេលមានទិន្នន័យដែលអាចផ្ទៀងផ្ទាត់បាន។",
       attractions_en: "Browse the attraction listings below. More details will be added as verified local information becomes available.",
       stay_guide_km: "ព័ត៌មានកន្លែងស្នាក់នៅសម្រាប់ខេត្តនេះមិនទាន់មានពេញលេញទេ។ អ្នកអាចស្វែងរកបញ្ជីស្នាក់នៅទូទាំងប្រទេសបាន។",
@@ -113,7 +119,7 @@ export async function getProvinceGuide(slug: string): Promise<ProvinceGuide | nu
 
   try {
     const [rows] = await db.query<ProvinceGuide[]>(
-      `SELECT p.slug, p.name_km, p.name_en, g.overview_km, g.overview_en,
+      `SELECT p.slug, p.name_km, p.name_en, p.banner_image_url, g.overview_km, g.overview_en,
         g.story_km, g.story_en, g.history_km, g.history_en, g.culture_km, g.culture_en,
         g.travel_km, g.travel_en,
         g.attractions_km, g.attractions_en, g.stay_guide_km, g.stay_guide_en,
@@ -192,7 +198,7 @@ export async function getNearbyPlaces(slug: string, limit = 6): Promise<Place[]>
 
   try {
     const [currentRows] = await db.query<PlaceCoordinates[]>(
-      "SELECT lat, lng FROM places WHERE slug = ?",
+      "SELECT lat, lng FROM places WHERE slug = ? AND publication_status = 'published'",
       [slug],
     );
     const current = currentRows[0];
@@ -206,7 +212,7 @@ export async function getNearbyPlaces(slug: string, limit = 6): Promise<Place[]>
       `SELECT p.*, pr.slug AS province_slug, pr.name_km AS province_km, pr.name_en AS province_en,
         ${distanceSql} AS distance_km
       FROM places p JOIN provinces pr ON pr.id = p.province_id
-      WHERE p.slug <> ? AND p.lat IS NOT NULL AND p.lng IS NOT NULL
+      WHERE p.slug <> ? AND p.publication_status = 'published' AND p.lat IS NOT NULL AND p.lng IS NOT NULL
       HAVING distance_km <= 30
       ORDER BY distance_km ASC
       LIMIT ?`,
@@ -229,7 +235,7 @@ export async function getPopular(limit = 5): Promise<Place[]> {
   }
 
   try {
-    const [rows] = await db.query<Place[]>(`${SELECT} ORDER BY p.views DESC LIMIT ?`, [limit]);
+    const [rows] = await db.query<Place[]>(`${SELECT} WHERE p.publication_status = 'published' ORDER BY p.views DESC LIMIT ?`, [limit]);
     const value = rows.map(hydratePlace);
     popularCache.set(limit, { value, expiresAt: Date.now() + CACHE_TTL_MS });
     return value;
@@ -319,14 +325,14 @@ export async function getPlace(slug: string): Promise<Place | null> {
       FROM places p
       JOIN provinces pr ON pr.id = p.province_id
       LEFT JOIN place_guides g ON g.place_id = p.id
-      WHERE p.slug = ?`,
+      WHERE p.slug = ? AND p.publication_status = 'published'`,
       [slug],
     );
     return rows[0] ? hydratePlaceGuide(rows[0]) : null;
   } catch (error) {
     console.warn("Unable to load the destination guide from MySQL.", error);
     try {
-      const [rows] = await db.query<Place[]>(`${SELECT} WHERE p.slug = ?`, [slug]);
+      const [rows] = await db.query<Place[]>(`${SELECT} WHERE p.slug = ? AND p.publication_status = 'published'`, [slug]);
       return rows[0] ?? (filterFallbackPlaces().find((place) => place.slug === slug) as Place | null);
     } catch {
       return filterFallbackPlaces().find((place) => place.slug === slug) as Place | null;

@@ -21,23 +21,23 @@ export default function Footer({ lang }: { lang: Lang }) {
     <footer className="site-footer">
       <div className="footer-main">
         <div className="footer-brand">
-          <Link href={`/?lang=${lang}`} className="footer-wordmark">Visit Cambodia<span>.</span></Link>
+          <Link href={`/${lang}`} className="footer-wordmark">Visit Cambodia<span>.</span></Link>
           <p>{copy.intro}</p>
         </div>
         <nav className="footer-group" aria-label={copy.explore}>
           <h2>{copy.explore}</h2>
-          <Link href={`/explore?lang=${lang}`}>{t.destinations}</Link>
-          <Link href={`/discover?lang=${lang}`}>{t.discover}</Link>
-          <Link href={`/events?lang=${lang}`}>{t.events}</Link>
-          <Link href={`/food?lang=${lang}`}>{t.cats.food}</Link>
-          <Link href={`/map?lang=${lang}`}>{lang === "km" ? "ផែនទីកន្លែងទេសចរណ៍" : "Places map"}</Link>
+          <Link href={`/${lang}/explore`}>{t.destinations}</Link>
+          <Link href={`/${lang}/discover`}>{t.discover}</Link>
+          <Link href={`/${lang}/events`}>{t.events}</Link>
+          <Link href={`/${lang}/food`}>{t.cats.food}</Link>
+          <Link href={`/${lang}/map`}>{lang === "km" ? "ផែនទីកន្លែងទេសចរណ៍" : "Places map"}</Link>
         </nav>
         <nav className="footer-group" aria-label={copy.plan}>
           <h2>{copy.plan}</h2>
-          <Link href={`/itineraries?lang=${lang}`}>{t.itineraries}</Link>
-          <Link href={`/saved?lang=${lang}`}>{t.savedPlaces}</Link>
-          <Link href={`/tools?lang=${lang}`}>{t.tools}</Link>
-          <Link href={`/laws?lang=${lang}`}>{lang === "km" ? "ច្បាប់សម្រាប់អ្នកទេសចរណ៍" : "Travel laws"}</Link>
+          <Link href={`/${lang}/itineraries`}>{t.itineraries}</Link>
+          <Link href={`/${lang}/saved`}>{t.savedPlaces}</Link>
+          <Link href={`/${lang}/tools`}>{t.tools}</Link>
+          <Link href={`/${lang}/laws`}>{lang === "km" ? "ច្បាប់សម្រាប់អ្នកទេសចរណ៍" : "Travel laws"}</Link>
         </nav>
       </div>
       <div className="footer-bottom">

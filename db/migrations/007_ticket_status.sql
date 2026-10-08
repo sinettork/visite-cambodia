@@ -1,7 +1,7 @@
 USE cambodia_tourism;
 
 ALTER TABLE places
-  ADD COLUMN IF NOT EXISTS ticket_status ENUM('free','unknown','check') NULL AFTER ticket_usd;
+  ADD COLUMN ticket_status ENUM('free','unknown','check') NULL AFTER ticket_usd;
 
 -- Existing numeric prices are retained but must be checked against the current source.
 UPDATE places

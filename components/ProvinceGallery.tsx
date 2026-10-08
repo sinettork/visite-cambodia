@@ -7,12 +7,10 @@ export default function ProvinceGallery({
   slides,
   title,
   overview,
-  disclaimer,
 }: {
   slides: ProvinceGallerySlide[];
   title: string;
   overview: string;
-  disclaimer: string;
 }) {
   const [index, setIndex] = useState(0);
   const count = slides.length;
@@ -30,7 +28,6 @@ export default function ProvinceGallery({
       <div className="province-hero-copy">
         <h1 id="province-title">{title}</h1>
         <p>{overview}</p>
-        <p className="province-hero-disclaimer">{disclaimer}</p>
       </div>
     );
   }
@@ -57,7 +54,6 @@ export default function ProvinceGallery({
         <span className="province-gallery-label">{active.label}</span>
         <h1 id="province-title">{title}</h1>
         <p>{overview}</p>
-        <p className="province-hero-disclaimer">{disclaimer}</p>
       </div>
 
       {count > 1 && (
@@ -75,11 +71,6 @@ export default function ProvinceGallery({
         </div>
       )}
 
-      <div className="province-photo-credit">
-        <a href={active.source} target="_blank" rel="noreferrer">Photo: {active.credit}</a>
-        <span aria-hidden="true"> · </span>
-        <a href={active.source} target="_blank" rel="noreferrer">{active.license}</a>
-      </div>
     </>
   );
 }

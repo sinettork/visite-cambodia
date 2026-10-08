@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { T, type Lang } from "@/lib/i18n";
 import { getStoredFavorites } from "./FavoriteButton";
@@ -21,7 +21,6 @@ export default function Header({
   const [savedCount, setSavedCount] = useState<number>(0);
   const guidesMenu = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const t = T[lang];
 
   useEffect(() => {
@@ -45,26 +44,21 @@ export default function Header({
     if (guidesMenu.current) guidesMenu.current.open = false;
   };
 
-  const isProvincesRoute = pathname.startsWith("/regions/");
-  const isGuidesRoute = pathname === "/discover" || pathname === "/food" || pathname === "/laws" || pathname.startsWith("/laws/") || pathname === "/tools";
-
-  const languageHref = (nextLang: Lang) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("lang", nextLang);
-    return `${pathname}?${params.toString()}`;
-  };
+  const routePath = pathname.replace(/^\/(?:km|en)(?=\/|$)/, "") || "/";
+  const isProvincesRoute = routePath.startsWith("/regions/");
+  const isGuidesRoute = routePath === "/discover" || routePath === "/food" || routePath === "/laws" || routePath.startsWith("/laws/") || routePath === "/tools";
+  const languageHref = (nextLang: Lang) => `/${nextLang}${routePath === "/" ? "" : routePath}`;
 
   return (
     <>
       <a className="skip-link" href="#main-content">{lang === "km" ? "រំលងទៅមាតិកា" : "Skip to content"}</a>
       <header className="header">
         <div className="header-inner">
-          <Link href={`/?lang=${lang}`} className="logo" style={{ fontWeight: 700, fontSize: 22, color: "#fff" }}>
+          <Link href={`/${lang}`} className="logo" style={{ fontWeight: 700, fontSize: 22, color: "#fff" }}>
             Visit Cambodia
           </Link>
-          <form className="search" action="/explore" role="search">
+          <form className="search" action={`/${lang}/explore`} role="search">
             <input name="q" defaultValue={q} placeholder={t.search} aria-label={t.search} />
-            <input type="hidden" name="lang" value={lang} />
             <select name="type" defaultValue={type} aria-label={t.browseByType}>
               <option value="">{t.all}</option>
               {Object.entries(t.placeTypes).map(([value, label]) => (
@@ -98,27 +92,27 @@ export default function Header({
       <nav id="site-navigation" className={`nav ${open ? "open" : ""}`} aria-label={lang === "km" ? "ការរុករកចម្បង" : "Main navigation"}>
         {/* 1. Home */}
         <Link
-          href={`/?lang=${lang}`}
+          href={`/${lang}`}
           onClick={closeAllMenus}
-          className={pathname === "/" ? "current" : ""}
-          aria-current={pathname === "/" ? "page" : undefined}
+          className={routePath === "/" ? "current" : ""}
+          aria-current={routePath === "/" ? "page" : undefined}
         >
           {t.home}
         </Link>
 
         {/* 2. Destinations */}
         <Link
-          href={`/explore?lang=${lang}`}
+          href={`/${lang}/explore`}
           onClick={closeAllMenus}
-          className={pathname === "/explore" ? "current" : ""}
-          aria-current={pathname === "/explore" ? "page" : undefined}
+          className={routePath === "/explore" ? "current" : ""}
+          aria-current={routePath === "/explore" ? "page" : undefined}
         >
           {t.destinations}
         </Link>
 
         {/* 3. Provinces */}
         <Link
-          href={`/?lang=${lang}#province-list`}
+          href={`/${lang}#province-list`}
           onClick={closeAllMenus}
           className={isProvincesRoute ? "current" : ""}
           aria-current={isProvincesRoute ? "page" : undefined}
@@ -128,40 +122,40 @@ export default function Header({
 
         {/* 4. Map */}
         <Link
-          href={`/map?lang=${lang}`}
+          href={`/${lang}/map`}
           onClick={closeAllMenus}
-          className={pathname === "/map" ? "current" : ""}
-          aria-current={pathname === "/map" ? "page" : undefined}
+          className={routePath === "/map" ? "current" : ""}
+          aria-current={routePath === "/map" ? "page" : undefined}
         >
           {lang === "km" ? "ផែនទី" : "Map"}
         </Link>
 
         {/* 5. Itineraries */}
         <Link
-          href={`/itineraries?lang=${lang}`}
+          href={`/${lang}/itineraries`}
           onClick={closeAllMenus}
-          className={pathname === "/itineraries" ? "current" : ""}
-          aria-current={pathname === "/itineraries" ? "page" : undefined}
+          className={routePath === "/itineraries" ? "current" : ""}
+          aria-current={routePath === "/itineraries" ? "page" : undefined}
         >
           {t.itineraries}
         </Link>
 
         {/* 6. Events & Festivals */}
         <Link
-          href={`/events?lang=${lang}`}
+          href={`/${lang}/events`}
           onClick={closeAllMenus}
-          className={pathname === "/events" ? "current" : ""}
-          aria-current={pathname === "/events" ? "page" : undefined}
+          className={routePath === "/events" ? "current" : ""}
+          aria-current={routePath === "/events" ? "page" : undefined}
         >
           {t.events}
         </Link>
 
         {/* 7. Saved Places */}
         <Link
-          href={`/saved?lang=${lang}`}
+          href={`/${lang}/saved`}
           onClick={closeAllMenus}
-          className={`nav-saved-link ${pathname === "/saved" ? "current" : ""}`}
-          aria-current={pathname === "/saved" ? "page" : undefined}
+          className={`nav-saved-link ${routePath === "/saved" ? "current" : ""}`}
+          aria-current={routePath === "/saved" ? "page" : undefined}
         >
           <span>{t.savedPlaces}</span>
           {savedCount > 0 && <span className="nav-saved-badge">{savedCount}</span>}
@@ -173,22 +167,22 @@ export default function Header({
             {t.guideAndTools} <i className="fa-solid fa-chevron-down" aria-hidden="true" style={{ fontSize: "0.75em", marginLeft: 4 }} />
           </summary>
           <div className="nav-dropdown-menu nav-dropdown-guides-menu">
-            <Link href={`/discover?lang=${lang}`} onClick={closeAllMenus} aria-current={pathname === "/discover" ? "page" : undefined}>
+            <Link href={`/${lang}/discover`} onClick={closeAllMenus} aria-current={routePath === "/discover" ? "page" : undefined}>
               {t.discover}
             </Link>
-            <Link href={`/food?lang=${lang}`} onClick={closeAllMenus} aria-current={pathname === "/food" ? "page" : undefined}>
+            <Link href={`/${lang}/food`} onClick={closeAllMenus} aria-current={routePath === "/food" ? "page" : undefined}>
               {t.cats.food}
             </Link>
-            <Link href={`/laws?lang=${lang}`} onClick={closeAllMenus} aria-current={pathname.startsWith("/laws") ? "page" : undefined}>
+            <Link href={`/${lang}/laws`} onClick={closeAllMenus} aria-current={routePath.startsWith("/laws") ? "page" : undefined}>
               {lang === "km" ? "ច្បាប់សម្រាប់អ្នកទេសចរណ៍" : "Travel laws"}
             </Link>
-            <Link href={`/tools?lang=${lang}#currency`} onClick={closeAllMenus}>
+            <Link href={`/${lang}/tools#currency`} onClick={closeAllMenus}>
               {lang === "km" ? "ឧបករណ៍ប្តូរប្រាក់ (USD ↔ KHR)" : "Currency Converter"}
             </Link>
-            <Link href={`/tools?lang=${lang}#phrasebook`} onClick={closeAllMenus}>
+            <Link href={`/${lang}/tools#phrasebook`} onClick={closeAllMenus}>
               {lang === "km" ? "ឃ្លាសន្ទនាខ្មែរសំខាន់ៗ" : "Khmer Phrasebook"}
             </Link>
-            <Link href={`/tools?lang=${lang}#emergency`} onClick={closeAllMenus}>
+            <Link href={`/${lang}/tools#emergency`} onClick={closeAllMenus}>
               {lang === "km" ? "លេខទូរស័ព្ទសង្គ្រោះបន្ទាន់" : "Emergency Directory"}
             </Link>
           </div>

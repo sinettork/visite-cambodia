@@ -110,7 +110,7 @@ export default function PlaceMap({ places, lang }: { places: Place[]; lang: "km"
         location.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${provName}`;
 
         const link = document.createElement("a");
-        link.href = `/destinations/${encodeURIComponent(place.slug)}?lang=${lang}`;
+        link.href = `/${lang}/destinations/${encodeURIComponent(place.slug)}`;
         link.textContent = t.open;
         link.className = "popup-detail-btn";
 

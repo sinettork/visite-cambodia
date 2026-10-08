@@ -1,11 +1,11 @@
 USE cambodia_tourism;
 
--- Keep the live MySQL catalog aligned with lib/data/sample-data.ts.
--- Re-running this migration is safe: columns are conditional and records upsert by slug.
+-- Apply once after the earlier schema migrations. This aligns the live catalog
+-- with lib/data/sample-data.ts and updates matching seeded destination records.
 ALTER TABLE places
-  ADD COLUMN IF NOT EXISTS access_km TEXT NULL AFTER open_hours,
-  ADD COLUMN IF NOT EXISTS access_en TEXT NULL AFTER access_km,
-  ADD COLUMN IF NOT EXISTS source_urls TEXT NULL AFTER access_en;
+  ADD COLUMN access_km TEXT NULL AFTER open_hours,
+  ADD COLUMN access_en TEXT NULL AFTER access_km,
+  ADD COLUMN source_urls TEXT NULL AFTER access_en;
 
 INSERT INTO places (slug, province_id, listing_type, category, name_km, name_en, summary_km, summary_en, image_url, ticket_usd, ticket_status, open_hours, access_km, access_en, source_urls, lat, lng, views)
 SELECT 'angkor-wat', id, 'attraction', 'history', 'ប្រាសាទអង្គរវត្ត', 'Angkor Wat', 'មហាសំណង់ប្រាសាទបុរាណធំបំផុតនៅលើពិភពលោក និងជានិមិត្តរូបជាតិនៃប្រទេសកម្ពុជា។', 'The largest religious monument in the world and the iconic national symbol of Cambodia.', NULL, '37.00', 'check', '05:00-17:30', NULL, NULL, NULL, '13.4125', '103.8670', '1200' FROM provinces WHERE slug = 'siem-reap'

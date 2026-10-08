@@ -217,14 +217,21 @@ export function getProvinceBannerImage(slug: string): string | undefined {
   return provinceBannerImages[slug]?.image;
 }
 
-export default async function ProvinceHero({ guide, lang, disclaimer }: {
+export default async function ProvinceHero({ guide, lang }: {
   guide: ProvinceGuide;
   lang: Lang;
-  disclaimer: string;
 }) {
-  const image = provinceBannerImages[guide.slug];
   const name = pick(guide, "name", lang);
-  const slides = await getProvinceGallery(guide.slug, image ?? null);
+  const image = guide.banner_image_url
+    ? {
+        image: guide.banner_image_url,
+        alt: `${name} province banner`,
+        credit: "",
+        source: "",
+        license: "",
+      }
+    : provinceBannerImages[guide.slug];
+  const slides = await getProvinceGallery(guide.slug, image ?? null, Boolean(guide.banner_image_url));
 
   return (
     <header className={"province-hero" + (slides.length ? " has-photo" : "")} aria-labelledby="province-title">
@@ -232,7 +239,6 @@ export default async function ProvinceHero({ guide, lang, disclaimer }: {
         slides={slides}
         title={name}
         overview={pick(guide, "overview", lang)}
-        disclaimer={disclaimer}
       />
     </header>
   );

@@ -3,6 +3,17 @@
 import { useState } from "react";
 import type { Lang } from "@/lib/i18n";
 
+const rielBanknotes = [
+  { amount: 100, image: "/images/riel-100.jpg", side: "front" },
+  { amount: 500, image: "/images/riel-500.jpg", side: "front" },
+  { amount: 1000, image: "/images/riel-1000.jpg", side: "front" },
+  { amount: 2000, image: "/images/riel-2000.jpg", side: "front" },
+  { amount: 5000, image: "/images/riel-5000.jpg", side: "back" },
+  { amount: 10000, image: "/images/riel-10000.jpg", side: "back" },
+  { amount: 20000, image: "/images/riel-20000.jpg", side: "back" },
+  { amount: 50000, image: "/images/riel-50000.jpg", side: "back" },
+] as const;
+
 export default function CurrencyConverter({ lang }: { lang: Lang }) {
   const [rate, setRate] = useState<number>(4100);
   const [usdAmount, setUsdAmount] = useState<string>("10");
@@ -45,6 +56,13 @@ export default function CurrencyConverter({ lang }: { lang: Lang }) {
 
   const setPresetUsd = (amount: number) => {
     handleUsdChange(amount.toString());
+  };
+
+  const formatRiel = (amount: number) => {
+    const formatted = amount.toLocaleString("en-US");
+    return lang === "km"
+      ? formatted.replace(/\d/g, (digit) => "០១២៣៤៥៦៧៨៩"[Number(digit)])
+      : formatted;
   };
 
   return (
@@ -127,6 +145,44 @@ export default function CurrencyConverter({ lang }: { lang: Lang }) {
           </div>
         </details>
       </div>
+
+      <section className="riel-notes-guide" aria-labelledby="riel-notes-title">
+        <div className="riel-notes-copy">
+          <h4 id="riel-notes-title">
+            {lang === "km" ? "ស្គាល់ក្រដាសប្រាក់រៀល" : "Recognize Cambodian Riel Notes"}
+          </h4>
+          <p>
+            {lang === "km"
+              ? "មើលរូបក្រដាសប្រាក់តាមតម្លៃនីមួយៗ។ រូបខ្លះបង្ហាញផ្នែកខាងមុខ និងរូបខ្លះបង្ហាញផ្នែកខាងក្រោយ។ ពណ៌ និងរូបរាងអាចខុសគ្នាតាមស៊េរី—សូមពិនិត្យលេខតម្លៃលើក្រដាសប្រាក់។"
+              : "Compare notes by denomination. Some photos show the front and others the reverse. Colors and designs vary by series, so always check the printed value."}
+          </p>
+          <p className="riel-notes-tip">
+            {lang === "km"
+              ? "អត្រាប្តូរប្រាក់ និងប្រភេទក្រដាសប្រាក់អាចខុសគ្នា។ សូមពិនិត្យតម្លៃ និងចំនួនប្រាក់អាប់មុនចាកចេញពីហាង។"
+              : "Exchange rates and note designs can vary. Check the amount and your change before leaving a shop."}
+          </p>
+        </div>
+        <ul className="riel-banknote-grid" aria-label={lang === "km" ? "រូបក្រដាសប្រាក់រៀលតាមតម្លៃ" : "Cambodian riel notes by denomination"}>
+          {rielBanknotes.map((note) => (
+            <li className="riel-banknote-card" key={note.amount}>
+              <figure>
+                <img
+                  src={note.image}
+                  alt={lang === "km"
+                    ? `ក្រដាសប្រាក់ ${formatRiel(note.amount)} រៀល ផ្នែក${note.side === "front" ? "ខាងមុខ" : "ខាងក្រោយ"}`
+                    : `${formatRiel(note.amount)} riel banknote, ${note.side}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  <strong>{formatRiel(note.amount)} ៛</strong>
+                  <span>{lang === "km" ? (note.side === "front" ? "ខាងមុខ" : "ខាងក្រោយ") : note.side === "front" ? "Front" : "Reverse"}</span>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

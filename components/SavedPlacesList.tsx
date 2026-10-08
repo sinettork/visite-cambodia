@@ -81,7 +81,7 @@ export default function SavedPlacesList({
           </div>
           <h3>{lang === "km" ? "មិនទាន់មានកន្លែងរក្សាទុក" : "No saved places yet"}</h3>
           <p>{t.noSaved}</p>
-          <Link href={`/explore?lang=${lang}`} className="saved-explore-link">
+          <Link href={`/${lang}/explore`} className="saved-explore-link">
             {t.homeExplore} <i className="fa-solid fa-arrow-right" aria-hidden="true" style={{ fontSize: "0.85em", marginLeft: 4 }} />
           </Link>
         </div>
