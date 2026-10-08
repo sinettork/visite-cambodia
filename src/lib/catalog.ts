@@ -106,6 +106,21 @@ export async function getPopular(limit = 6) {
   return result.items;
 }
 
+export async function getAllPlaces(filters: Omit<Parameters<typeof getPlaces>[0], "page" | "pageSize"> = {}) {
+  const pageSize = 48;
+  const first = await getPlaces({ ...filters, page: 1, pageSize });
+  if (first.total <= first.items.length) return first.items;
+
+  const totalPages = Math.ceil(first.total / pageSize);
+  const rest = await Promise.all(
+    Array.from({ length: totalPages - 1 }, (_, index) =>
+      getPlaces({ ...filters, page: index + 2, pageSize }),
+    ),
+  );
+
+  return [first.items, ...rest.map((page) => page.items)].flat();
+}
+
 export async function getPlace(slug: string): Promise<Place | null> {
   const supabase = getSupabase();
   const { data, error } = await supabase
@@ -159,8 +174,8 @@ export async function getPlaceGuide(placeId: number) {
 }
 
 export async function getNearbyPlaces(place: Place, limit = 6) {
-  const result = await getPlaces({ page: 1, pageSize: 48 });
-  if (place.lat == null || place.lng == null) return result.items.slice(0, limit);
+  const items = await getAllPlaces();
+  if (place.lat == null || place.lng == null) return items.slice(0, limit);
   const lat = Number(place.lat);
   const lng = Number(place.lng);
   const toRad = (n: number) => (n * Math.PI) / 180;
@@ -172,5 +187,5 @@ export async function getNearbyPlaces(place: Place, limit = 6) {
       Math.cos(toRad(lat)) * Math.cos(toRad(pLat)) * Math.sin(toRad(pLng - lng) / 2) ** 2;
     return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
-  return result.items.sort((a, b) => distance(a) - distance(b)).slice(0, limit);
+  return items.sort((a, b) => distance(a) - distance(b)).slice(0, limit);
 }
