@@ -1,0 +1,57 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import PlaceCard from "../../components/PlaceCard.astro";
+import { buildExploreUrl, normalizeQuery } from "../../lib/search";
+import { getPlaces, getProvinces, type Lang, type Place } from "../../lib/catalog";
+import { T } from "../../lib/i18n";
+
+const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
+const q = normalizeQuery(Astro.url.searchParams.get("q"));
+const province = normalizeQuery(Astro.url.searchParams.get("province"));
+const category = normalizeQuery(Astro.url.searchParams.get("category"));
+const rawType = normalizeQuery(Astro.url.searchParams.get("type"));
+const type = ["attraction","accommodation","restaurant"].includes(rawType) ? rawType as Place["listing_type"] : undefined;
+const page = Math.max(1, Number(Astro.url.searchParams.get("page") || 1));
+const result = await getPlaces({ q, province, category, type, page, pageSize: 12 });
+const provinces = await getProvinces();
+const selectedProvince = province ? provinces.find((item) => item.slug === province) : null;
+const t = T[lang];
+const currentContext = selectedProvince ? (lang === "km" ? selectedProvince.name_km : selectedProvince.name_en)
+  : category ? (t.cats as Record<string,string>)[category] ?? category
+  : type ? t.placeTypes[type] : q ? t.searchTitle : t.destinations;
+const title = selectedProvince
+  ? currentContext + " · " + (type ? t.placeTypes[type] : t.destinations)
+  : type ? t.placeTypes[type] : category ? ((t.cats as Record<string,string>)[category] ?? category)
+  : q ? t.searchTitle : t.directoryTitle;
+const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
+---
+<SiteLayout lang={lang} title={title} q={q} type={type ?? ""} active={province} variant="results">
+  <header class="browse-heading directory-heading">
+    <nav class="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
+      <a href={"/" + lang}>{t.home}</a><span aria-hidden="true">›</span><span aria-current="page">{currentContext}</span>
+    </nav>
+    <h1>{title}</h1>
+    <p>{q || province || category || type ? t.browseIntro : t.directoryIntro}</p>
+    {q && <p class="browse-query">{t.selectedSearch}: <strong>{q}</strong></p>}
+  </header>
+
+  <div class="browse-toolbar">
+    <nav class="place-type-filters" aria-label={t.browseByType}>
+      <a href={buildExploreUrl(lang, { q, province, category })} class={!type ? "active" : ""}>{t.allTypes}</a>
+      {Object.entries(t.placeTypes).map(([value, label]) => <a href={buildExploreUrl(lang, { q, province, category, type: value })} class={type === value ? "active" : ""}>{label}</a>)}
+    </nav>
+    {(q || province || category || type) && <a class="clear-filters" href={"/" + lang + "/explore"}>{t.clearFilters}</a>}
+  </div>
+
+  <div class="section-head browse-results-head"><h2>{t.results}</h2><span>{result.total}</span></div>
+
+  {result.items.length === 0 ? <p class="region-empty">{type ? t.noListings : t.none}</p> : <div class="review-grid">{result.items.map((place) => <PlaceCard place={place} lang={lang} />)}</div>}
+
+  {totalPages > 1 && (
+    <nav class="pagination" aria-label={lang === "km" ? "ការបែងចែកទំព័រ" : "Pagination"}>
+      {page > 1 && <a href={buildExploreUrl(lang, { q, province, category, type, page: page - 1 })}>{t.previous}</a>}
+      <span aria-current="page">{t.pageOf} {page} / {totalPages}</span>
+      {page < totalPages && <a href={buildExploreUrl(lang, { q, province, category, type, page: page + 1 })}>{t.next}</a>}
+    </nav>
+  )}
+</SiteLayout>
