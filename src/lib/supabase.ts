@@ -1,6 +1,7 @@
 import { createClient as createBaseClient } from "@supabase/supabase-js";
 import { createServerClient, parseCookieHeader } from "@supabase/ssr";
 import type { AstroCookies } from "astro";
+import type { Database } from "./database.types";
 
 const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
 const supabasePublishableKey = import.meta.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -9,7 +10,7 @@ export function getSupabase() {
   if (!supabaseUrl || !supabasePublishableKey) {
     throw new Error("Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_PUBLISHABLE_KEY.");
   }
-  return createBaseClient(supabaseUrl, supabasePublishableKey, {
+  return createBaseClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -29,7 +30,7 @@ export function createServerSupabase({
     throw new Error("Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_PUBLISHABLE_KEY.");
   }
 
-  return createServerClient(supabaseUrl, supabasePublishableKey, {
+  return createServerClient<Database>(supabaseUrl, supabasePublishableKey, {
     cookies: {
       getAll() {
         return parseCookieHeader(request.headers.get("Cookie") ?? "");
