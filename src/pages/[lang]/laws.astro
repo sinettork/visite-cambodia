@@ -1,0 +1,20 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import type { Lang } from "../../lib/catalog";
+export const prerender=true;
+export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+const pages=lang==="km"?[
+  ["ច្បាប់ស្តីពីចរាចរណ៍ផ្លូវគោក","ទំព័រនេះរក្សាព័ត៌មានត្រឹមត្រូវដោយមិនសន្និដ្ឋានលើកម្រិតល្បឿន អាល់កុល ឬទោសពិន័យ ប្រសិនបើមិនអាចផ្ទៀងផ្ទាត់បានពីប្រភពបច្ចុប្បន្ន។","road-traffic"],
+  ["ច្បាប់ស្តីពីទេសចរណ៍","ក្របខណ្ឌច្បាប់សម្រាប់ការគ្រប់គ្រងវិស័យទេសចរណ៍ និងវិជ្ជាជីវៈទេសចរណ៍នៅកម្ពុជា។","tourism-law"],
+  ["លិខិតបទដ្ឋាន និងបទប្បញ្ញត្តិទេសចរណ៍","ឯកសារដែលពាក់ព័ន្ធនឹងការអនុវត្ត និងការគ្រប់គ្រងវិស័យទេសចរណ៍។","ministry-instruments"]
+]:[
+  ["Law on Road Traffic","This guide avoids unverified speed limits, alcohol limits and penalties and points readers toward current official sources.","road-traffic"],
+  ["Law on Tourism","A guide to the national framework for Cambodia's tourism sector and tourism professions.","tourism-law"],
+  ["Tourism regulations and legal instruments","A concise overview of legal instruments maintained by the Ministry of Tourism.","ministry-instruments"]
+];
+---
+<SiteLayout lang={lang} title={lang==="km"?"ច្បាប់សម្រាប់អ្នកដំណើរ":"Travel laws & regulations"} variant="editorial">
+  <header class="page-header-block"><h1>{lang==="km"?"ច្បាប់សម្រាប់អ្នកដំណើរ":"Travel laws & regulations"}</h1><p class="page-header-intro">{lang==="km"?"សេចក្តីណែនាំសង្ខេបដោយផ្អែកលើប្រភពផ្លូវការ និងមិនជំនួសការប្រឹក្សាផ្លូវច្បាប់។":"Concise travel-law guides based on official sources; they are not a substitute for legal advice."}</p></header>
+  <div class="law-guide-list">{pages.map((item)=><article class="law-guide-card"><h2>{item[0]}</h2><p>{item[1]}</p><a href={"/"+lang+"/laws/"+item[2]}>{lang==="km"?"អានមគ្គុទ្ទេសក៍":"Read guide"} ›</a></article>)}</div>
+</SiteLayout>
