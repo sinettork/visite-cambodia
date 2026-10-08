@@ -37,6 +37,35 @@ export type Place = {
   province?: Province;
 };
 
+/** Repair text accidentally decoded as Latin-1 before entering the database. */
+export function repairMojibake(value: string | null | undefined) {
+  if (!value || !/[ÃÂâð]/.test(value) || [...value].some((character) => character.charCodeAt(0) > 255)) return value ?? "";
+  let current = value;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const bytes = Uint8Array.from([...current].map((character) => character.charCodeAt(0)));
+      const candidate = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+      if (candidate === current || mojibakeScore(candidate) >= mojibakeScore(current)) break;
+      current = candidate;
+    } catch {
+      break;
+    }
+  }
+  return current;
+}
+
+function mojibakeScore(value: string) {
+  return (value.match(/[ÃÂâð]/g) ?? []).length + (value.match(/�/g) ?? []).length * 4;
+}
+
+function repairRecord<T extends Record<string, unknown>>(record: T): T {
+  return Object.fromEntries(Object.entries(record).map(([key, value]) => {
+    if (typeof value === "string" && key.endsWith("_km")) return [key, repairMojibake(value)];
+    if (value && typeof value === "object" && !Array.isArray(value)) return [key, repairRecord(value as Record<string, unknown>)];
+    return [key, value];
+  })) as T;
+}
+
 export function pick<T extends { name_km: string; name_en: string }>(value: T, field: "name" | "summary", lang: Lang) {
   const key = lang === "km" ? `${field}_km` : `${field}_en`;
   return (value as Record<string, unknown>)[key] as string;
@@ -60,7 +89,7 @@ export async function getProvinces(): Promise<Province[]> {
   const supabase = getSupabase();
   const { data, error } = await supabase.from("provinces").select("*").order("name_en");
   if (error) throw error;
-  return (data ?? []) as Province[];
+  return (data ?? []).map((item) => repairRecord(item as Record<string, unknown>)) as Province[];
 }
 
 export async function getPlaces(filters: {
@@ -94,7 +123,7 @@ export async function getPlaces(filters: {
   if (error) throw error;
 
   return {
-    items: (data ?? []) as Place[],
+    items: (data ?? []).map((item) => repairRecord(item as Record<string, unknown>)) as Place[],
     total: count ?? 0,
     page,
     pageSize,
@@ -130,17 +159,17 @@ export async function getPlace(slug: string): Promise<Place | null> {
     .eq("publication_status", "published")
     .maybeSingle();
   if (error) throw error;
-  return (data ?? null) as Place | null;
+  return data ? repairRecord(data as Record<string, unknown>) as Place : null;
 }
 
 export async function getProvince(slug: string): Promise<Province | null> {
   const supabase = getSupabase();
   const { data, error } = await supabase.from("provinces").select("*").eq("slug", slug).maybeSingle();
   if (error) throw error;
-  return (data ?? null) as Province | null;
+  return data ? repairRecord(data as Record<string, unknown>) as Province : null;
 }
 
-export async function getProvinceGuide(slug: string) {
+export async function getProvinceGuide(slug: string): Promise<any> {
   const province = await getProvince(slug);
   if (!province) return null;
   const supabase = getSupabase();
@@ -150,7 +179,7 @@ export async function getProvinceGuide(slug: string) {
     .eq("province_id", province.id)
     .maybeSingle();
   if (error) throw error;
-  return data ? { ...province, ...data } : {
+  return data ? { ...province, ...repairRecord(data as Record<string, unknown>) } : {
     ...province,
     overview_km: `${province.name_km} — ស្វែងយល់ពីប្រវត្តិសាស្ត្រ វប្បធម៌ និងកន្លែងគួរទៅលេងក្នុងខេត្តនេះ។`,
     overview_en: `Explore the history, culture and places to visit in ${province.name_en}.`,
@@ -166,11 +195,11 @@ export async function getProvinceGuide(slug: string) {
   };
 }
 
-export async function getPlaceGuide(placeId: number) {
+export async function getPlaceGuide(placeId: number): Promise<any> {
   const supabase = getSupabase();
   const { data, error } = await supabase.from("place_guides").select("*").eq("place_id", placeId).maybeSingle();
   if (error) throw error;
-  return data;
+  return data ? repairRecord(data as Record<string, unknown>) : data;
 }
 
 export async function getNearbyPlaces(place: Place, limit = 6) {
