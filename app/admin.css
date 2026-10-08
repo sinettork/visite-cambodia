@@ -40,9 +40,11 @@
   margin: 0;
   color: var(--admin-text-main);
   background: var(--admin-bg);
-  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 12px;
-  line-height: 1.45;
+  font-family: var(--font-roboto), var(--font-battambang), Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
 }
 
 .admin-mobile-menu {
@@ -2096,3 +2098,424 @@
   font-size: 10px;
 }
 
+
+
+/* ==========================================================================
+   Production admin UX/UI pass — readable CMS scale, consistent font system
+   ========================================================================== */
+
+.admin-main {
+  padding: 0;
+}
+
+.admin-navigation-heading {
+  color: var(--admin-text-muted);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+.admin-navigation-link,
+.admin-sidebar-footer > a,
+.admin-sidebar-footer > button {
+  min-height: 36px;
+  font-size: 13px;
+}
+
+.admin-navigation-link i {
+  width: 18px;
+  font-size: 12px;
+}
+
+.admin-main-content {
+  max-width: 1480px;
+  padding: 28px 32px 44px;
+}
+
+.admin-page-heading {
+  margin-bottom: 24px;
+}
+
+.admin-page-heading h1 {
+  font-family: var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.2;
+}
+
+.admin-page-heading p:not(.admin-page-count),
+.admin-page-count {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.admin-section-heading h2,
+.admin-panel > h2,
+.admin-media-toolbar h2,
+.admin-record-toolbar h2,
+.admin-form-heading h2 {
+  font-family: var(--font-roboto-condensed), var(--font-battambang), sans-serif;
+  font-size: 16px;
+}
+
+.admin-section-heading p,
+.admin-media-toolbar p,
+.admin-record-toolbar p,
+.admin-panel > p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.admin-stat-grid {
+  gap: 14px;
+}
+
+.admin-stat-card {
+  min-height: 92px;
+  padding: 16px 18px;
+  border-radius: 6px;
+}
+
+.admin-stat-card > span {
+  font-size: 13px;
+}
+
+.admin-stat-card > strong {
+  font-size: 28px;
+}
+
+.admin-stat-card > small {
+  font-size: 12px;
+}
+
+.admin-overview-shortcuts {
+  gap: 12px;
+}
+
+.admin-overview-shortcuts > a {
+  min-height: 60px;
+  padding: 12px 14px;
+}
+
+.admin-overview-shortcuts > a strong {
+  font-size: 13px;
+}
+
+.admin-overview-shortcuts > a small {
+  font-size: 11.5px;
+}
+
+.admin-data-table {
+  font-size: 13px;
+}
+
+.admin-data-table th {
+  padding: 10px 12px;
+  font-size: 12px;
+}
+
+.admin-data-table td {
+  padding: 11px 12px;
+}
+
+.admin-place-name {
+  font-size: 13.5px;
+}
+
+.admin-place-name-km,
+.admin-td-province,
+.admin-td-type,
+.admin-status-label {
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.admin-action-btn,
+.admin-row-action {
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+}
+
+.admin-record-filters input,
+.admin-record-filters select,
+.admin-form input,
+.admin-form textarea,
+.admin-form select,
+.admin-select-label select,
+.admin-search-input,
+.admin-select {
+  min-height: 38px;
+  height: auto;
+  padding: 7px 10px;
+  font-size: 13.5px;
+}
+
+.admin-form label,
+.admin-select-label,
+.admin-field {
+  font-size: 13px;
+}
+
+.admin-field-label {
+  font-size: 13px;
+}
+
+.admin-field small,
+.admin-check small {
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.admin-form textarea {
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.admin-breadcrumb,
+.admin-breadcrumb-link {
+  font-size: 13px;
+}
+
+.admin-tab {
+  height: 34px;
+  font-size: 13px;
+}
+
+.admin-filters-btn {
+  height: 34px;
+  font-size: 13px;
+}
+
+.admin-filter-panel,
+.admin-bulk-bar {
+  padding: 10px 12px;
+}
+
+.admin-filter-item {
+  font-size: 13px;
+}
+
+.admin-primary-button,
+.admin-secondary-button,
+.admin-danger-button {
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 13px;
+}
+
+.admin-alert,
+.admin-success {
+  padding: 10px 13px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.admin-empty-state,
+.admin-loading {
+  padding: 42px 16px;
+  font-size: 13px;
+}
+
+.admin-footer {
+  min-height: 40px;
+  height: 40px;
+  font-size: 11.5px;
+}
+
+.admin-save-bar {
+  padding: 0 32px;
+}
+
+.admin-save-bar-inner {
+  min-height: 58px;
+  height: 58px;
+}
+
+.admin-save-alert {
+  font-size: 13px;
+}
+
+.admin-topbar {
+  padding-inline: 22px;
+}
+
+.admin-topbar-user-name {
+  font-size: 13px;
+}
+
+.admin-topbar-role {
+  font-size: 11px;
+}
+
+.admin-topbar-icon {
+  width: 36px;
+  height: 36px;
+}
+
+.admin-topbar-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.admin-sidebar {
+  padding: 16px 10px;
+}
+
+.admin-sidebar-heading {
+  min-height: 30px;
+  margin-bottom: 10px;
+  padding: 0 6px 8px;
+}
+
+.admin-media-grid {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+
+.admin-media-card img {
+  height: 140px;
+}
+
+.admin-media-card-copy {
+  padding: 10px 12px;
+}
+
+.admin-media-card-copy strong {
+  font-size: 13px;
+}
+
+.admin-media-card-copy span {
+  font-size: 11.5px;
+}
+
+:where(.admin-layout) :focus-visible {
+  outline: 2px solid var(--admin-blue);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1100px) {
+  .admin-main-content {
+    padding-inline: 24px;
+  }
+}
+
+@media (max-width: 860px) {
+  .admin-main-content {
+    padding: 22px 18px 84px;
+  }
+
+  .admin-topbar {
+    padding-inline: 12px;
+  }
+
+  .admin-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-overview-grid,
+  .admin-settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-overview-shortcuts {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-save-bar {
+    padding-inline: 14px;
+  }
+
+  .admin-sidebar-footer > a,
+  .admin-sidebar-footer > button {
+    min-height: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-main-content {
+    padding: 18px 14px 88px;
+  }
+
+  .admin-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 18px;
+  }
+
+  .admin-page-heading h1 {
+    font-size: 24px;
+  }
+
+  .admin-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-fields-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-field-wide {
+    grid-column: auto;
+  }
+
+  .admin-media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .admin-media-card img {
+    height: 110px;
+  }
+
+  .admin-record-toolbar,
+  .admin-media-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-search-wrap {
+    width: 100%;
+    max-width: none;
+  }
+
+  .admin-filter-bar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-filter-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-filter-item .admin-select,
+  .admin-select {
+    width: 100%;
+    min-height: 40px;
+  }
+
+  .admin-data-table {
+    min-width: 720px;
+  }
+
+  .admin-save-bar-inner {
+    min-height: 64px;
+    height: auto;
+    padding-block: 8px;
+    flex-wrap: wrap;
+  }
+
+  .admin-save-bar {
+    padding-inline: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-layout *,
+  .admin-layout *::before,
+  .admin-layout *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
