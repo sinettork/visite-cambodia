@@ -11,15 +11,6 @@ export function getStaticPaths() {
 const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
 const result = await getPlaces({ page: 1, pageSize: 48 });
 const places = result.items.filter((place) => Number.isFinite(Number(place.lat)) && Number.isFinite(Number(place.lng)));
-const mapPlaces = places.map((place) => ({
-  slug: place.slug,
-  name: lang === "km" ? place.name_km : place.name_en,
-  province: place.province ? (lang === "km" ? place.province.name_km : place.province.name_en) : "",
-  provinceSlug: place.province?.slug ?? "",
-  type: place.listing_type,
-  lat: Number(place.lat),
-  lng: Number(place.lng),
-}));
 ---
 <SiteLayout lang={lang} title={lang === "km" ? "ផែនទី" : "Places Map"} variant="map">
   <header class="browse-heading directory-heading">
@@ -78,7 +69,7 @@ const mapPlaces = places.map((place) => ({
     }>;
 
     const lang = document.documentElement.lang;
-    const container = document.querySelector("#cambodia-place-map");
+    const container = document.querySelector<HTMLElement>("#cambodia-place-map");
     const typeButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-map-type]")];
     const provinceSelect = document.querySelector<HTMLSelectElement>("#map-province-filter");
     const countNode = document.querySelector<HTMLElement>("#map-result-count");
