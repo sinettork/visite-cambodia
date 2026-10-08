@@ -76,6 +76,9 @@ const legacyRedirects = routes.flatMap((source) => {
 });
 
 const nextConfig: NextConfig = {
+  // Keep the dev compiler cache isolated from production builds. This allows
+  // `next dev` to stay open in one terminal while `next build` runs elsewhere.
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   experimental: {
     globalNotFound: true,
   },
