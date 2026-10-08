@@ -13,22 +13,62 @@ const media = [
   { path: "/images/food/nom-banh-chok.jpg", title: "Nom Banh Chok" },
 ];
 ---
+
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
   <section class="admin-page">
-    <header class="admin-page-heading"><h1>Media library</h1><p>Current production-safe media assets shipped with the site.</p></header>
-    <section class="admin-panel">
-      <div class="admin-media-grid">
+    <header class="admin-page-heading">
+      <div><span class="admin-eyebrow">Content</span><h1>Media library</h1><p>Find and reuse the production-safe assets currently shipped with the site.</p></div>
+    </header>
+
+    <section class="admin-records-panel">
+      <div class="admin-media-toolbar">
+        <div><h2>Current assets</h2><p>{media.length} production assets</p></div>
+        <label class="admin-search-wrap"><span class="sr-only">Search media</span><i class="fa-solid fa-magnifying-glass admin-search-icon" aria-hidden="true"></i><input class="admin-search-input" id="media-search" placeholder="Search assets" /></label>
+      </div>
+
+      <div class="admin-media-grid" id="media-grid">
         {media.map((item) => (
-          <article class="admin-media-card">
+          <article class="admin-media-card" data-media-search={(item.title + " " + item.path).toLowerCase()}>
             <img src={item.path} alt="" loading="lazy" />
             <div class="admin-media-card-copy">
               <strong>{item.title}</strong>
               <span>{item.path}</span>
-              <a class="admin-secondary-button" href={item.path} target="_blank" rel="noreferrer">Open</a>
+              <div class="admin-media-actions">
+                <a class="admin-secondary-button" href={item.path} target="_blank" rel="noreferrer">Open</a>
+                <button class="admin-secondary-button" type="button" data-copy-url={item.path}>Copy URL</button>
+              </div>
             </div>
           </article>
         ))}
       </div>
+      <p id="media-empty" class="admin-empty-state" hidden>No assets match this search.</p>
     </section>
   </section>
+
+  <script>
+    const search = document.querySelector<HTMLInputElement>("#media-search");
+    const cards = [...document.querySelectorAll<HTMLElement>("[data-media-search]")];
+    const empty = document.querySelector<HTMLElement>("#media-empty");
+    const render = () => {
+      const query = (search?.value ?? "").trim().toLowerCase();
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = !query || (card.dataset.mediaSearch ?? "").includes(query);
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      if (empty) empty.hidden = visible !== 0;
+    };
+    search?.addEventListener("input", render);
+    document.querySelectorAll<HTMLButtonElement>("[data-copy-url]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const value = button.dataset.copyUrl;
+        if (!value) return;
+        await navigator.clipboard?.writeText(new URL(value, window.location.origin).href);
+        const original = button.textContent;
+        button.textContent = "Copied";
+        window.setTimeout(() => { button.textContent = original; }, 1200);
+      });
+    });
+  </script>
 </AdminLayout>
