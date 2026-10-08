@@ -7302,3 +7302,33 @@ main {
 .region-section .section-head > div > p {
   font-family: var(--font-roboto);
 }
+
+/* Province page section titles — use the same full-width rule as Sources. */
+.region-story-section .section-head {
+  display: block;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.region-story-section .section-head h2 {
+  width: 100%;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent);
+}
+
+.region-section .section-head {
+  width: 100%;
+}
+
+.region-section .section-head > div {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.region-section .section-head > div > p {
+  max-width: 760px;
+  margin: 7px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.75;
+}
