@@ -1,0 +1,85 @@
+---
+import "../styles/site.css";
+import { copy, langHref, type Lang } from "../lib/content";
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+}
+
+const { lang, title = "Visit Cambodia", description = copy[lang].heroIntro } = Astro.props;
+const t = copy[lang];
+const pathname = Astro.url.pathname;
+const cleanPath = pathname.replace(/^\/(?:km|en)(?=\/|$)/, "") || "/";
+const otherLang = lang === "en" ? "km" : "en";
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1d1d1d" />
+    <title>{title} | Visit Cambodia</title>
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{lang === "km" ? "រំលងទៅមាតិកា" : "Skip to content"}</a>
+
+    <div class="site">
+      <header class="header">
+        <div class="header-inner">
+          <a class="logo" href={langHref(lang)}>Visit Cambodia</a>
+          <form class="search" action={langHref(lang, "/explore")} role="search">
+            <input name="q" placeholder={lang === "km" ? "ស្វែងរកកន្លែង..." : "Search destinations..."} />
+            <button type="submit" aria-label={lang === "km" ? "ស្វែងរក" : "Search"}>⌕</button>
+          </form>
+          <nav class="language-switch" aria-label="Language">
+            <a href={langHref(otherLang, cleanPath)}>{otherLang === "en" ? "EN" : "KH"}</a>
+            <a href={langHref(lang, cleanPath)} aria-current="page">{lang === "en" ? "EN" : "KH"}</a>
+          </nav>
+        </div>
+      </header>
+
+      <nav class="nav" aria-label={lang === "km" ? "ការរុករកចម្បង" : "Main navigation"}>
+        <a class:list-current={cleanPath === "/"} href={langHref(lang)}>{t.home}</a>
+        <a class:list-current={cleanPath === "/explore"} href={langHref(lang, "/explore")}>{t.destinations}</a>
+        <a href={langHref(lang, "/#province-list")}>{t.provinces}</a>
+        <a class:list-current={cleanPath === "/map"} href={langHref(lang, "/map")}>{t.map}</a>
+        <a href={langHref(lang, "/itineraries")}>{t.plan}</a>
+        <a href={langHref(lang, "/events")}>{t.events}</a>
+        <a href={langHref(lang, "/discover")}>{t.guides}</a>
+      </nav>
+
+      <main id="main-content">
+        <slot />
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-main">
+          <div>
+            <a class="footer-wordmark" href={langHref(lang)}>Visit Cambodia<span>.</span></a>
+            <p>{lang === "km"
+              ? "ស្វែងយល់ពីកម្ពុជា និងរៀបចំដំណើរដោយគោរពប្រជាជន និងទីកន្លែងដែលអ្នកបានជួប។"
+              : "Discover Cambodia through its heritage, living culture, landscapes and flavours."}</p>
+          </div>
+          <nav aria-label={t.destinations}>
+            <a href={langHref(lang, "/explore")}>{t.destinations}</a>
+            <a href={langHref(lang, "/discover")}>{t.discover}</a>
+            <a href={langHref(lang, "/food")}>{t.food}</a>
+          </nav>
+          <nav aria-label={t.plan}>
+            <a href={langHref(lang, "/itineraries")}>{t.itineraries}</a>
+            <a href={langHref(lang, "/events")}>{t.events}</a>
+            <a href={langHref(lang, "/tools")}>{t.tools}</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <span>© {new Date().getFullYear()} Visit Cambodia</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
