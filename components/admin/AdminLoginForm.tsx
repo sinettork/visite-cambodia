@@ -52,7 +52,7 @@ export default function AdminLoginForm() {
         {" "}
         {pending ? "Signing in…" : "Sign in"}
       </button>
-      <a className="admin-back-link" href="/km"><i className="fa-solid fa-arrow-left" aria-hidden="true" /> Back to Visit Cambodia</a>
+      <a className="admin-back-link" href="/en"><i className="fa-solid fa-arrow-left" aria-hidden="true" /> Back to Visit Cambodia</a>
     </form>
   );
 }
