@@ -1,15 +1,14 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import PlaceCard from "../../components/PlaceCard.astro";
-import { getPlaces, type Lang } from "../../lib/catalog";
+import { getAllPlaces, type Lang } from "../../lib/catalog";
 
 export const prerender = true;
 export function getStaticPaths() {
   return [{ params: { lang: "en" } }, { params: { lang: "km" } }];
 }
 const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
-const result = await getPlaces({ page: 1, pageSize: 48 });
-const places = result.items;
+const places = await getAllPlaces();
 ---
 <SiteLayout lang={lang} title={lang === "km" ? "កន្លែងដែលបានរក្សាទុក" : "Saved Places"} variant="saved">
   <div class="saved-places-container">
