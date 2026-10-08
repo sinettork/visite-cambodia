@@ -28,7 +28,7 @@ const [placesResult, provincesResult, draftsResult, missingImageResult, missingL
       </a>
     </header>
 
-    <section class="admin-overview-workflow {(draftsResult.count ?? 0) > 0 ? "has-drafts" : ""}" aria-label="Publishing status">
+    <section class={"admin-overview-workflow " + ((draftsResult.count ?? 0) > 0 ? "has-drafts" : "")} aria-label="Publishing status">
       <div class="admin-workflow-icon"><i class={"fa-solid " + ((draftsResult.count ?? 0) > 0 ? "fa-circle-exclamation" : "fa-circle-check")} aria-hidden="true"></i></div>
       <div>
         <strong>{(draftsResult.count ?? 0) > 0 ? (draftsResult.count ?? 0) + " draft" + ((draftsResult.count ?? 0) === 1 ? "" : "s") + " need review" : "No drafts are waiting for review"}</strong>
