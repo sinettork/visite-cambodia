@@ -79,7 +79,7 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
   if (!payload.name_en || !payload.name_km) return redirect("/admin/places/" + id + "?error=names-required", 303);
 
   const { error } = await context.supabase.from("places").update(payload).eq("id", id);
-  if (error) return redirect("/admin/places/" + id + "?error=" + encodeURIComponent(error.message), 303);
+  if (error) return redirect("/admin/places/" + id + "?error=save-failed", 303);
 
   const guidePayload = {
     place_id: id,
@@ -98,7 +98,7 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
   const hasGuide = Object.values(guidePayload).some((value) => value !== null && value !== id);
   if (hasGuide) {
     const { error: guideError } = await context.supabase.from("place_guides").upsert(guidePayload, { onConflict: "place_id" });
-    if (guideError) return redirect("/admin/places/" + id + "?error=" + encodeURIComponent(guideError.message), 303);
+    if (guideError) return redirect("/admin/places/" + id + "?error=save-failed", 303);
   }
 
   const action = intent === "publish" ? "publish" : intent === "pause" ? "pause" : intent === "draft" ? "save_draft" : "update";
