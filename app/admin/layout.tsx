@@ -1,3 +1,5 @@
+import "@fontsource-variable/arimo/wght.css";
+import "@fontsource-variable/oswald/wght.css";
 import "../globals.css";
 import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
 import "@fortawesome/fontawesome-free/css/solid.min.css";
