@@ -1,0 +1,32 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { sampleItineraries } from "../../data/itineraries-data";
+import type { Lang } from "../../lib/catalog";
+
+export const prerender = true;
+export function getStaticPaths(){ return [{params:{lang:"en"}},{params:{lang:"km"}}]; }
+const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
+---
+<SiteLayout lang={lang} title={lang==="km"?"គម្រោងដំណើរ":"Travel Itineraries"} variant="itineraries">
+  <header class="page-header-block">
+    <h1>{lang==="km"?"គម្រោងដំណើរដែលបានរៀបចំ":"Ready-to-use travel itineraries"}</h1>
+    <p class="page-header-intro">{lang==="km"?"គម្រោងដំណើរដែលអាចយកទៅកែសម្រួលតាមពេលវេលា និងថវិការបស់អ្នក។":"Practical itineraries you can adapt to your own time, budget and travel style."}</p>
+  </header>
+  <div class="itinerary-list">
+    {sampleItineraries.map((trip) => (
+      <article class="itinerary-card">
+        {trip.image_url ? <img src={trip.image_url} alt="" loading="lazy" /> : <div class="itinerary-card-image review-thumb-empty"></div>}
+        <div class="itinerary-card-body">
+          <div class="itinerary-meta"><span>{lang==="km"?trip.duration_km:trip.duration_en}</span><span>{lang==="km"?trip.region_km:trip.region_en}</span><span>{trip.budget_level}</span></div>
+          <h2>{lang==="km"?trip.title_km:trip.title_en}</h2>
+          <p class="itinerary-subtitle">{lang==="km"?trip.subtitle_km:trip.subtitle_en}</p>
+          <p>{lang==="km"?trip.overview_km:trip.overview_en}</p>
+          <div class="itinerary-days">
+            {trip.days.map((day) => <section><h3>{lang==="km"?day.title_km:day.title_en}</h3><p>{lang==="km"?day.description_km:day.description_en}</p><ul>{(lang==="km"?day.highlights_km:day.highlights_en).map((item)=><li>{item}</li>)}</ul></section>)}
+          </div>
+          <p class="itinerary-transport"><strong>{lang==="km"?"ការធ្វើដំណើរ":"Transport"}:</strong> {lang==="km"?trip.transport_km:trip.transport_en}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</SiteLayout>
