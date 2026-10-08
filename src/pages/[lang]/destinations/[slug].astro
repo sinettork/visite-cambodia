@@ -53,16 +53,16 @@ const province = place?.province ? (lang === "km" ? place.province.name_km : pla
         <div class="place-detail-grid">
           <div class="place-detail-main">
             {summary && <p class="place-detail-lead">{summary}</p>}
-            {guide?.about_km || guide?.about_en ? <section class="place-guide-section"><h2>{t.about}</h2><p>{lang === "km" ? guide?.about_km : guide?.about_en}</p></section> : null}
-            {guide?.history_km || guide?.history_en ? <section class="place-guide-section"><h2>{t.history}</h2><p>{lang === "km" ? guide?.history_km : guide?.history_en}</p></section> : null}
-            {guide?.highlights_km || guide?.highlights_en ? <section class="place-guide-section"><h2>{t.highlights}</h2><p>{lang === "km" ? guide?.highlights_km : guide?.highlights_en}</p></section> : null}
+            {guide?.about_km || guide?.about_en ? <section class="place-guide-section"><h2>{t.aboutPlace}</h2><p>{lang === "km" ? guide?.about_km : guide?.about_en}</p></section> : null}
+            {guide?.history_km || guide?.history_en ? <section class="place-guide-section"><h2>{t.destinationHistory}</h2><p>{lang === "km" ? guide?.history_km : guide?.history_en}</p></section> : null}
+            {guide?.highlights_km || guide?.highlights_en ? <section class="place-guide-section"><h2>{t.destinationHighlights}</h2><p>{lang === "km" ? guide?.highlights_km : guide?.highlights_en}</p></section> : null}
             {guide?.visit_plan_km || guide?.visit_plan_en ? <section class="place-guide-section"><h2>{t.planYourVisit}</h2><p>{lang === "km" ? guide?.visit_plan_km : guide?.visit_plan_en}</p></section> : null}
-            {guide?.tips_km || guide?.tips_en ? <section class="place-guide-section"><h2>{t.travelTips}</h2><p>{lang === "km" ? guide?.tips_km : guide?.tips_en}</p></section> : null}
+            {guide?.tips_km || guide?.tips_en ? <section class="place-guide-section"><h2>{t.travelerTips}</h2><p>{lang === "km" ? guide?.tips_km : guide?.tips_en}</p></section> : null}
           </div>
 
           <aside class="place-detail-facts">
             <h2>{t.quickFacts}</h2>
-            {place.ticket_status && <div><strong>{t.ticket}</strong><span>{place.ticket_status === "free" ? t.free : place.ticket_usd ? "$" + place.ticket_usd : t.check}</span></div>}
+            {place.ticket_status && <div><strong>{t.ticket}</strong><span>{place.ticket_status === "free" ? t.ticketFree : place.ticket_usd ? "$" + place.ticket_usd : t.ticketCheck}</span></div>}
             {place.open_hours && <div><strong>{t.hours}</strong><span>{place.open_hours}</span></div>}
             {place.lat != null && <div><strong>{t.location}</strong><span>{Number(place.lat).toFixed(4)}, {Number(place.lng).toFixed(4)}</span></div>}
             {place.access_en && <div><strong>{lang === "km" ? "ការធ្វើដំណើរ" : "Access"}</strong><span>{lang === "km" ? place.access_km : place.access_en}</span></div>}
