@@ -43,6 +43,14 @@ const gallery = [
       label: lang === "km" ? place.name_km : place.name_en,
     })),
 ].filter((slide, index, items) => items.findIndex((item) => item.image === slide.image) === index).slice(0, 4);
+
+const sourceLabel = (url: string) => {
+  const host = new URL(url).hostname.replace(/^www\./, "");
+  if (host === "tourismcambodia.org") return lang === "km" ? "ក្រសួងទេសចរណ៍កម្ពុជា" : "Ministry of Tourism of Cambodia";
+  if (host === "information.gov.kh") return lang === "km" ? "ក្រសួងព័ត៌មាន" : "Ministry of Information";
+  if (host === "en.wikipedia.org") return "Wikipedia";
+  return host;
+};
 ---
 <SiteLayout lang={lang} title={name + " Travel Guide"} description={overview} active={slug} variant="region">
   {guide && (
@@ -140,6 +148,23 @@ const gallery = [
           {group.places.length > 0 ? <div class="review-grid">{group.places.slice(0, 6).map((place) => <PlaceCard place={place} lang={lang} />)}</div> : <p class="region-empty">{lang === "km" ? "មិនទាន់មានបញ្ជីកន្លែងដែលបានផ្ទៀងផ្ទាត់។" : "No verified listings are available yet."}</p>}
         </section>
       ))}
+
+      {Array.isArray(guide.source_urls) && guide.source_urls.length > 0 ? (
+        <section class="guide-sources" aria-labelledby="guide-sources-title">
+          <div class="section-head no-action">
+            <h2 id="guide-sources-title">{lang === "km" ? "ប្រភពព័ត៌មាន" : "Sources"}</h2>
+          </div>
+          <ul>
+            {guide.source_urls
+              .filter((url: string) => url.startsWith("http"))
+              .map((url: string) => (
+                <li>
+                  <a href={url} target="_blank" rel="noopener noreferrer">{sourceLabel(url)}</a>
+                </li>
+              ))}
+          </ul>
+        </section>
+      ) : null}
     </>
   )}
 </SiteLayout>
