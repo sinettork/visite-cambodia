@@ -69,7 +69,11 @@ const siteClass = "site site-" + variant;
         </div>
       </header>
 
-      <nav class="nav" aria-label={lang === "km" ? "ការរុករកចម្បង" : "Main navigation"}>
+      <button class="mobile-menu" type="button" id="site-mobile-menu" aria-controls="site-navigation" aria-expanded="false">
+        <i class="fa-solid fa-bars" aria-hidden="true"></i> {lang === "km" ? "ម៉ឺនុយ" : "Menu"}
+      </button>
+
+      <nav id="site-navigation" class="nav" aria-label={lang === "km" ? "ការរុករកចម្បង" : "Main navigation"}>
         <a href={"/" + lang} class={cleanPath === "/" ? "current" : ""}>{t.home}</a>
         <a href={"/" + lang + "/explore"} class={cleanPath === "/explore" ? "current" : ""}>{t.destinations}</a>
         <a href={"/" + lang + "/#province-list"} class={cleanPath.startsWith("/regions/") ? "current" : ""}>{t.provinces}</a>
@@ -161,6 +165,20 @@ const siteClass = "site site-" + variant;
 
     <button class="back-to-top" type="button" aria-label={lang === "km" ? "ត្រឡប់ទៅកំពូល" : "Back to top"}>↑</button>
     <script>
+      const mobileMenu = document.querySelector("#site-mobile-menu");
+      const siteNavigation = document.querySelector("#site-navigation");
+      mobileMenu?.addEventListener("click", () => {
+        const open = mobileMenu.getAttribute("aria-expanded") === "true";
+        mobileMenu.setAttribute("aria-expanded", String(!open));
+        siteNavigation?.classList.toggle("is-open", !open);
+      });
+      siteNavigation?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu?.setAttribute("aria-expanded", "false");
+          siteNavigation?.classList.remove("is-open");
+        });
+      });
+
       const btn = document.querySelector(".back-to-top");
       const onScroll = () => btn?.classList.toggle("visible", window.scrollY > 500);
       window.addEventListener("scroll", onScroll, { passive: true });
