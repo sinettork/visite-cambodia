@@ -1,8 +1,8 @@
 @import url("/fonts/fonts.css");
 
 :root {
-  --font-arimo: "Arimo", Arial, sans-serif;
-  --font-oswald: "Oswald", "Arial Narrow", sans-serif;
+  --font-arimo: "Arimo Variable", Arial, sans-serif;
+  --font-oswald: "Oswald Variable", "Arial Narrow", sans-serif;
   --font-battambang: "Battambang", "Noto Sans Khmer", sans-serif;
   --font-noto-sans-khmer: "Noto Sans Khmer", sans-serif;
   --font-roboto: var(--font-arimo);
