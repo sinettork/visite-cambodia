@@ -1,6 +1,6 @@
 ---
 import AdminLayout from "../../../layouts/AdminLayout.astro";
-import { getAdminContext, isAdminRole } from "../../../lib/admin";
+import { getAdminContext } from "../../../lib/admin";
 
 const context = await getAdminContext(Astro.request, Astro.cookies);
 if (!context.user || !context.admin) return Astro.redirect("/admin/login");
@@ -12,7 +12,6 @@ const [{ data: province }, { data: guide }] = await Promise.all([
 ]);
 if (!province) return Astro.redirect("/admin/provinces");
 
-const canPublish = isAdminRole(context.admin.role);
 const message = Astro.url.searchParams.get("saved");
 const errorCode = Astro.url.searchParams.get("error");
 const errorLabels: Record<string, string> = {
@@ -85,19 +84,10 @@ const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this 
           <a class="admin-secondary-button" href="/admin/provinces">Back</a>
           <a class="admin-secondary-button" href={"/admin/provinces/" + id + "/preview"} target="_blank" rel="noreferrer"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview</a>
           <button class="admin-secondary-button" type="submit" name="intent" value="save">Save changes</button>
-          <button class="admin-primary-button" type="submit" name="intent" value="draft">Save draft</button>
-          {canPublish
-            ? <button class="admin-primary-button" type="submit" name="intent" value="publish" data-publish-button>Publish</button>
-            : <span class="admin-save-alert">Editors can save drafts. Admin approval is required to publish.</span>}
+          <button class="admin-primary-button" type="submit" name="intent" value="save">Save guide</button>
         </div>
       </div>
     </form>
   </section>
 
-  <script>
-    const publish = document.querySelector<HTMLButtonElement>("[data-publish-button]");
-    publish?.addEventListener("click", (event) => {
-      if (!window.confirm("Save and publish this province guide?")) event.preventDefault();
-    });
-  </script>
 </AdminLayout>
