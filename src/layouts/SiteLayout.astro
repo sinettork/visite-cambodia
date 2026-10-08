@@ -1,0 +1,169 @@
+---
+import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
+import "@fortawesome/fontawesome-free/css/solid.min.css";
+import "@fortawesome/fontawesome-free/css/regular.min.css";
+import "../styles/site.css";
+import { getPopular, getProvinces, type Lang } from "../lib/catalog";
+import { T, type Lang as LegacyLang } from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  q?: string;
+  active?: string;
+  type?: string;
+  variant?: string;
+}
+
+const { lang, title, description, q = "", active, type = "", variant = "results" } = Astro.props;
+const t = T[lang as LegacyLang];
+const provinces = await getProvinces();
+const popular = await getPopular();
+const cleanPath = Astro.url.pathname.replace(/^\/(?:km|en)(?=\/|$)/, "") || "/";
+const otherLang = lang === "en" ? "km" : "en";
+const pageTitle = title ? title + " | Visit Cambodia" : "Visit Cambodia | ទេសចរណ៍កម្ពុជា";
+const pageDescription = description ?? "Discover places to visit, food, stays and travel ideas across Cambodia.";
+const langHref = (nextLang: Lang) => "/" + nextLang + (cleanPath === "/" ? "" : cleanPath);
+const siteClass = "site site-" + variant;
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={pageDescription} />
+    <meta name="keywords" content="Cambodia travel, Cambodia tourism, Cambodia destinations, ទេសចរណ៍កម្ពុជា" />
+    <meta name="robots" content="index,follow" />
+    <meta name="theme-color" content="#333333" />
+    <title>{pageTitle}</title>
+    <link rel="alternate" hreflang="en" href={langHref("en")} />
+    <link rel="alternate" hreflang="km" href={langHref("km")} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main-content">{lang === "km" ? "រំលងទៅមាតិកា" : "Skip to content"}</a>
+
+    <div class={siteClass}>
+      <header class="header">
+        <div class="header-inner">
+          <a href={"/" + lang} class="logo">Visit Cambodia</a>
+
+          <form class="search" action={"/" + lang + "/explore"} role="search">
+            <input name="q" value={q} placeholder={t.search} aria-label={t.search} />
+            <select name="type" value={type} aria-label={t.browseByType}>
+              <option value="">{t.all}</option>
+              {Object.entries(t.placeTypes).map(([value, label]) => <option value={value}>{label}</option>)}
+            </select>
+            <button type="submit" aria-label={t.searchAction}>
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            </button>
+          </form>
+
+          <nav class="language-switch" aria-label="Language">
+            <a href={langHref(otherLang)}>{otherLang === "en" ? "EN" : "KH"}</a>
+            <a href={langHref(lang)} aria-current="page">{lang === "en" ? "EN" : "KH"}</a>
+          </nav>
+        </div>
+      </header>
+
+      <nav class="nav" aria-label={lang === "km" ? "ការរុករកចម្បង" : "Main navigation"}>
+        <a href={"/" + lang} class={cleanPath === "/" ? "current" : ""}>{t.home}</a>
+        <a href={"/" + lang + "/explore"} class={cleanPath === "/explore" ? "current" : ""}>{t.destinations}</a>
+        <a href={"/" + lang + "/#province-list"} class={cleanPath.startsWith("/regions/") ? "current" : ""}>{t.provinces}</a>
+
+        <details class="nav-dropdown">
+          <summary>{lang === "km" ? "រៀបចំដំណើរ" : "Plan"} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <div class="nav-dropdown-menu nav-dropdown-plan-menu">
+            <a href={"/" + lang + "/itineraries"}>{t.itineraries}</a>
+            <a href={"/" + lang + "/events"}>{t.events}</a>
+            <a href={"/" + lang + "/map"}>{lang === "km" ? "ផែនទី" : "Map"}</a>
+          </div>
+        </details>
+
+        <a href={"/" + lang + "/saved"} class={cleanPath === "/saved" ? "current" : ""}>{t.savedPlaces}</a>
+
+        <details class="nav-dropdown">
+          <summary>{t.guideAndTools} <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></summary>
+          <div class="nav-dropdown-menu nav-dropdown-guides-menu">
+            <a href={"/" + lang + "/discover"}>{t.discover}</a>
+            <a href={"/" + lang + "/food"}>{t.cats.food}</a>
+            <a href={"/" + lang + "/laws"}>{lang === "km" ? "ច្បាប់សម្រាប់អ្នកទេសចរណ៍" : "Travel laws"}</a>
+            <a href={"/" + lang + "/tools#currency"}>{lang === "km" ? "ប្តូរប្រាក់" : "Currency Converter"}</a>
+            <a href={"/" + lang + "/tools#phrasebook"}>{lang === "km" ? "ឃ្លាសន្ទនាខ្មែរ" : "Khmer Phrasebook"}</a>
+            <a href={"/" + lang + "/tools#emergency"}>{lang === "km" ? "លេខសង្គ្រោះបន្ទាន់" : "Emergency Directory"}</a>
+          </div>
+        </details>
+
+        <a href={"/" + lang + "/map"} class={cleanPath === "/map" ? "current" : ""}>{lang === "km" ? "ផែនទី" : "Map"}</a>
+      </nav>
+
+      <div class="columns">
+        <aside class="left-side">
+          <h2 id="province-list">{t.provinces}</h2>
+          <div class="brands">
+            {provinces.map((province) => (
+              <a href={"/" + lang + "/regions/" + province.slug} class={active === province.slug ? "active-brand" : ""}>
+                {lang === "km" ? province.name_km : province.name_en}
+              </a>
+            ))}
+          </div>
+          <a class="all-brands" href={"/" + lang + "/explore"}>{t.destinations} <b>›</b></a>
+        </aside>
+
+        <main id="main-content"><slot /></main>
+
+        <aside class="right-side">
+          <h2>{t.popular}</h2>
+          <div class="phones">
+            {popular.map((place) => (
+              <a href={"/" + lang + "/destinations/" + place.slug}>
+                <img src={place.image_url || "/images/angkor-wat-header.jpg"} alt="" loading="lazy" decoding="async" />
+                <span>{lang === "km" ? place.name_km : place.name_en}</span>
+              </a>
+            ))}
+          </div>
+        </aside>
+      </div>
+
+      <footer class="site-footer">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href={"/" + lang} class="footer-wordmark">Visit Cambodia<span>.</span></a>
+            <p>{lang === "km"
+              ? "ស្វែងយល់ពីបេតិកភណ្ឌ វប្បធម៌រស់រវើក ទេសភាព និងរសជាតិរបស់កម្ពុជា ហើយរៀបចំដំណើរដោយគោរពប្រជាជន និងទីកន្លែងដែលអ្នកបានជួប។"
+              : "Discover Cambodia through its heritage, living culture, landscapes and flavours—then plan a journey that respects the people and places you meet."}</p>
+          </div>
+          <nav class="footer-group">
+            <h2>{lang === "km" ? "ស្វែងយល់" : "Explore"}</h2>
+            <a href={"/" + lang + "/explore"}>{t.destinations}</a>
+            <a href={"/" + lang + "/discover"}>{t.discover}</a>
+            <a href={"/" + lang + "/events"}>{t.events}</a>
+            <a href={"/" + lang + "/food"}>{t.cats.food}</a>
+            <a href={"/" + lang + "/map"}>{lang === "km" ? "ផែនទី" : "Map"}</a>
+          </nav>
+          <nav class="footer-group">
+            <h2>{lang === "km" ? "រៀបចំដំណើរ" : "Plan your trip"}</h2>
+            <a href={"/" + lang + "/itineraries"}>{t.itineraries}</a>
+            <a href={"/" + lang + "/saved"}>{t.savedPlaces}</a>
+            <a href={"/" + lang + "/tools"}>{t.tools}</a>
+            <a href={"/" + lang + "/laws"}>{lang === "km" ? "ច្បាប់សម្រាប់អ្នកទេសចរណ៍" : "Travel laws"}</a>
+          </nav>
+        </div>
+        <div class="footer-bottom">
+          <p>{lang === "km" ? "ព័ត៌មានអាចផ្លាស់ប្តូរ។ សូមបញ្ជាក់ព័ត៌មានជាមួយប្រភពមូលដ្ឋានមុនចេញដំណើរ។" : "Details can change. Confirm information with local sources before travelling."}</p>
+          <span>© {new Date().getFullYear()} Visit Cambodia</span>
+        </div>
+      </footer>
+    </div>
+
+    <button class="back-to-top" type="button" aria-label={lang === "km" ? "ត្រឡប់ទៅកំពូល" : "Back to top"}>↑</button>
+    <script>
+      const btn = document.querySelector(".back-to-top");
+      const onScroll = () => btn?.classList.toggle("visible", window.scrollY > 500);
+      window.addEventListener("scroll", onScroll, { passive: true });
+      btn?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+      onScroll();
+    </script>
+  </body>
+</html>
