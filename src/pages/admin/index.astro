@@ -3,19 +3,24 @@ import AdminLayout from "../../layouts/AdminLayout.astro";
 import { getAdminContext } from "../../lib/admin";
 const context = await getAdminContext(Astro.request, Astro.cookies);
 if (!context.user || !context.admin) return Astro.redirect("/admin/login");
-const [placesResult, provincesResult, draftsResult] = await Promise.all([
+
+const [placesResult, provincesResult, draftsResult, missingImageResult, missingLocationResult, activityResult] = await Promise.all([
   context.supabase.from("places").select("id", { count: "exact", head: true }),
   context.supabase.from("provinces").select("id", { count: "exact", head: true }),
   context.supabase.from("places").select("id", { count: "exact", head: true }).eq("publication_status", "draft"),
+  context.supabase.from("places").select("id", { count: "exact", head: true }).is("image_url", null),
+  context.supabase.from("places").select("id", { count: "exact", head: true }).or("lat.is.null,lng.is.null"),
+  context.supabase.from("admin_audit_log").select("id,entity_type,entity_id,action,created_at,admin_user_id").order("created_at", { ascending: false }).limit(6),
 ]);
 ---
+
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
   <section class="admin-page">
     <header class="admin-page-heading">
-      <div class="admin-page-heading-copy">
+      <div>
         <span class="admin-eyebrow">Workspace</span>
         <h1>Dashboard</h1>
-        <p>Keep the Visit Cambodia content catalogue accurate, published and ready for visitors.</p>
+        <p>Focus on the content work that affects the public site first.</p>
       </div>
       <a class="admin-page-heading-action" href="/en" target="_blank" rel="noreferrer">
         <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
@@ -23,58 +28,51 @@ const [placesResult, provincesResult, draftsResult] = await Promise.all([
       </a>
     </header>
 
+    <section class="admin-overview-workflow {(draftsResult.count ?? 0) > 0 ? "has-drafts" : ""}" aria-label="Publishing status">
+      <div class="admin-workflow-icon"><i class={"fa-solid " + ((draftsResult.count ?? 0) > 0 ? "fa-circle-exclamation" : "fa-circle-check")} aria-hidden="true"></i></div>
+      <div>
+        <strong>{(draftsResult.count ?? 0) > 0 ? (draftsResult.count ?? 0) + " draft" + ((draftsResult.count ?? 0) === 1 ? "" : "s") + " need review" : "No drafts are waiting for review"}</strong>
+        <p>{(draftsResult.count ?? 0) > 0 ? "Review content, open a preview, then publish approved records." : "The catalogue is currently clear."}</p>
+      </div>
+      {(draftsResult.count ?? 0) > 0 && <a class="admin-primary-button" href="/admin/places?status=draft">Review drafts <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>}
+    </section>
+
     <div class="admin-stat-grid">
-      <a class="admin-stat-card" href="/admin/places">
-        <span>Places</span>
-        <strong>{placesResult.count ?? 0}</strong>
-        <small>All destination and business records</small>
-        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-      </a>
-      <a class="admin-stat-card" href="/admin/provinces">
-        <span>Provinces</span>
-        <strong>{provincesResult.count ?? 0}</strong>
-        <small>Regional guides and destination hubs</small>
-        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-      </a>
-      <a class="admin-stat-card admin-stat-card-attention" href="/admin/places?status=draft">
-        <span>Drafts</span>
-        <strong>{draftsResult.count ?? 0}</strong>
-        <small>Content waiting for publication review</small>
-        <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-      </a>
+      <a class="admin-stat-card" href="/admin/places"><span>Places</span><strong>{placesResult.count ?? 0}</strong><small>Published, draft and paused records</small><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <a class="admin-stat-card" href="/admin/provinces"><span>Provinces</span><strong>{provincesResult.count ?? 0}</strong><small>Regional destination hubs</small><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <a class="admin-stat-card admin-stat-card-attention" href="/admin/places?status=draft"><span>Drafts</span><strong>{draftsResult.count ?? 0}</strong><small>Waiting for publication review</small><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+      <a class="admin-stat-card" href="/admin/places"><span>Needs cleanup</span><strong>{(missingImageResult.count ?? 0) + (missingLocationResult.count ?? 0)}</strong><small>{missingImageResult.count ?? 0} missing images · {missingLocationResult.count ?? 0} missing coordinates</small><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
     </div>
 
     <section class="admin-panel admin-dashboard-panel">
       <div class="admin-section-heading admin-dashboard-section-heading">
-        <div>
-          <span class="admin-section-kicker">Daily workflow</span>
-          <h2>Content operations</h2>
-          <p>Start with the area that needs attention instead of navigating through the sidebar.</p>
-        </div>
+        <div><span class="admin-section-kicker">Daily workflow</span><h2>Start where attention is needed</h2><p>Use the shortcuts to move from problem → record → preview → publish.</p></div>
       </div>
 
       <div class="admin-overview-shortcuts">
-        <a href="/admin/places">
-          <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-          <span><strong>Manage places</strong><small>Review listings, status, views and details</small></span>
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
-        <a href="/admin/places?status=draft">
-          <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-          <span><strong>Review drafts</strong><small>Check content before it goes live</small></span>
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
-        <a href="/admin/provinces">
-          <i class="fa-solid fa-map" aria-hidden="true"></i>
-          <span><strong>Manage provinces</strong><small>Maintain all regional guide content</small></span>
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
-        <a href="/admin/media">
-          <i class="fa-solid fa-images" aria-hidden="true"></i>
-          <span><strong>Media library</strong><small>Keep destination imagery organised</small></span>
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </a>
+        <a href="/admin/places?status=draft"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span><strong>Review drafts</strong><small>Open records waiting for approval</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="/admin/places"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span><strong>Manage places</strong><small>Search, filter and edit the catalogue</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="/admin/provinces"><i class="fa-solid fa-map" aria-hidden="true"></i><span><strong>Manage provinces</strong><small>Edit the full regional guide</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <a href="/admin/media"><i class="fa-solid fa-images" aria-hidden="true"></i><span><strong>Media library</strong><small>Review current production assets</small></span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
       </div>
+    </section>
+
+    <section class="admin-overview-grid admin-dashboard-secondary-grid">
+      <section class="admin-panel">
+        <div class="admin-section-heading"><div><h2>Content quality</h2><p>Items that can weaken the visitor experience.</p></div></div>
+        <ul class="admin-type-list">
+          <li><span>Missing images</span><strong>{missingImageResult.count ?? 0}</strong></li>
+          <li><span>Missing coordinates</span><strong>{missingLocationResult.count ?? 0}</strong></li>
+          <li><span>Drafts to review</span><strong>{draftsResult.count ?? 0}</strong></li>
+        </ul>
+      </section>
+
+      <section class="admin-panel">
+        <div class="admin-section-heading"><div><h2>Recent activity</h2><p>Latest content operations.</p></div><a href="/admin/activity">View all <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+        {activityResult.data && activityResult.data.length > 0
+          ? <ul class="admin-recent-activity">{activityResult.data.map((item)=><li><a href={item.entity_type === "place" ? "/admin/places/" + item.entity_id : item.entity_type === "province" ? "/admin/provinces/" + item.entity_id : "/admin/activity"}><strong>{item.action.replaceAll("_"," ")}</strong><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a><span>{item.entity_type} #{item.entity_id ?? "—"}</span><time>{new Date(item.created_at).toLocaleString()}</time></li>)}</ul>
+          : <p class="admin-empty-state">No activity recorded yet.</p>}
+      </section>
     </section>
   </section>
 </AdminLayout>
