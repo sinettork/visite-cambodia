@@ -1,0 +1,25 @@
+---
+import AdminLayout from "../../../layouts/AdminLayout.astro";
+import { getAdminContext } from "../../../lib/admin";
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+const id = Number(Astro.params.id);
+const { data: province } = await context.supabase.from("provinces").select("*").eq("id", id).maybeSingle();
+if (!province) return Astro.redirect("/admin/provinces");
+---
+<AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
+  <section class="admin-page">
+    <header class="admin-page-heading"><h1>{province.name_en}</h1><p>{province.name_km}</p></header>
+    <form class="admin-form-grid" method="post" action={"/api/admin/provinces/" + id}>
+      <div class="admin-panel">
+        <label>Name EN<input name="name_en" value={province.name_en} required /></label>
+        <label>Name KM<input name="name_km" value={province.name_km} required /></label>
+        <label>Banner image URL<input name="banner_image_url" value={province.banner_image_url ?? ""} /></label>
+      </div>
+      <div class="admin-panel">
+        <button class="admin-primary-button" type="submit">Save province</button>
+        <a class="admin-secondary-button" href="/admin/provinces">Back</a>
+      </div>
+    </form>
+  </section>
+</AdminLayout>
