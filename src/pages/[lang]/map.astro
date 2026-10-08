@@ -1,14 +1,165 @@
 ---
+import "leaflet/dist/leaflet.css";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { getPlaces, type Lang } from "../../lib/catalog";
-export const prerender=true;
-export function getStaticPaths(){return [{params:{lang:"en"}},{params:{lang:"km"}}];}
-const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
-const result=await getPlaces({page:1,pageSize:48});
+
+export const prerender = true;
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "km" } }];
+}
+
+const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
+const result = await getPlaces({ page: 1, pageSize: 48 });
+const places = result.items.filter((place) => Number.isFinite(Number(place.lat)) && Number.isFinite(Number(place.lng)));
+const mapPlaces = places.map((place) => ({
+  slug: place.slug,
+  name: lang === "km" ? place.name_km : place.name_en,
+  province: place.province ? (lang === "km" ? place.province.name_km : place.province.name_en) : "",
+  provinceSlug: place.province?.slug ?? "",
+  type: place.listing_type,
+  lat: Number(place.lat),
+  lng: Number(place.lng),
+}));
 ---
-<SiteLayout lang={lang} title={lang==="km"?"ផែនទី":"Places Map"} variant="map">
-  <header class="page-header-block"><h1>{lang==="km"?"ផែនទីកន្លែងទេសចរណ៍":"Explore on the map"}</h1><p class="page-header-intro">{lang==="km"?"មើលគោលដៅជាមួយកូអរដោនេ និងបើកវានៅលើ Google Maps។":"Browse mapped places and open any location in Google Maps."}</p></header>
-  <div class="map-place-list">
-    {result.items.map((place)=><article class="map-place-row"><div><h2>{lang==="km"?place.name_km:place.name_en}</h2><p>{place.province?.name_en ?? ""}</p></div><a href={"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(String(place.lat)+","+String(place.lng))} target="_blank" rel="noopener noreferrer">Open map ↗</a></article>)}
-  </div>
+<SiteLayout lang={lang} title={lang === "km" ? "ផែនទី" : "Places Map"} variant="map">
+  <header class="browse-heading directory-heading">
+    <nav class="detail-breadcrumb" aria-label={lang === "km" ? "ទីតាំងបច្ចុប្បន្ន" : "Breadcrumb"}>
+      <a href={"/" + lang}>{lang === "km" ? "ទំព័រដើម" : "Home"}</a><span aria-hidden="true">›</span><span aria-current="page">{lang === "km" ? "ផែនទី" : "Places on the map"}</span>
+    </nav>
+    <h1>{lang === "km" ? "កន្លែងទេសចរណ៍លើផែនទី" : "Places on the map"}</h1>
+    <p>{lang === "km" ? "ស្វែងរកកន្លែងទេសចរណ៍ ស្នាក់នៅ និងអាហារ ហើយបើកព័ត៌មានលម្អិត។" : "Find attractions, stays and food across Cambodia, then open any place for details."}</p>
+  </header>
+
+  <section class="place-map-section">
+    <div class="map-toolbar-container">
+      <p class="map-intro-text">{lang === "km" ? "ចុចលើចំណុចណាមួយ ដើម្បីមើលព័ត៌មាន និងបន្តទៅទំព័រកន្លែង។" : "Select a pin to see the place, province and destination details."}</p>
+      <div class="map-filters-row">
+        <div class="map-type-pills" role="group" aria-label={lang === "km" ? "ច្រោះតាមប្រភេទ" : "Filter by type"}>
+          <button type="button" class="map-pill-btn active" data-map-type="">{lang === "km" ? "ទាំងអស់" : "All"}</button>
+          <button type="button" class="map-pill-btn" data-map-type="attraction"><i class="fa-solid fa-landmark" aria-hidden="true"></i> {lang === "km" ? "កម្សាន្ត" : "Attractions"}</button>
+          <button type="button" class="map-pill-btn" data-map-type="accommodation"><i class="fa-solid fa-hotel" aria-hidden="true"></i> {lang === "km" ? "ស្នាក់នៅ" : "Stays"}</button>
+          <button type="button" class="map-pill-btn" data-map-type="restaurant"><i class="fa-solid fa-utensils" aria-hidden="true"></i> {lang === "km" ? "អាហារ" : "Food"}</button>
+        </div>
+        <div class="map-province-select-wrapper">
+          <label for="map-province-filter" class="sr-only">{lang === "km" ? "តម្រងខេត្ត" : "Filter by province"}</label>
+          <select id="map-province-filter" class="map-province-select">
+            <option value="">{lang === "km" ? "ខេត្ត/ក្រុងទាំងអស់" : "All provinces"}</option>
+            {Array.from(new Map(places.map((place) => [place.province?.slug ?? "", place.province ? (lang === "km" ? place.province.name_km : place.province.name_en) : ""])).entries())
+              .filter(([slug]) => slug)
+              .sort((a, b) => (a[1] || "").localeCompare(b[1] || ""))
+              .map(([slug, name]) => <option value={slug}>{name}</option>)}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="cambodia-place-map" class="leaflet-map" role="region" aria-label={lang === "km" ? "ផែនទីកន្លែងទេសចរណ៍" : "Cambodia places map"}></div>
+
+    <div class="map-caption">
+      <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <strong id="map-result-count">{places.length}</strong> {lang === "km" ? "កន្លែងបង្ហាញ" : "places displayed"}</span>
+      <span>{lang === "km" ? "ផែនទី © OpenStreetMap" : "Map data © OpenStreetMap"}</span>
+    </div>
+  </section>
+
+  <script type="application/json" id="map-data">{JSON.stringify(mapPlaces)}</script>
+
+  <script>
+    import L from "leaflet";
+
+    const dataNode = document.querySelector<HTMLScriptElement>("#map-data");
+    const places = JSON.parse(dataNode?.textContent ?? "[]") as Array<{
+      slug: string;
+      name: string;
+      province: string;
+      provinceSlug: string;
+      type: string;
+      lat: number;
+      lng: number;
+    }>;
+
+    const lang = document.documentElement.lang;
+    const container = document.querySelector("#cambodia-place-map");
+    const typeButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-map-type]")];
+    const provinceSelect = document.querySelector<HTMLSelectElement>("#map-province-filter");
+    const countNode = document.querySelector<HTMLElement>("#map-result-count");
+    let activeType = "";
+    let map: L.Map | undefined;
+    let markersLayer: L.LayerGroup | undefined;
+
+    const typeLabel = (type: string) =>
+      type === "accommodation" ? (lang === "km" ? "ស្នាក់នៅ" : "Stay")
+      : type === "restaurant" ? (lang === "km" ? "អាហារ" : "Food")
+      : (lang === "km" ? "កម្សាន្ត" : "Attraction");
+
+    const markerColor = (type: string) =>
+      type === "accommodation" ? "#246b5a" : type === "restaurant" ? "#a94b24" : "#ea7925";
+
+    const renderMap = () => {
+      const province = provinceSelect?.value ?? "";
+      const filtered = places.filter((place) => (!activeType || place.type === activeType) && (!province || place.provinceSlug === province));
+
+      if (countNode) countNode.textContent = String(filtered.length);
+      markersLayer?.clearLayers();
+
+      const bounds: [number, number][] = [];
+      filtered.forEach((place) => {
+        const marker = L.circleMarker([place.lat, place.lng], {
+          radius: 8,
+          color: "#fff",
+          weight: 2,
+          fillColor: markerColor(place.type),
+          fillOpacity: 0.95,
+        });
+
+        const popup = document.createElement("div");
+        popup.className = "leaflet-popup-content-custom";
+
+        const badge = document.createElement("span");
+        badge.className = "popup-badge";
+        badge.textContent = typeLabel(place.type);
+
+        const heading = document.createElement("h4");
+        heading.textContent = place.name;
+
+        const location = document.createElement("p");
+        location.className = "popup-location";
+        location.textContent = place.province;
+
+        const link = document.createElement("a");
+        link.className = "popup-detail-btn";
+        link.href = "/" + lang + "/destinations/" + encodeURIComponent(place.slug);
+        link.textContent = lang === "km" ? "មើលព័ត៌មានលម្អិត ›" : "View details ›";
+
+        popup.append(badge, heading, location, link);
+        marker.bindPopup(popup);
+        marker.addTo(markersLayer!);
+        bounds.push([place.lat, place.lng]);
+      });
+
+      if (bounds.length > 1) map?.fitBounds(bounds, { padding: [28, 28], maxZoom: 12 });
+      else if (bounds.length === 1) map?.setView(bounds[0], 12);
+      else map?.setView([12.6, 104.9], 7);
+    };
+
+    if (container) {
+      map = L.map(container, { scrollWheelZoom: false }).setView([12.6, 104.9], 7);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+      markersLayer = L.layerGroup().addTo(map);
+
+      typeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          typeButtons.forEach((item) => item.classList.toggle("active", item === button));
+          activeType = button.dataset.mapType ?? "";
+          renderMap();
+        });
+      });
+
+      provinceSelect?.addEventListener("change", renderMap);
+      renderMap();
+      window.setTimeout(() => map?.invalidateSize(), 100);
+    }
+  </script>
 </SiteLayout>
