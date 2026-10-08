@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getAdminContext, isAdminRole } from "../../../../lib/admin";
+import { getAdminContext } from "../../../../lib/admin";
 
 const urlsFromText = (value: FormDataEntryValue | null) =>
   String(value ?? "")
@@ -15,11 +15,6 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
   if (!Number.isInteger(id) || id <= 0) return redirect("/admin/provinces", 303);
 
   const form = await request.formData();
-  const intent = String(form.get("intent") ?? "save");
-  if (intent === "publish" && !isAdminRole(context.admin.role)) {
-    return redirect("/admin/provinces/" + id + "?error=publish-forbidden", 303);
-  }
-
   const payload = {
     name_en: String(form.get("name_en") ?? "").trim(),
     name_km: String(form.get("name_km") ?? "").trim(),
@@ -57,7 +52,7 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
     admin_user_id: context.user.id,
     entity_type: "province",
     entity_id: id,
-    action: intent === "publish" ? "publish" : "update",
+    action: "update",
     changed_fields: Object.keys(payload).concat(["guide"]),
   });
 
