@@ -23,8 +23,8 @@ const lang=(Astro.params.lang==="en"?"en":"km") as Lang;
   </section>
 
   <script>
-    const usd = document.querySelector("#usd");
-    const khr = document.querySelector("#khr");
+    const usd = document.querySelector("#usd") as HTMLInputElement | null;
+    const khr = document.querySelector("#khr") as HTMLInputElement | null;
     const rate = 4000;
     usd?.addEventListener("input", () => { if (khr && usd) khr.value = String((Number(usd.value || 0) * rate).toFixed(0)); });
     khr?.addEventListener("input", () => { if (usd && khr) usd.value = String((Number(khr.value || 0) / rate).toFixed(2)); });
