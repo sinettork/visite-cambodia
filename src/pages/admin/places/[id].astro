@@ -18,7 +18,7 @@ const message=Astro.url.searchParams.get("saved");
 <label>Name KM<input name="name_km" value={place.name_km} required /></label>
 <label>Summary EN<textarea name="summary_en" rows="5">{place.summary_en ?? ""}</textarea></label>
 <label>Summary KM<textarea name="summary_km" rows="5">{place.summary_km ?? ""}</textarea></label>
-<label>Image URL<input name="image_url" value={place.image_url ?? "" /></label>
+<label>Image URL<input name="image_url" value={place.image_url ?? ""} /></label>
 </div>
 <div class="admin-panel">
 <label>Publication status<select name="publication_status"><option selected={place.publication_status==="draft"} value="draft">Draft</option><option selected={place.publication_status==="published"} value="published">Published</option><option selected={place.publication_status==="paused"} value="paused">Paused</option></select></label>
