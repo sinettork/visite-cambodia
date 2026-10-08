@@ -1,5 +1,6 @@
 ---
 import type { Lang, Place } from "../lib/catalog";
+import FavoriteButton from "./FavoriteButton.astro";
 
 interface Props {
   place: Place;
@@ -28,31 +29,5 @@ const businessLabels: Record<string, string> = {
       <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {province}</span>
     </div>
   </a>
-  <button class="card-favorite-btn" type="button" data-favorite={place.slug} aria-label={lang === "km" ? "រក្សាទុកកន្លែងនេះ" : "Save this place"} aria-pressed="false">
-    <i class="fa-regular fa-heart" aria-hidden="true"></i>
-  </button>
+  <FavoriteButton slug={place.slug} lang={lang} />
 </div>
-
-<script>
-  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-favorite]");
-  buttons.forEach((button) => {
-    const slug = button.dataset.favorite;
-    if (!slug) return;
-    const key = "visit-cambodia-favorites";
-    const saved = new Set(JSON.parse(localStorage.getItem(key) ?? "[]"));
-    const update = () => {
-      const active = saved.has(slug);
-      button.setAttribute("aria-pressed", String(active));
-      button.innerHTML = active
-        ? '<i class="fa-solid fa-heart" aria-hidden="true"></i>'
-        : '<i class="fa-regular fa-heart" aria-hidden="true"></i>';
-    };
-    update();
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      if (saved.has(slug)) saved.delete(slug); else saved.add(slug);
-      localStorage.setItem(key, JSON.stringify([...saved]));
-      update();
-    });
-  });
-</script>
