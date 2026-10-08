@@ -20,3 +20,8 @@ yarn-debug.log*
 pnpm-debug.log*
 
 tsconfig.tsbuildinfo
+
+# Astro migration workspace
+astro/node_modules/
+astro/dist/
+astro/.astro/
