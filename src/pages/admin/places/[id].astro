@@ -1,32 +1,137 @@
 ---
 import AdminLayout from "../../../layouts/AdminLayout.astro";
-import { getAdminContext } from "../../../lib/admin";
-const context=await getAdminContext(Astro.request,Astro.cookies);
-if(!context.user||!context.admin)return Astro.redirect("/admin/login");
-const id=Number(Astro.params.id);
-const {data:place}=await context.supabase.from("places").select("*").eq("id",id).maybeSingle();
-if(!place)return Astro.redirect("/admin/places");
-const message=Astro.url.searchParams.get("saved");
+import { getAdminContext, isAdminRole } from "../../../lib/admin";
+
+const context = await getAdminContext(Astro.request, Astro.cookies);
+if (!context.user || !context.admin) return Astro.redirect("/admin/login");
+
+const id = Number(Astro.params.id);
+const [{ data: place }, { data: provinces }, { data: guide }] = await Promise.all([
+  context.supabase.from("places").select("*").eq("id", id).maybeSingle(),
+  context.supabase.from("provinces").select("id,name_en,name_km").order("name_en"),
+  context.supabase.from("place_guides").select("*").eq("place_id", id).maybeSingle(),
+]);
+
+if (!place) return Astro.redirect("/admin/places");
+
+const message = Astro.url.searchParams.get("saved");
+const created = Astro.url.searchParams.get("created") === "1";
+const canPublish = isAdminRole(context.admin.role);
+const publicUrl = "/en/destinations/" + place.slug;
+const sourceUrls = Array.isArray(place.source_urls) ? place.source_urls.filter((value): value is string => typeof value === "string") : [];
 ---
+
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
-<section class="admin-page">
-<header class="admin-page-heading"><h1>Edit place</h1><p>{place.name_en}</p></header>
-{message&&<div class="admin-alert" role="status">Saved.</div>}
-<form class="admin-form-grid" method="post" action={"/api/admin/places/" + id}>
-<div class="admin-panel">
-<label>Name EN<input name="name_en" value={place.name_en} required /></label>
-<label>Name KM<input name="name_km" value={place.name_km} required /></label>
-<label>Summary EN<textarea name="summary_en" rows="5">{place.summary_en ?? ""}</textarea></label>
-<label>Summary KM<textarea name="summary_km" rows="5">{place.summary_km ?? ""}</textarea></label>
-<label>Image URL<input name="image_url" value={place.image_url ?? ""} /></label>
-</div>
-<div class="admin-panel">
-<label>Publication status<select name="publication_status"><option selected={place.publication_status==="draft"} value="draft">Draft</option><option selected={place.publication_status==="published"} value="published">Published</option><option selected={place.publication_status==="paused"} value="paused">Paused</option></select></label>
-<label>Listing type<select name="listing_type"><option selected={place.listing_type==="attraction"} value="attraction">Attraction</option><option selected={place.listing_type==="accommodation"} value="accommodation">Accommodation</option><option selected={place.listing_type==="restaurant"} value="restaurant">Restaurant</option></select></label>
-<label>Ticket USD<input name="ticket_usd" value={place.ticket_usd ?? ""} /></label>
-<label>Open hours<input name="open_hours" value={place.open_hours ?? ""} /></label>
-<button class="admin-primary-button" type="submit">Save changes</button>
-</div>
-</form>
-</section>
+  <section class="admin-page">
+    <nav class="admin-breadcrumb" aria-label="Breadcrumb">
+      <a class="admin-breadcrumb-link" href="/admin/places"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Places</a>
+      <span class="admin-breadcrumb-sep">/</span>
+      <span>{place.name_en}</span>
+    </nav>
+
+    <header class="admin-page-heading">
+      <div>
+        <span class="admin-eyebrow">Place editor</span>
+        <h1>{place.name_en}</h1>
+        <p>{place.slug} · <span class={"admin-publication-chip is-" + place.publication_status}>{place.publication_status}</span></p>
+      </div>
+      <div class="admin-page-heading-actions">
+        <a class="admin-secondary-button" href={"/admin/places/" + id + "/preview"} target="_blank" rel="noreferrer"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview</a>
+        {place.publication_status === "published" && <a class="admin-secondary-button" href={publicUrl} target="_blank" rel="noreferrer"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Public page</a>}
+      </div>
+    </header>
+
+    {message && <div class="admin-success" role="status">Saved. Current publication state: {message === "published" ? "published" : message === "paused" ? "paused" : "draft"}.</div>}
+    {created && <div class="admin-success" role="status">Draft created. Complete the visitor information, then preview and publish.</div>}
+
+    <form class="admin-editor-form" method="post" action={"/api/admin/places/" + id} id="place-editor-form">
+      <div class="admin-editor-body">
+        <section class="admin-panel">
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Identity</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field"><span class="admin-field-label">Name (English)</span><input name="name_en" value={place.name_en} required /></label>
+              <label class="admin-field"><span class="admin-field-label">Name (Khmer)</span><input name="name_km" value={place.name_km} required /></label>
+              <label class="admin-field"><span class="admin-field-label">Slug</span><input name="slug" value={place.slug} required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" /><small>Public URL identifier. Lowercase letters, numbers and hyphens.</small></label>
+              <label class="admin-field"><span class="admin-field-label">Province</span><select name="province_id" required>{(provinces ?? []).map((province) => <option value={province.id} selected={province.id === place.province_id}>{province.name_en} · {province.name_km}</option>)}</select></label>
+            </div>
+          </div>
+
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Classification</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field"><span class="admin-field-label">Listing type</span><select name="listing_type"><option value="attraction" selected={place.listing_type === "attraction"}>Attraction</option><option value="accommodation" selected={place.listing_type === "accommodation"}>Accommodation</option><option value="restaurant" selected={place.listing_type === "restaurant"}>Restaurant</option></select></label>
+              <label class="admin-field"><span class="admin-field-label">Category</span><select name="category"><option value="history" selected={place.category === "history"}>History</option><option value="nature" selected={place.category === "nature"}>Nature</option><option value="beach" selected={place.category === "beach"}>Beach</option><option value="adventure" selected={place.category === "adventure"}>Adventure</option><option value="culture" selected={place.category === "culture"}>Culture</option><option value="food" selected={place.category === "food"}>Food</option></select></label>
+              <label class="admin-field"><span class="admin-field-label">Business type</span><input name="business_type" value={place.business_type ?? ""} placeholder="hotel, cafe, guest_house…" /></label>
+            </div>
+          </div>
+
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Visitor information</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Summary (English)</span><textarea name="summary_en" rows="5">{place.summary_en ?? ""}</textarea></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Summary (Khmer)</span><textarea name="summary_km" rows="5">{place.summary_km ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Opening hours</span><input name="open_hours" value={place.open_hours ?? ""} placeholder="06:00–18:00" /></label>
+              <label class="admin-field"><span class="admin-field-label">Ticket status</span><select name="ticket_status"><option value="">Not specified</option><option value="free" selected={place.ticket_status === "free"}>Free</option><option value="unknown" selected={place.ticket_status === "unknown"}>Unknown</option><option value="check" selected={place.ticket_status === "check"}>Check current price</option></select></label>
+              <label class="admin-field"><span class="admin-field-label">Ticket USD</span><input name="ticket_usd" inputmode="decimal" value={place.ticket_usd ?? ""} placeholder="37" /></label>
+              <label class="admin-field"><span class="admin-field-label">Ticket information URL</span><input name="ticket_url" type="url" value={place.ticket_url ?? ""} /></label>
+              <label class="admin-field"><span class="admin-field-label">Ticket provider</span><input name="ticket_provider" value={place.ticket_provider ?? ""} placeholder="Official ticket office" /></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Getting there (English)</span><textarea name="access_en" rows="3">{place.access_en ?? ""}</textarea></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Getting there (Khmer)</span><textarea name="access_km" rows="3">{place.access_km ?? ""}</textarea></label>
+            </div>
+          </div>
+
+          <div class="admin-field-group">
+            <h2 class="admin-field-group-title">Location & media</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Image URL</span><input name="image_url" value={place.image_url ?? ""} placeholder="/images/…" /></label>
+              <label class="admin-field"><span class="admin-field-label">Latitude</span><input name="lat" inputmode="decimal" value={place.lat ?? ""} placeholder="13.4125" /></label>
+              <label class="admin-field"><span class="admin-field-label">Longitude</span><input name="lng" inputmode="decimal" value={place.lng ?? ""} placeholder="103.8670" /></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">Source URLs</span><textarea name="source_urls" rows="4" placeholder="One URL per line">{sourceUrls.join("\n")}</textarea><small>Keep official or authoritative sources here; one URL per line.</small></label>
+            </div>
+          </div>
+
+          <section class="admin-field-group">
+            <h2 class="admin-field-group-title">Guide content</h2>
+            <div class="admin-fields-grid">
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">About (English)</span><textarea name="guide_about_en" rows="5">{guide?.about_en ?? ""}</textarea></label>
+              <label class="admin-field admin-field-wide"><span class="admin-field-label">About (Khmer)</span><textarea name="guide_about_km" rows="5">{guide?.about_km ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">History (English)</span><textarea name="guide_history_en" rows="5">{guide?.history_en ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">History (Khmer)</span><textarea name="guide_history_km" rows="5">{guide?.history_km ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Highlights (English)</span><textarea name="guide_highlights_en" rows="5">{guide?.highlights_en ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Highlights (Khmer)</span><textarea name="guide_highlights_km" rows="5">{guide?.highlights_km ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Visit plan (English)</span><textarea name="guide_visit_plan_en" rows="5">{guide?.visit_plan_en ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Visit plan (Khmer)</span><textarea name="guide_visit_plan_km" rows="5">{guide?.visit_plan_km ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Tips (English)</span><textarea name="guide_tips_en" rows="5">{guide?.tips_en ?? ""}</textarea></label>
+              <label class="admin-field"><span class="admin-field-label">Tips (Khmer)</span><textarea name="guide_tips_km" rows="5">{guide?.tips_km ?? ""}</textarea></label>
+            </div>
+          </section>
+        </section>
+      </div>
+
+      <div class="admin-save-bar">
+        <div class="admin-save-bar-inner">
+          <a class="admin-secondary-button" href="/admin/places">Back</a>
+          <a class="admin-secondary-button" href={"/admin/places/" + id + "/preview"} target="_blank" rel="noreferrer"><i class="fa-solid fa-eye" aria-hidden="true"></i> Preview</a>
+          <button class="admin-secondary-button" type="submit" name="intent" value="save">Save changes</button>
+          <button class="admin-primary-button" type="submit" name="intent" value="draft">Save draft</button>
+          {canPublish
+            ? <>
+                <button class="admin-primary-button" type="submit" name="intent" value="publish" data-publish-button>Publish</button>
+                <button class="admin-secondary-button" type="submit" name="intent" value="pause">Pause</button>
+              </>
+            : <span class="admin-save-alert">Editors can save drafts. Admin approval is required to publish.</span>}
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>("#place-editor-form");
+    const publish = document.querySelector<HTMLButtonElement>("[data-publish-button]");
+    form?.addEventListener("submit", (event) => {
+      const submitter = (event as SubmitEvent).submitter as HTMLButtonElement | null;
+      if (submitter?.value === "publish" && !window.confirm("Publish this place to the public site?")) event.preventDefault();
+    });
+  </script>
 </AdminLayout>
