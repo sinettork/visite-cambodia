@@ -1,0 +1,20 @@
+---
+import type { Lang } from "../lib/catalog";
+interface Props {
+  slug: string;
+  lang: Lang;
+  class?: string;
+  size?: "default" | "large";
+}
+const { slug, lang, class: className = "", size = "default" } = Astro.props;
+const label = lang === "km" ? "រក្សាទុកកន្លែងនេះ" : "Save this place";
+---
+<button
+  class={"card-favorite-btn" + (size === "large" ? " destination-hero-favorite" : "") + (className ? " " + className : "")}
+  type="button"
+  data-favorite={slug}
+  aria-label={label}
+  aria-pressed="false"
+>
+  <i class="fa-regular fa-heart" aria-hidden="true"></i>
+</button>
