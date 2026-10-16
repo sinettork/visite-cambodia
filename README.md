@@ -1,10 +1,10 @@
 # Visit Cambodia
 
-Lightweight bilingual Cambodia tourism platform built with Astro 6 + Supabase + Vercel.
+Lightweight bilingual Cambodia tourism platform built with Astro 7 + Supabase + Vercel.
 
 ## Stack
 
-- Astro 6 / TypeScript
+- Astro 7 / TypeScript
 - Supabase PostgreSQL
 - Supabase Auth for admin sessions
 - Supabase Storage for production media
@@ -17,7 +17,7 @@ Use Node.js 24 (see .nvmrc).
 
 1. Copy .env.example to .env.
 2. Set the Supabase publishable key for project votiwwvilkrabcrcrkzy.
-3. Run npm install once after the stack migration to generate the new lockfile.
+3. Run npm ci (or npm install).
 4. Run npm run dev.
 
 The public site is rendered primarily as Astro HTML. Interactive behavior is limited to small client-side scripts/islands.
@@ -26,7 +26,8 @@ The public site is rendered primarily as Astro HTML. Interactive behavior is lim
 
 - npm run check
 - npm run build
-- npm run preview
+
+The build prerenders pages from Supabase, so PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_PUBLISHABLE_KEY must be set (locally in .env, on Vercel in project settings, in GitHub Actions as repository secrets).
 
 The app deploys with the Vercel Astro adapter. Public pages can be prerendered; authenticated admin routes remain request-time and are not globally cached.
 

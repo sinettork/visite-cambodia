@@ -9,9 +9,19 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Add these in GitHub: Settings > Secrets and variables > Actions.
+      # The build prerenders pages that read from Supabase, so both are required.
+      PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+      PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,28 +29,35 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run check
+
+      - name: Require Supabase settings
+        run: |
+          if [ -z "$PUBLIC_SUPABASE_URL" ] || [ -z "$PUBLIC_SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::error::Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_PUBLISHABLE_KEY as repository secrets."
+            exit 1
+          fi
 
       - name: Production build
         run: npm run build
 
-      - name: Start production server
+      - name: Start dev server
         run: |
-          npm run start > /tmp/visit-cambodia-next.log 2>&1 &
-          echo $! > /tmp/visit-cambodia-next.pid
+          npm run dev -- --host 127.0.0.1 --port 4321 > /tmp/visit-cambodia-astro.log 2>&1 &
+          echo $! > /tmp/visit-cambodia-astro.pid
 
       - name: Route smoke test
         env:
-          BASE_URL: http://127.0.0.1:3000
+          BASE_URL: http://127.0.0.1:4321
         run: node scripts/verify-routes.mjs
 
       - name: Server log on failure
         if: failure()
-        run: cat /tmp/visit-cambodia-next.log || true
+        run: cat /tmp/visit-cambodia-astro.log || true
