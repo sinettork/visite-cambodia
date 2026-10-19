@@ -4,12 +4,6 @@ import PlaceCard from "../../components/PlaceCard.astro";
 import { getPopular, getProvinces, type Lang } from "../../lib/catalog";
 import { T } from "../../lib/i18n";
 
-export const prerender = true;
-
-export function getStaticPaths() {
-  return [{ params: { lang: "en" } }, { params: { lang: "km" } }];
-}
-
 const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
 const t = T[lang];
 const [places, provinces] = await Promise.all([getPopular(6), getProvinces()]);

@@ -114,8 +114,15 @@ export async function getPlaces(filters: {
   if (filters.category) query = query.eq("category", filters.category);
   if (filters.type) query = query.eq("listing_type", filters.type);
   if (filters.q?.trim()) {
-    const term = filters.q.trim();
-    query = query.or(`name_en.ilike.%${term}%,name_km.ilike.%${term}%,summary_en.ilike.%${term}%,summary_km.ilike.%${term}%`);
+    // Normalize and remove PostgREST filter syntax before building the ilike expression.
+    const term = filters.q.normalize("NFC")
+      .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 100);
+    if (term) {
+      query = query.or(`name_en.ilike.%${term}%,name_km.ilike.%${term}%,summary_en.ilike.%${term}%,summary_km.ilike.%${term}%`);
+    }
   }
 
   const from = (page - 1) * pageSize;
@@ -203,18 +210,54 @@ export async function getPlaceGuide(placeId: number): Promise<any> {
 }
 
 export async function getNearbyPlaces(place: Place, limit = 6) {
-  const items = await getAllPlaces();
-  if (place.lat == null || place.lng == null) return items.slice(0, limit);
+  const take = Math.max(1, Math.min(12, Math.floor(limit) || 6));
+  const excludedSlug = place.slug;
+  const toRad = (n: number) => (n * Math.PI) / 180;
+
+  // When coordinates are absent, prefer the same province, but never recommend this place.
+  if (place.lat == null || place.lng == null) {
+    const local = place.province?.slug
+      ? (await getPlaces({ province: place.province.slug, pageSize: Math.min(48, take + 12) })).items
+      : [];
+    const nearbyLocal = local.filter((item) => item.slug !== excludedSlug);
+    if (nearbyLocal.length >= take) return nearbyLocal.slice(0, take);
+    const popular = (await getPlaces({ pageSize: 48 })).items;
+    const seen = new Set(nearbyLocal.map((item) => item.slug));
+    return [...nearbyLocal, ...popular.filter((item) => item.slug !== excludedSlug && !seen.has(item.slug))].slice(0, take);
+  }
+
   const lat = Number(place.lat);
   const lng = Number(place.lng);
-  const toRad = (n: number) => (n * Math.PI) / 180;
+  const latDelta = 300 / 111;
+  const lngDelta = 300 / (111 * Math.max(0.2, Math.cos(toRad(lat))));
+  const supabase = getSupabase();
+  const { data, error } = await supabase.from("places")
+    .select("*, province:provinces!places_province_id_fkey!inner(*)")
+    .eq("publication_status", "published")
+    .neq("slug", excludedSlug)
+    .not("lat", "is", null)
+    .not("lng", "is", null)
+    .gte("lat", lat - latDelta).lte("lat", lat + latDelta)
+    .gte("lng", lng - lngDelta).lte("lng", lng + lngDelta)
+    .limit(120);
+  if (error) throw error;
+
   const distance = (item: Place) => {
-    if (item.lat == null || item.lng == null || item.slug === place.slug) return Number.POSITIVE_INFINITY;
+    if (item.lat == null || item.lng == null) return Number.POSITIVE_INFINITY;
     const pLat = Number(item.lat);
     const pLng = Number(item.lng);
     const a = Math.sin(toRad(pLat - lat) / 2) ** 2 +
       Math.cos(toRad(lat)) * Math.cos(toRad(pLat)) * Math.sin(toRad(pLng - lng) / 2) ** 2;
-    return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)));
   };
-  return items.sort((a, b) => distance(a) - distance(b)).slice(0, limit);
+  const ranked = ((data ?? []).map((item) => repairRecord(item as Record<string, unknown>) as Place))
+    .map((item) => ({ item, km: distance(item) }))
+    .filter((entry) => entry.km <= 300)
+    .sort((a, b) => a.km - b.km)
+    .map((entry) => entry.item);
+  if (ranked.length >= take) return ranked.slice(0, take);
+
+  const popular = (await getPlaces({ pageSize: 48 })).items;
+  const seen = new Set(ranked.map((item) => item.slug));
+  return [...ranked, ...popular.filter((item) => item.slug !== excludedSlug && !seen.has(item.slug))].slice(0, take);
 }

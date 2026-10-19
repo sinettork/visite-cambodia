@@ -5,7 +5,9 @@ import { getAdminContext } from "../../lib/admin";
 const context = await getAdminContext(Astro.request, Astro.cookies);
 if (!context.user || !context.admin) return Astro.redirect("/admin/login");
 
-const actionFilter = Astro.url.searchParams.get("action")?.trim() ?? "";
+const actionFilter = ["create", "update", "save_draft", "publish", "pause", "delete"].includes(Astro.url.searchParams.get("action") ?? "")
+  ? Astro.url.searchParams.get("action")!
+  : "";
 let query = context.supabase
   .from("admin_audit_log")
   .select("id,admin_user_id,entity_type,entity_id,action,changed_fields,created_at")
@@ -39,6 +41,7 @@ const fieldsFor = (value: unknown) => Array.isArray(value) ? value.filter((item)
             <option value="save_draft" selected={actionFilter === "save_draft"}>Save draft</option>
             <option value="publish" selected={actionFilter === "publish"}>Publish</option>
             <option value="pause" selected={actionFilter === "pause"}>Pause</option>
+            <option value="delete" selected={actionFilter === "delete"}>Delete</option>
           </select>
         </label>
         {actionFilter && <a class="admin-clear-filters" href="/admin/activity">Clear</a>}
@@ -49,7 +52,7 @@ const fieldsFor = (value: unknown) => Array.isArray(value) ? value.filter((item)
           <thead><tr><th>Time</th><th>Content</th><th>Action</th><th>Changed</th></tr></thead>
           <tbody>
             {(activity ?? []).map((item) => {
-              const href = item.entity_type === "place" ? "/admin/places/" + item.entity_id : item.entity_type === "province" ? "/admin/provinces/" + item.entity_id : "#";
+              const href = ["place", "place_guide"].includes(item.entity_type) ? "/admin/places/" + item.entity_id : ["province", "province_guide"].includes(item.entity_type) ? "/admin/provinces/" + item.entity_id : "#";
               const fields = fieldsFor(item.changed_fields);
               return <tr>
                 <td><time datetime={item.created_at}>{new Date(item.created_at).toLocaleString()}</time></td>

@@ -4808,3 +4808,20 @@
 .admin-publication-chip { padding: 3px 6px; font-size: 11px; }
 .admin-action-btn { width: 30px; height: 30px; font-size: 13px; }
 .admin-empty-state { border: 0; border-bottom: 1px solid #d5d5d5; font-size: 13px; }
+
+
+/* Place catalogue pagination */
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  padding: 14px 0 4px;
+  color: var(--admin-text-muted);
+  font-size: 12px;
+}
+.admin-pagination-disabled {
+  padding: 7px 10px;
+  color: var(--admin-text-subtle);
+  border: 1px solid var(--admin-border-soft);
+}

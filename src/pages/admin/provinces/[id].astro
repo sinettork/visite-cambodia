@@ -17,6 +17,8 @@ const errorCode = Astro.url.searchParams.get("error");
 const errorLabels: Record<string, string> = {
   "publish-forbidden": "Your role cannot publish content.",
   "names-required": "Both English and Khmer names are required.",
+  "invalid-image-url": "Banner image URL must be a site path or valid HTTP(S) link.",
+  "invalid-source-url": "Every source URL must be a valid HTTP or HTTPS link.",
   "save-failed": "We could not save this province guide. Review the form and try again.",
 };
 const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this province guide. Review the form and try again." : "";

@@ -2,22 +2,13 @@
 import SiteLayout from "../../../layouts/SiteLayout.astro";
 import PlaceCard from "../../../components/PlaceCard.astro";
 import FavoriteButton from "../../../components/FavoriteButton.astro";
-import { getAllPlaces, getNearbyPlaces, getPlace, getPlaceGuide, type Lang } from "../../../lib/catalog";
+import { getNearbyPlaces, getPlace, getPlaceGuide, type Lang } from "../../../lib/catalog";
 import { T } from "../../../lib/i18n";
-
-export const prerender = true;
-
-export async function getStaticPaths() {
-  const places = await getAllPlaces();
-  return ["en", "km"].flatMap((lang) =>
-    places.map((place) => ({ params: { lang, slug: place.slug } })),
-  );
-}
 
 const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
 const place = Astro.params.slug ? await getPlace(Astro.params.slug) : null;
 
-if (!place) Astro.redirect("/" + lang + "/explore");
+if (!place) return Astro.redirect("/" + lang + "/explore");
 
 const guide = place ? await getPlaceGuide(place.id) : null;
 const nearby = place ? await getNearbyPlaces(place) : [];

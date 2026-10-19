@@ -340,7 +340,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      admin_save_place: {
+        Args: {
+          p_id: number
+          p_payload: Json
+          p_guide: Json
+          p_save_guide: boolean
+          p_intent: string
+        }
+        Returns: string
+      }
+      admin_save_province: {
+        Args: {
+          p_id: number
+          p_payload: Json
+          p_guide: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

@@ -25,6 +25,13 @@ const errorLabels: Record<string, string> = {
   "invalid-type": "The listing type is invalid.",
   "invalid-ticket-status": "The ticket status is invalid.",
   "names-required": "Both English and Khmer names are required.",
+  "invalid-action": "Choose a valid content action.",
+  "invalid-category": "Choose a valid category.",
+  "invalid-business-type": "Choose a valid business type.",
+  "invalid-number": "Check the ticket price and map coordinates.",
+  "invalid-ticket-url": "Ticket URL must be a valid HTTP or HTTPS link.",
+  "invalid-image-url": "Image URL must be a site path or valid HTTP(S) link.",
+  "invalid-source-url": "Every source URL must be a valid HTTP or HTTPS link.",
   "save-failed": "We could not save this place. Review the form and try again.",
 };
 const errorText = errorCode ? errorLabels[errorCode] ?? "We could not save this place. Review the form and try again." : "";
@@ -75,7 +82,7 @@ const sourceUrls = Array.isArray(place.source_urls) ? place.source_urls.filter((
             <div class="admin-fields-grid">
               <label class="admin-field"><span class="admin-field-label">Listing type</span><select name="listing_type"><option value="attraction" selected={place.listing_type === "attraction"}>Attraction</option><option value="accommodation" selected={place.listing_type === "accommodation"}>Accommodation</option><option value="restaurant" selected={place.listing_type === "restaurant"}>Restaurant</option></select></label>
               <label class="admin-field"><span class="admin-field-label">Category</span><select name="category"><option value="history" selected={place.category === "history"}>History</option><option value="nature" selected={place.category === "nature"}>Nature</option><option value="beach" selected={place.category === "beach"}>Beach</option><option value="adventure" selected={place.category === "adventure"}>Adventure</option><option value="culture" selected={place.category === "culture"}>Culture</option><option value="food" selected={place.category === "food"}>Food</option></select></label>
-              <label class="admin-field"><span class="admin-field-label">Business type</span><input name="business_type" value={place.business_type ?? ""} placeholder="hotel, cafe, guest_house…" /></label>
+              <label class="admin-field"><span class="admin-field-label">Business type</span><select name="business_type"><option value="" selected={!place.business_type}>Not specified</option><option value="hotel" selected={place.business_type === "hotel"}>Hotel</option><option value="guest_house" selected={place.business_type === "guest_house"}>Guest house</option><option value="restaurant" selected={place.business_type === "restaurant"}>Restaurant</option><option value="cafe" selected={place.business_type === "cafe"}>Cafe</option><option value="other" selected={place.business_type === "other"}>Other</option></select></label>
             </div>
           </div>
 

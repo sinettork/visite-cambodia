@@ -6,7 +6,8 @@ const context = await getAdminContext(Astro.request, Astro.cookies);
 if (!context.user || !context.admin) return Astro.redirect("/admin/login");
 const { data: provinces } = await context.supabase.from("provinces").select("id,name_en,name_km").order("name_en");
 const error = Astro.url.searchParams.get("error");
-const errorText = error === "create-failed" ? "We could not create the place. Check the required fields and slug, then try again." : "";
+const errorText = error === "create-failed" ? "We could not create the place. Check the required fields and slug, then try again."
+  : error ? error : "";
 ---
 
 <AdminLayout email={context.user.email ?? ""} displayName={context.admin.display_name} role={context.admin.role}>
@@ -44,7 +45,7 @@ const errorText = error === "create-failed" ? "We could not create the place. Ch
             <div class="admin-fields-grid">
               <label class="admin-field"><span class="admin-field-label">Listing type</span><select name="listing_type"><option value="attraction">Attraction</option><option value="accommodation">Accommodation</option><option value="restaurant">Restaurant</option></select></label>
               <label class="admin-field"><span class="admin-field-label">Category</span><select name="category"><option value="history">History</option><option value="nature">Nature</option><option value="beach">Beach</option><option value="adventure">Adventure</option><option value="culture">Culture</option><option value="food">Food</option></select></label>
-              <label class="admin-field"><span class="admin-field-label">Business type</span><input name="business_type" placeholder="hotel, cafe, guest_house…" /></label>
+              <label class="admin-field"><span class="admin-field-label">Business type</span><select name="business_type"><option value="">Not specified</option><option value="hotel">Hotel</option><option value="guest_house">Guest house</option><option value="restaurant">Restaurant</option><option value="cafe">Cafe</option><option value="other">Other</option></select></label>
             </div>
           </div>
 

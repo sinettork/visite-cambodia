@@ -4,20 +4,12 @@ import PlaceCard from "../../../components/PlaceCard.astro";
 import { getPlaces, getProvinceGuide, type Lang, type Place } from "../../../lib/catalog";
 import { T } from "../../../lib/i18n";
 
-export const prerender = true;
-
-export async function getStaticPaths() {
-  const { getProvinces } = await import("../../../lib/catalog");
-  const provinces = await getProvinces();
-  return ["en", "km"].flatMap((lang) => provinces.map((p) => ({ params: { lang, slug: p.slug } })));
-}
-
 const lang = (Astro.params.lang === "en" ? "en" : "km") as Lang;
 const slug = Astro.params.slug ?? "";
 const guide = await getProvinceGuide(slug);
 const t = T[lang];
 
-if (!guide) Astro.redirect("/" + lang + "/explore");
+if (!guide) return Astro.redirect("/" + lang + "/explore");
 
 const [attractions, stays, restaurants] = await Promise.all([
   getPlaces({ province: slug, type: "attraction", pageSize: 12 }),
