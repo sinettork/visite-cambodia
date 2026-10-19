@@ -12,10 +12,10 @@ const isHttpUrl = (value: string) => {
   }
 };
 const isSafeImageUrl = (value: string) =>
-  (value.startsWith("/") && !value.startsWith("//") && !/[\\s\\u0000-\\u001f]/.test(value))
+  (value.startsWith("/") && !value.startsWith("//") && !/[\s\u0000-\u001f]/.test(value))
   || isHttpUrl(value);
 const urlsFromText = (value: FormDataEntryValue | null) =>
-  String(value ?? "").split(/\\r?\\n/).map((part) => part.trim()).filter(Boolean);
+  String(value ?? "").split(/\r?\n/).map((part) => part.trim()).filter(Boolean);
 
 export const POST: APIRoute = async ({ request, cookies, params, redirect }) => {
   const context = await getAdminContext(request, cookies);

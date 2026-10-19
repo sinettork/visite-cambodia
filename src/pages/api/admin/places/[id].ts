@@ -23,11 +23,11 @@ const isHttpUrl = (value: string) => {
 };
 
 const isSafeImageUrl = (value: string) =>
-  (value.startsWith("/") && !value.startsWith("//") && !/[\\s\\u0000-\\u001f]/.test(value))
+  (value.startsWith("/") && !value.startsWith("//") && !/[\s\u0000-\u001f]/.test(value))
   || isHttpUrl(value);
 
 const urlsFromText = (value: FormDataEntryValue | null) =>
-  String(value ?? "").split(/\\r?\\n/).map((part) => part.trim()).filter(Boolean);
+  String(value ?? "").split(/\r?\n/).map((part) => part.trim()).filter(Boolean);
 
 export const POST: APIRoute = async ({ request, cookies, params, redirect }) => {
   const context = await getAdminContext(request, cookies);
@@ -123,12 +123,15 @@ export const POST: APIRoute = async ({ request, cookies, params, redirect }) => 
     ...(Array.isArray(existingGuide?.source_urls) ? { source_urls: existingGuide.source_urls } : {}),
   };
 
+  const effectiveIntent = intent === "save" && current.publication_status === "paused" && !isAdminRole(context.admin.role)
+    ? "draft"
+    : intent;
   const { data: savedStatus, error } = await context.supabase.rpc("admin_save_place", {
     p_id: id,
     p_payload: payload,
     p_guide: guidePayload,
     p_save_guide: saveGuide,
-    p_intent: intent,
+    p_intent: effectiveIntent,
   });
   if (error || !savedStatus) return redirect("/admin/places/" + id + "?error=save-failed", 303);
   return redirect("/admin/places/" + id + "?saved=" + encodeURIComponent(savedStatus), 303);

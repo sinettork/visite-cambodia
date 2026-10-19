@@ -12,7 +12,7 @@ const isHttpUrl = (value: string) => {
   }
 };
 const isSafeImageUrl = (value: string) =>
-  (value.startsWith("/") && !value.startsWith("//") && !/[\\s\\u0000-\\u001f]/.test(value))
+  (value.startsWith("/") && !value.startsWith("//") && !/[\s\u0000-\u001f]/.test(value))
   || isHttpUrl(value);
 
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {

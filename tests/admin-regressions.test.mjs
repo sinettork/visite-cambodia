@@ -28,6 +28,7 @@ test("content saves use transactional RPCs and validate unsafe values", async ()
   assert.match(placeApi, /url\.protocol === "https:"/);
   assert.match(placeApi, /lat < -90 \|\| lat > 90/);
   assert.match(placeApi, /lng < -180 \|\| lng > 180/);
+  assert.match(placeApi, /current\.publication_status === "paused"/);
 });
 
 test("public homepage and detail routes are request rendered", async () => {
